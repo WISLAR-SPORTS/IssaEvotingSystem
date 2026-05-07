@@ -36,7 +36,7 @@ ALLOWED_HOSTS = [
 AUTH_USER_MODEL = "accounts.User"
 LOGOUT_REDIRECT_URL = '/'
 
-SESSION_COOKIE_AGE = 60  # 5 minutes logs out due to inactivity 
+SESSION_COOKIE_AGE = 180  # 3 minutes logs out due to inactivity 
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  #when a user closes the browser he's logged out
 
@@ -135,26 +135,38 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Evoting.wsgi.application'
 
+
+import os
 import dj_database_url
+from decouple import config
+ #uses sqlite3 database locally and postgres on render.com
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
-
+if config("DATABASE_URL", default=""):
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=config("DATABASE_URL"),
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / "db.sqlite3",
+        }
+    }
+    """
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
-"""
+}"""
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
