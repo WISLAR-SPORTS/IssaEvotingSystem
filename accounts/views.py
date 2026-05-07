@@ -107,7 +107,6 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User
-
 def request_password_reset(request):
     if request.method == "POST":
         try:
@@ -123,14 +122,14 @@ def request_password_reset(request):
         code = generate_otp()
         PasswordResetOTP.objects.create(user=user, code=code)
 
-        send_otp_email(user.email, code)
+        print("OTP:", code)
 
         request.session["reset_email"] = email
 
+        # TEMP: skipping email sending for debugging
         return JsonResponse({"success": True})
 
     return render(request, "accounts/request_otp.html")
-
 
 def verify_otp(request):
     email = request.session.get("reset_email")
