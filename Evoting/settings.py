@@ -45,29 +45,19 @@ import os
 
 from decouple import config
 
-EMAIL_HOST_USER = config("BREVO_SMTP_USER")
-EMAIL_HOST_PASSWORD = config("BREVO_SMTP_PASSWORD")
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
-
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = "smtp-relay.brevo.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = os.environ.get("BREVO_SMTP_USER", "a71171001@smtp-brevo.com")
-EMAIL_HOST_PASSWORD = os.environ.get("BREVO_SMTP_PASSWORD")
+EMAIL_HOST_USER = config("BREVO_SMTP_USER")
+EMAIL_HOST_PASSWORD = config("BREVO_SMTP_PASSWORD")
 
-DEFAULT_FROM_EMAIL = os.environ.get(
+DEFAULT_FROM_EMAIL = config(
     "DEFAULT_FROM_EMAIL",
-    "wamaniissa0@gmail.com"
+    default="wamaniissa0@gmail.com"
 )
-
-
-EMAIL_HOST_PASSWORD = "dNEbWD3RzAM4cgq0"
-
-
-DEFAULT_FROM_EMAIL = "wamaniissa0@gmail.com"
 
 INSTALLED_APPS = [
     'jazzmin',
