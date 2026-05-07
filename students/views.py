@@ -61,7 +61,6 @@ def student_profile(request):
     })
 
 
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -69,12 +68,13 @@ from students.models import StudentRecord
 from .form import StudentRegistrationForm
 
 User = get_user_model()
+
 def student_register(request):
     if request.method == "POST":
         form = StudentRegistrationForm(request.POST)
 
         if form.is_valid():
-            username = form.cleaned_data["username"]   # 👈 NEW
+            username = form.cleaned_data["username"]
             student_id = form.cleaned_data["student_id"]
             name = form.cleaned_data["name"]
             password = form.cleaned_data["password"]
@@ -86,46 +86,59 @@ def student_register(request):
                 messages.error(request, "Username already taken")
                 return redirect("student_register")
 
-            # 🔒 prevent duplicate phone (since it's unique=True)
-            if User.objects.filter(phone_number=phone).exists():
-                messages.error(request, "Phone number already in use")
-                return redirect("student_register")
+            # 🔒 prevent duplicate phone (SAFE CHECK)
+            if hasattr(User, "phone_number"):
+                if User.objects.filter(phone_number=phone).exists():
+                    messages.error(request, "Phone number already in use")
+                    return redirect("students:register")
 
+            # 📌 get student safely
             try:
                 student = StudentRecord.objects.get(student_id=student_id)
-
             except StudentRecord.DoesNotExist:
                 messages.error(request, "Invalid student ID")
                 return redirect("student_register")
 
-            # 🔍 keep your core logic EXACTLY as is
-            if student.name.strip().lower() != name.lower():
+            # 📌 safe branch check (THIS WAS A COMMON CRASH POINT)
+            if not student.branch or not hasattr(student.branch, "institution"):
+                messages.error(request, "Student branch/institution not assigned")
+                return redirect("student_register")
+
+            # 🔍 name validation (safe for None)
+            if not student.name or student.name.strip().lower() != name.strip().lower():
                 messages.error(request, "Name does not match student record")
                 return redirect("student_register")
 
+            # 📌 check if already linked
             if student.user:
                 messages.error(request, "Student already registered")
-                return redirect("register")
+                return redirect("student_register")
 
             # ✅ create user
             user = User.objects.create_user(
-                username=username,                # 👈 FIXED
+                username=username,
                 password=password,
                 email=email,
                 role="student",
-                student_number=student_id,        # 👈 still mapped
+                student_number=student_id,
                 phone_number=phone,
                 institution=student.branch.institution,
                 branch=student.branch,
             )
 
-            # 🔗 link student
+            # 🔗 link student safely
             user.institution = student.branch.institution
             user.branch = student.branch
             user.save()
 
+            student.user = user
+            student.save()
+
             messages.success(request, "Registration successful. You can now login.")
             return redirect("accounts:login")
+
+        else:
+            messages.error(request, "Invalid form data")
 
     else:
         form = StudentRegistrationForm()
