@@ -16,36 +16,37 @@ from django.utils import timezone
 from django.shortcuts import render
 from elections.models import Election
 
+from django.http import HttpResponseForbidden
+
 @login_required
 def student_dashboard(request):
     user = request.user
 
-    # 🔍 Student record
+    # 🔒 ONLY STUDENTS ALLOWED
+    if user.role != "student":
+        return HttpResponseForbidden("Access denied: Students only")
+
     student = StudentRecord.objects.filter(user=user).first()
 
     now = timezone.now()
 
-    # 🟢 Active elections
     active_elections = Election.objects.filter(
         institution=user.institution,
         start_time__lte=now,
         end_time__gte=now
     )
 
-    # 🟡 Upcoming elections
     upcoming_elections = Election.objects.filter(
         institution=user.institution,
         start_time__gt=now
     )
 
-    context = {
+    return render(request, "students/dashboard.html", {
         "student": student,
         "active_elections": active_elections,
         "upcoming_elections": upcoming_elections,
         "user": user,
-    }
-
-    return render(request, "students/dashboard.html", context)
+    })
 
 @login_required
 def student_profile(request):

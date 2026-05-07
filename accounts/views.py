@@ -9,8 +9,6 @@ from django.utils import timezone
 from .models import PasswordResetOTP
 from .utils import generate_otp, send_otp_email 
 
-
-
 def role_based_login(request):
     if request.method == "POST":
 
@@ -18,65 +16,77 @@ def role_based_login(request):
         password = request.POST.get("password")
         remember_me = request.POST.get("remember_me")
 
-        # 🔍 allow username OR email
+        # 🔍 FIND USER BY USERNAME OR EMAIL
         user_obj = User.objects.filter(username=identifier).first()
 
         if not user_obj:
             user_obj = User.objects.filter(email=identifier).first()
 
-        if user_obj:
-            user = authenticate(request, username=user_obj.username, password=password)
-        else:
-            user = None
+        # ❌ USER NOT FOUND
+        if not user_obj:
+            messages.error(request, "Invalid username or password")
+            return render(request, "accounts/login.html")
 
-        if user is not None:
+        # 🔐 AUTHENTICATE USING USERNAME (ALWAYS SAFE)
+        user = authenticate(
+            request,
+            username=user_obj.username,
+            password=password
+        )
 
-            # 🔒 SINGLE DEVICE LOGIN CHECK (FIXED)
-            if user.current_session_key:
-                session = Session.objects.filter(
-                    session_key=user.current_session_key
-                ).first()
+        if user is None:
+            messages.error(request, "Invalid username or password")
+            return render(request, "accounts/login.html")
 
-                if session:
-                    # check if session is still active
-                    if session.expire_date > timezone.now():
-                        messages.error(request, "You are already logged in on another device.")
-                        return redirect("accounts:login")
-                    else:
-                        # session expired → clean it
-                        user.current_session_key = None
-                        user.save()
+        # 🔒 SINGLE DEVICE LOGIN CHECK
+        if user.current_session_key:
+            session = Session.objects.filter(
+                session_key=user.current_session_key
+            ).first()
 
-            # ✅ login user
-            login(request, user)
+            if session and session.expire_date > timezone.now():
+                messages.error(request, "You are already logged in on another device.")
+                return redirect("accounts:login")
 
-            # 🔑 ensure session exists
-            request.session.save()
-
-            # store new session key
-            user.current_session_key = request.session.session_key
+            # cleanup expired session
+            user.current_session_key = None
             user.save()
 
-            # 🧠 remember me logic (FIXED)
-            if not remember_me:
-                request.session.set_expiry(0)  # browser close
-            else:
-                request.session.set_expiry(60 * 60 * 12)  # 12 hours
+        # ✅ LOGIN USER
+        login(request, user)
 
-            # 🔥 ADMIN ROUTING
-            if user.role in ["super_admin", "institution_admin", "branch_admin"]:
-                return redirect("/admin/")
+        # 🔑 SAVE SESSION KEY
+        request.session.save()
+        user.current_session_key = request.session.session_key
+        user.save()
 
-            if user.is_superuser:
-                return redirect("/admin/")
+        # 🧠 REMEMBER ME LOGIC
+        if remember_me:
+            request.session.set_expiry(60 * 60 * 12)  # 12 hours
+        else:
+            request.session.set_expiry(0)  # browser close
 
-            if user.role == "student":
-                return redirect("students:dashboard")
+        # 🚨 SAFETY: SUPERUSER FIRST
+        if user.is_superuser:
+            return redirect("/admin/")
 
-        messages.error(request, "Invalid username or password")
+        # 🚨 SAFETY: ROLE MUST EXIST
+        if not user.role:
+            messages.error(request, "User role not assigned.")
+            return redirect("accounts:login")
+
+        # 🔥 ROLE ROUTING
+        if user.role in ["super_admin", "institution_admin", "branch_admin"]:
+            return redirect("/admin/")
+
+        if user.role == "student":
+            return redirect("students:dashboard")
+
+        # ❌ UNKNOWN ROLE FALLBACK
+        messages.error(request, "Invalid user role.")
+        return redirect("accounts:login")
 
     return render(request, "accounts/login.html")
-
 
 def custom_admin_logout(request):
     if request.user.is_authenticated:
