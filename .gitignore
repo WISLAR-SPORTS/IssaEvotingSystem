@@ -1,0 +1,9 @@
+myenv/
+.env
+__pycache__/
+*.pyc
+
+staticfiles/
+*.download
+static/js/hack1_files/
+*.pyc
