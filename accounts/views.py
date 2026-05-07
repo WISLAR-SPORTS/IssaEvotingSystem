@@ -220,3 +220,10 @@ def resend_otp(request):
     return render(request, "accounts/verify_otp.html", {
         "message": "A new OTP has been sent."
     })
+from django.http import HttpResponseNotAllowed
+
+def health_check(request):
+    if request.method not in ["GET", "HEAD"]:
+        return HttpResponseNotAllowed(["GET", "HEAD"])
+    
+    return JsonResponse({"status": "ok"})

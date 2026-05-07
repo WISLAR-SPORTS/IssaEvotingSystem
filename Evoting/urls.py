@@ -22,6 +22,7 @@ from django.contrib.auth import views as auth_views
 from accounts.views import custom_admin_logout
 from django.conf import settings
 from django.conf.urls.static import static
+from accounts.views import health_check
 
 urlpatterns = [
     path('admin/logout/', custom_admin_logout, name='logout'),
@@ -34,6 +35,7 @@ urlpatterns = [
     path("elections/", include("elections.urls")),
     path("voting/", include("voting.urls")),
     path("admin/login/", role_based_login), 
+    path("health/", health_check, name='health'),
       #  allauth URLs (Google login, etc.)
     
     path("accounts/", include("allauth.urls")),
