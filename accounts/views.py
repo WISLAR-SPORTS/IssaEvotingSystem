@@ -12,12 +12,12 @@ from .utils import generate_otp, send_otp_email
 def role_based_login(request):
     if request.method == "POST":
 
-        identifier = request.POST.get("identifier")
+        identifier = request.POST.get("identifier", "").strip()
         password = request.POST.get("password")
         remember_me = request.POST.get("remember_me")
 
         # 🔍 FIND USER BY USERNAME OR EMAIL
-        user_obj = User.objects.filter(username=identifier).first()
+        user_obj = User.objects.filter(username__iexact=identifier).first()
 
         if not user_obj:
             user_obj = User.objects.filter(email=identifier).first()

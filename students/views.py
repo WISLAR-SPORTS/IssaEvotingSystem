@@ -74,7 +74,7 @@ def student_register(request):
         form = StudentRegistrationForm(request.POST)
 
         if form.is_valid():
-            username = form.cleaned_data["username"]
+            username = form.cleaned_data["username"].strip().lower()
             student_id = form.cleaned_data["student_id"]
             name = form.cleaned_data["name"]
             password = form.cleaned_data["password"]
