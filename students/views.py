@@ -84,7 +84,7 @@ def student_register(request):
             # 🔒 prevent duplicate username
             if User.objects.filter(username=username).exists():
                 messages.error(request, "Username already taken")
-                return redirect("student_register")
+                return redirect("students:register")
 
             # 🔒 prevent duplicate phone (SAFE CHECK)
             if hasattr(User, "phone_number"):
@@ -97,22 +97,22 @@ def student_register(request):
                 student = StudentRecord.objects.get(student_id=student_id)
             except StudentRecord.DoesNotExist:
                 messages.error(request, "Invalid student ID")
-                return redirect("student_register")
+                return redirect("students:register")
 
             # 📌 safe branch check (THIS WAS A COMMON CRASH POINT)
             if not student.branch or not hasattr(student.branch, "institution"):
                 messages.error(request, "Student branch/institution not assigned")
-                return redirect("student_register")
+                return redirect("students:register")
 
             # 🔍 name validation (safe for None)
             if not student.name or student.name.strip().lower() != name.strip().lower():
                 messages.error(request, "Name does not match student record")
-                return redirect("student_register")
+                return redirect("students:register")
 
             # 📌 check if already linked
             if student.user:
                 messages.error(request, "Student already registered")
-                return redirect("student_register")
+                return redirect("students:register")
 
             # ✅ create user
             user = User.objects.create_user(
