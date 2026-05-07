@@ -107,6 +107,8 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User
+
+""" for debubbing only, remove in production 
 def request_password_reset(request):
     if request.method == "POST":
         try:
@@ -129,7 +131,38 @@ def request_password_reset(request):
         # TEMP: skipping email sending for debugging
         return JsonResponse({"success": True})
 
+    return render(request, "accounts/request_otp.html") """
+def request_password_reset(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            email = data.get("email")
+        except:
+            return JsonResponse({"success": False, "error": "Invalid request"})
+
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return JsonResponse({"success": False, "error": "Email not found"})
+
+        code = generate_otp()
+        PasswordResetOTP.objects.create(user=user, code=code)
+
+        request.session["reset_email"] = email
+
+        # 🔥 SAFE EMAIL SENDING (prevents Render crash)
+        try:
+            send_otp_email(user.email, code)
+        except Exception as e:
+            print("EMAIL ERROR:", str(e))
+            return JsonResponse({
+                "success": False,
+                "error": "Failed to send email. Try again later."
+            })
+
+        return JsonResponse({"success": True})
+
     return render(request, "accounts/request_otp.html")
+
 
 def verify_otp(request):
     email = request.session.get("reset_email")
