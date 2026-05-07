@@ -7,3 +7,11 @@ staticfiles/
 *.download
 static/js/hack1_files/
 *.pyc
+db.sqlite3
+*.sqlite3
+__pycache__/
+*.pyc
+audit/
+*.lnk
+venv/
+.env
