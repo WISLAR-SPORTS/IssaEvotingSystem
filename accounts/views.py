@@ -132,6 +132,22 @@ def request_password_reset(request):
         return JsonResponse({"success": True})
 
     return render(request, "accounts/request_otp.html") """
+import json
+import threading
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
+def send_email_async(email, code):
+    try:
+        send_otp_email(email, code)
+    except Exception as e:
+        print("EMAIL ERROR:", str(e))
+
+
 def request_password_reset(request):
     if request.method == "POST":
         try:
@@ -149,15 +165,11 @@ def request_password_reset(request):
 
         request.session["reset_email"] = email
 
-        # 🔥 SAFE EMAIL SENDING (prevents Render crash)
-        try:
-            send_otp_email(user.email, code)
-        except Exception as e:
-            print("EMAIL ERROR:", str(e))
-            return JsonResponse({
-                "success": False,
-                "error": "Failed to send email. Try again later."
-            })
+        # 🔥 FIX: send email in background (prevents timeout)
+        threading.Thread(
+            target=send_email_async,
+            args=(user.email, code)
+        ).start()
 
         return JsonResponse({"success": True})
 
@@ -171,6 +183,8 @@ def verify_otp(request):
         return JsonResponse({"success": False, "error": "Session expired"})
 
     user = User.objects.filter(email=email).first()
+    if not user:
+        return JsonResponse({"success": False, "error": "User not found"})
 
     if request.method == "POST":
         try:
@@ -197,15 +211,16 @@ def verify_otp(request):
 
     return JsonResponse({"success": False, "error": "Invalid request"})
 
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
+import json
+
+User = get_user_model()
+
+
 def set_new_password(request):
-    import json
-    from django.http import JsonResponse
-  
-    from django.contrib.auth import get_user_model
-    from django.contrib.auth.hashers import make_password
-
-    User = get_user_model()
-
     user_id = request.session.get("reset_user_id")
 
     if not user_id:
@@ -233,6 +248,8 @@ def set_new_password(request):
         user.save()
 
         request.session.flush()
+
+        return JsonResponse({"success": True})
 
         return JsonResponse({"success": True})
 from .models import PasswordResetOTP
