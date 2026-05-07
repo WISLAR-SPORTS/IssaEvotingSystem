@@ -25,6 +25,7 @@ body {
 
     display: flex;
     justify-content: center;
+    align-items: center; 
 
     /* ✅ CONTROL TOP/BOTTOM SPACING HERE */
     padding: 60px 20px;
