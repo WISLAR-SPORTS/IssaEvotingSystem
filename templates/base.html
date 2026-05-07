@@ -1,0 +1,145 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}E-Voting SaaS{% endblock %}</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/results.css' %}">
+  
+    <style>
+       
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    {% load static %}
+    <nav class="navbar navbar-expand-lg navbar-light navbar-card sticky-top">
+    
+        <!-- LOGO -->
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+            <img src="{% static 'images/LOGO.png' %}" class="nav-logo" alt="Logo">
+            <span class="fw-bold">E-Voting</span>
+        </a>
+    
+        <!-- TOGGLER -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <!-- NAV CONTENT -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+    
+            <!-- LEFT NAV -->
+            <ul class="navbar-nav ms-4 gap-2">
+
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="#">
+                        <i class="bi bi-ui-checks-grid"></i>
+                        Elections
+                    </a>
+                </li>
+            
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{% url 'students:dashboard' %}">
+                        <i class="bi bi-speedometer2"></i>
+                        Dashboard
+                    </a>
+                </li>
+            
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{% url 'students:student_profile' %}">
+                        <i class="bi bi-person-circle"></i>
+                        Profile
+                    </a>
+                </li>
+            
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{% url 'voting:election_results' %}">
+                        <i class="bi bi-graph-up-arrow"></i>
+                        Results
+                    </a>
+                </li>
+            
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{% url 'elections:positions_list' %}">
+                        <i class="bi bi-list-check"></i>
+                        Positions
+                    </a>
+                </li>
+            
+            </ul>
+            <!-- RIGHT SIDE -->
+            <div class="ms-auto d-flex align-items-center gap-3 mt-3 mt-lg-0 flex-wrap">
+    
+                <!-- THEME -->
+                
+    
+                <!-- AUTH -->
+                {% if user.is_authenticated %}
+    
+                <a href="{% url 'logout' %}" class="btn btn-primary btn-sm">
+                   Logout
+                </a>
+    
+                {% else %}
+    
+                    <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-sm">
+                        Sign in
+                    </a>
+    
+                    <a href="{% url 'students:register' %}" class="btn btn-warning btn-sm">
+                        Sign Up
+                    </a>
+    
+                {% endif %}
+    
+            </div>
+    
+        </div>
+    </nav>
+<!-- MAIN CONTENT -->
+<div class="container main-container">
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container text-center">
+
+        <h5 class="mb-3">E-Voting System</h5>
+
+        <p class="mb-2">
+            Secure • Transparent • Institution-Based Voting
+        </p>
+
+     
+
+        <small>&copy; Designed By Issa | 2026 E-Voting System. All rights reserved.</small>
+
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

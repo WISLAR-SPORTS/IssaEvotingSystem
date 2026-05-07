@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/results.css' %}">
+
+<div class="container py-4">
+
+    <!-- HEADER -->
+    <div class="dashboard-header mb-4">
+        <h2 class="fw-bold">📊 Election Results Dashboard</h2>
+        <p class="text-muted">Live results with real-time vote tracking</p>
+    </div>
+
+    {% for item in results_data %}
+
+    <div class="result-card mb-4">
+
+        <!-- POSITION HEADER -->
+        <div class="result-card-header">
+
+            <h5 class="mb-0">{{ item.position.name }}</h5>
+
+            {% if item.position.is_central %}
+                <span class="badge badge-central">Central</span>
+            {% else %}
+                <span class="badge badge-branch">Branch</span>
+            {% endif %}
+
+        </div>
+
+        <!-- BODY -->
+        <div class="result-card-body">
+
+            {% for c in item.candidates %}
+
+            <div class="candidate-row {% if c.is_winner %}winner-row{% endif %}">
+
+                <!-- LEFT SIDE -->
+                <div class="candidate-info">
+
+                    <div class="avatar">
+                        {{ c.user.username|first|upper }}
+                    </div>
+
+                    <div>
+
+                        <div class="candidate-name">
+                            {{ c.user.username }}
+
+                            {% if c.is_winner %}
+                                <span class="winner-pill">🏆 Winner</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="candidate-meta">
+                            {{ c.user.student_number }}
+                        </div>
+
+                        <!-- VOTE BAR -->
+                        <div class="vote-container">
+
+                            <div class="vote-meta">
+                                <span>{{ c.vote_percent }}%</span>
+                            </div>
+
+                            <div class="vote-bar-bg">
+                                <div class="vote-bar-fill"
+                                     style="width: {{ c.vote_percent }}%;">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- RIGHT SIDE -->
+                <div class="vote-count">
+                    <span class="vote-badge">
+                        {{ c.total_votes }} votes
+                    </span>
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-state">
+                No candidates found
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<!-- 🔥 LIVE AUTO REFRESH -->
+<script>
+function refreshResults() {
+    fetch("/voting/api/live-results/")
+        .then(res => res.json())
+        .then(data => {
+            console.log("Live update:", data);
+
+            // (future upgrade: update DOM dynamically here)
+        });
+}
+
+setInterval(refreshResults, 5000);
+</script>
+
+{% endblock %}

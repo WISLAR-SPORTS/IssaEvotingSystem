@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<!-- 🟡 Upcoming Elections -->
+{% if positions %}
+
+    <!-- 🟢 ACTIVE STATE -->
+    <h3 class="mb-4">🗳️ Available Positions</h3>
+
+    <div class="row g-4">
+        {% for position in positions %}
+            <div class="col-md-4">
+                <a href="{% url 'elections:position_candidates' position.id %}" class="text-decoration-none">
+                    <div class="card position-card p-4 shadow-sm">
+
+                        <h5 class="mb-2">{{ position.name }}</h5>
+
+                        {% if position.is_central %}
+                            <span class="badge bg-primary">Central</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Branch</span>
+                        {% endif %}
+
+                        <p class="mt-2 text-muted small">
+                            Click to view candidates
+                        </p>
+
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+{% elif upcoming_elections %}
+
+    <!-- 🟡 UPCOMING STATE -->
+    <h3 class="mb-4">⏳ Upcoming Elections</h3>
+
+    {% for election in upcoming_elections %}
+
+    <div class="d-flex justify-content-center mb-4">
+        <div class="card shadow-lg border-0 text-center p-4"
+             style="max-width: 520px; width: 100%; border-radius: 16px;">
+
+            <div class="mb-3">
+                <div style="
+                    width: 70px;
+                    height: 70px;
+                    margin: 0 auto;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #0d6efd, #6ea8fe);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 28px;
+                    color: white;
+                ">
+                    ⏳
+                </div>
+            </div>
+
+            <h5 class="fw-bold mb-2">{{ election.name }}</h5>
+
+            <p class="text-muted mb-2">Starts in</p>
+
+            <h6 id="countdown-{{ election.id }}" class="fw-bold text-primary mb-3"></h6>
+
+        </div>
+    </div>
+
+    <script>
+        const startTime{{ election.id }} = new Date("{{ election.start_time|date:'c' }}").getTime();
+        
+        function updateCountdown{{ election.id }}() {
+            const now = new Date().getTime();
+            const diff = startTime{{ election.id }} - now;
+        
+            if (diff <= 0) {
+                location.reload();
+                return;
+            }
+        
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+            document.getElementById("countdown-{{ election.id }}").innerText =
+                days + "d " + hours + "h " + minutes + "m " + seconds + "s remaining";
+        }
+        
+        // run immediately so no delay on load
+        updateCountdown{{ election.id }}();
+        
+        // update every second
+        setInterval(updateCountdown{{ election.id }}, 1000);
+        </script>
+
+    {% endfor %}
+
+{% else %}
+
+    <!-- 🔴 ENDED STATE -->
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+        <div class="card shadow-lg border-0 text-center p-5"
+             style="max-width: 520px; width: 100%; border-radius: 16px;">
+
+            <div class="mb-4">
+                <div style="
+                    width: 80px;
+                    height: 80px;
+                    margin: 0 auto;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #6c757d, #adb5bd);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 32px;
+                    color: white;
+                ">
+                    ❌
+                </div>
+            </div>
+
+            <h3 class="fw-bold mb-3">Election Closed</h3>
+
+            <p class="text-muted mb-3">
+                No active or upcoming elections.
+            </p>
+
+            <a href="{% url 'students:dashboard' %}" class="btn btn-dark">
+                Back to Dashboard
+            </a>
+
+        </div>
+    </div>
+
+{% endif %}
+
+{% endblock %}

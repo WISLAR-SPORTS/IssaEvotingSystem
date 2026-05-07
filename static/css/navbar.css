@@ -1,0 +1,103 @@
+
+/* LOGO */
+.nav-logo {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+};
+
+
+
+
+/* MOBILE SPACING */
+@media (max-width: 991px) {
+    .navbar-nav {
+        margin-top: 10px;
+    }
+}/* ===== SAAS CENTERED NAVBAR CARD ===== */
+.navbar-card {
+    background: rgba(122, 220, 124, 0.85);
+   /* background: rgba(249, 247, 247, 0.85); backdrop-filter: blur(12px);*/
+    border-radius: 18px;
+    color: black;
+
+    /* width control */
+    width: 95%;
+    max-width: 1100px;
+
+    /* THIS is the key fix */
+    margin: 12px auto;   /* centers it horizontally */
+
+    /* spacing inside */
+    padding: 10px 20px;
+
+    /* visual */
+
+
+    transition: all 0.3s ease;
+}
+/* keep inner layout normal */
+.navbar-card .navbar-collapse {
+    width: 100%;
+}
+
+/* responsive fix */
+@media (max-width: 992px) {
+    .navbar-card {
+        width: 95%;
+        margin: 10px auto;
+        padding: 10px 15px;
+    }
+}
+
+/* Sticky enhancement */
+.navbar-card.sticky-top {
+    position: sticky;
+    top: 10px;
+    z-index: 999;
+}
+
+/* Logo */
+.nav-logo {
+    width: 60px;
+    height: 50px;
+    object-fit: contain;
+}
+
+/* Nav links */
+.navbar .nav-link {
+    font-weight: 800;
+    color: #090909;
+    padding: 20px 22px;
+    border-radius: 10px;
+    transition: 0.2s;
+    font-size: 1.2rem;
+}
+
+.navbar .nav-link:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+/* Theme label */
+.theme-label {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* Buttons */
+.theme-btn {
+    border-radius: 10px;
+}
+
+/* Mobile spacing fix */
+@media (max-width: 992px) {
+    .navbar-card {
+        margin: 8px;
+        border-radius: 14px;
+    }
+
+    .navbar-nav {
+        margin-top: 10px;
+    }
+}

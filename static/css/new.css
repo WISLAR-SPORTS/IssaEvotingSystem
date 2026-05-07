@@ -1,0 +1,103 @@
+/* ===== GLOBAL ===== */
+body {
+    background: linear-gradient(135deg, #f5f7fa, #e4ecf7);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== CARD ===== */
+.card {
+    border-radius: 16px !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== HEADINGS ===== */
+h4 {
+    color: #2c3e50;
+}
+
+/* ===== INPUT FIELDS ===== */
+.form-control {
+    border-radius: 10px;
+    border: 1px solid #dcdfe6;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: #4a90e2;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #357abd;
+}
+
+.btn-success {
+    background: #28a745;
+    border: none;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+/* ===== ERROR TEXT ===== */
+.text-danger {
+    font-size: 0.85rem;
+}
+
+/* ===== OTP INPUT ===== */
+#otpInput {
+    letter-spacing: 8px;
+    font-size: 22px;
+    text-align: center;
+}
+
+/* ===== MODAL ===== */
+.modal-content {
+    border-radius: 16px;
+    animation: fadeInUp 0.3s ease;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== LINKS ===== */
+a {
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ===== SMALL TEXT ===== */
+.text-muted {
+    font-size: 0.9rem;
+}

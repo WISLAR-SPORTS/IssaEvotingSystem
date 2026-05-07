@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="mb-4">🗳️ {{ position.name }} Candidates</h3>
+
+{% now "Y-m-d H:i:s" as now %}
+
+<!-- 🟡 Upcoming Election -->
+{% if now < position.election.start_time %}
+    <div class="alert alert-info">
+        ⏳ Election starts in 
+        <strong>{{ position.election.start_time|timeuntil }}</strong>
+    </div>
+
+<!-- 🔴 Ended Election -->
+{% elif now > position.election.end_time %}
+    <div class="alert alert-secondary">
+        ❌ This election has ended
+    </div>
+
+<!-- 🟢 Active Election -->
+{% else %}
+
+<div class="row g-4">
+
+    {% for c in candidates %}
+
+    <div class="col-md-4">
+        <div class="card p-3 candidate-card text-center">
+    
+            <!-- 🖼️ Candidate Image -->
+            {% if c.image %}
+                <img src="{{ c.image.url }}"
+                       class="rounded-circle mx-auto mb-2"
+                     
+                     style="max-width:400px; max-height:150px; object-fit: contain;">
+            {% else %}
+                <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center"
+                     style="width:90px;height:90px;background:#e9ecef;font-weight:bold;">
+                    {{ c.user.first_name|first|upper }}
+                </div>
+            {% endif %}
+    
+            <!-- 👤 Candidate Info -->
+            <h5>{{ c.user.username }}</h5>
+            <p class="text-muted">{{ c.user.student_number }}</p>
+    
+            <!-- 🗳️ Vote Button -->
+            <form method="POST" action="{% url 'voting:cast_vote' c.id %}">
+                {% csrf_token %}
+    
+                {% if user_vote and user_vote.candidate.id == c.id %}
+                    <button class="btn btn-success w-100 mt-2" disabled>
+                        ✔ Your Choice
+                    </button>
+    
+                {% elif has_voted %}
+                    <button class="btn btn-secondary w-100 mt-2" disabled>
+                        Already Voted
+                    </button>
+    
+                {% else %}
+                    <button type="submit" class="btn btn-primary w-100 mt-2">
+                        Vote
+                    </button>
+                {% endif %}
+            </form>
+    
+        </div>
+    </div>
+    
+    {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning">
+                No candidates available for this position.
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+{% endblock %}

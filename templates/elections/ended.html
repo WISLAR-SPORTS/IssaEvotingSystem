@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+
+    <div class="card shadow-lg border-0 text-center p-5" style="max-width: 500px; width: 100%; border-radius: 16px;">
+
+        <!-- Icon -->
+        <div class="mb-4">
+            <div style="
+                width: 80px;
+                height: 80px;
+                margin: 0 auto;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #6c757d, #adb5bd);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 32px;
+                color: white;
+            ">
+                ❌
+            </div>
+        </div>
+
+        <!-- Title -->
+        <h3 class="mb-3 fw-bold">Election Closed</h3>
+
+        <!-- Description -->
+        <p class="text-muted mb-4">
+            The election for <strong>{{ election.name }}</strong> has officially ended.
+        </p>
+
+        <!-- Optional extra info -->
+        <p class="small text-muted">
+            Voting is no longer available. Results may be announced soon.
+        </p>
+
+        <!-- Action button -->
+        <div class="mt-4">
+            <a href="{% url 'elections:positions_list' %}" class="btn btn-dark px-4 py-2">
+                Back to Positions
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

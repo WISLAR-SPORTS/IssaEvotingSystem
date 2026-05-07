@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- 🏫 INSTITUTION BRAND HEADER -->
+<h4>Available Elections</h4>
+
+{% for election in request.user.institution.election_set.all %}
+<div class="card election-card p-3 mb-2">
+        <h5>{{ election.name }}</h5>
+        <p>
+            Starts: {{ election.start_time }}<br>
+            Ends: {{ election.end_time }}
+        </p>
+    </div>
+{% empty %}
+    <p>No elections available.</p>
+{% endfor %}
+<div class="text-center mb-4">
+
+    {% if user.institution %}
+
+        {% if user.institution.logo %}
+            <img src="{{ user.institution.logo.url }}"
+                 class="rounded-circle shadow-sm"
+                 width="70" height="70"
+                 style="object-fit: cover;">
+        {% else %}
+            <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm"
+                 style="width:70px;height:70px;
+                        background: linear-gradient(135deg,#0d6efd,#6ea8fe);
+                        color:white;font-weight:700;">
+                {{ user.institution.name|first|upper }}
+            </div>
+        {% endif %}
+
+        <h5 class="mt-2 mb-0">{{ user.institution.name }}</h5>
+        <small class="text-muted">Voting Platform</small>
+
+    {% endif %}
+
+</div>
+
+<!-- 🟦 STATUS CARD -->
+<div class="card shadow-sm p-4 mb-4 text-center">
+
+    <h4 class="mb-2">🗳️ Student Election Dashboard</h4>
+
+    <p class="text-muted mb-3">
+        Status:
+        {% if has_voted %}
+            <span class="text-success fw-bold">You have voted</span>
+        {% else %}
+            <span class="text-warning fw-bold">Not yet voted</span>
+        {% endif %}
+    </p>
+
+    <a href="{% url 'elections:positions_list' %}" class="btn btn-primary fw-bold">
+        View Positions
+    </a>
+
+</div>
+
+<div class="row">
+
+    </div>
+    <div class="row">
+
+        <!-- 👤 PROFILE CARD -->
+        <div class="col-12 col-md-6 mb-3">
+    
+            <div class="card p-3 h-100">
+                <h5>👤 Profile</h5>
+    
+                <p><b>ID:</b> {{ user.username }}</p>
+    
+                <p>
+                    <b>Branch:</b>
+                    {% if user.branch %}
+                        {{ user.branch.name }}
+                    {% else %}
+                        Not assigned
+                    {% endif %}
+                </p>
+    
+                <p>
+                    <b>Institution:</b>
+                    {% if user.institution %}
+                        {{ user.institution.name }}
+                    {% endif %}
+                </p>
+    
+            </div>
+    
+        </div>
+    
+        <!-- 📞 CONTACT CARD -->
+        <div class="col-12 col-md-6 mb-3">
+    
+            <div class="card p-3 h-100 shadow-sm">
+    
+                <h5 class="mb-3">❓ Help & Contact</h5>
+    
+                <p class="small text-muted mb-3">
+                    If you experience any issues during voting, reach out to your institution support team.
+                </p>
+    
+                <div class="border-top pt-2">
+    
+                    {% if user.institution %}
+    
+                        <p class="mb-1">
+                            <b>Institution:</b> {{ user.institution.name }}
+                        </p>
+    
+                        <p class="mb-1">
+                            <b>Email:</b> {{ user.institution.email }}
+                        </p>
+    
+                        <p class="mb-1">
+                            <b>Hotline:</b> {{ user.institution.contact_phone }}
+                        </p>
+    
+                    {% else %}
+    
+                        <p class="text-muted">No institution contact available.</p>
+    
+                    {% endif %}
+    
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    </div>
+
+{% endblock %}

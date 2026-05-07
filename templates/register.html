@@ -1,0 +1,98 @@
+
+
+{% load static %}
+
+
+{% block content%}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+</head>
+<body>
+
+<div class="card">
+    <h2>Voter Registration</h2>
+
+    {{ form.non_field_errors }}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Username</label>
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Student Number</label>
+            {{ form.student_id }}
+            {{ form.student_id.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Full Name</label>
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Phone</label>
+            {{ form.phone_number }}
+            {{ form.phone_number.errors }}
+        </div>
+
+        <div class="form-group password-wrapper">
+            <label>Password</label>
+            {{ form.password }}
+            <span onclick="togglePassword('id_password')">👁</span>
+            {{ form.password.errors }}
+        </div>
+
+        <div class="form-group password-wrapper">
+            <label>Confirm Password</label>
+            {{ form.confirm_password }}
+            <span onclick="togglePassword('id_confirm_password')">👁</span>
+            {{ form.confirm_password.errors }}
+        </div>
+
+        <button type="submit">Sign Up</button>
+        
+    <p class="auth-text">
+        Already have an account?
+        <a href="{% url 'accounts:login' %}">Sign in</a>
+    </p>
+
+    <p class="auth-link">
+        <span class="auth-icon">🏠</span>
+        <span>Go back to</span>
+        <a href="{% url 'landing' %}">Home</a>
+    </p>
+    </form>
+
+    <div class="messages">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function togglePassword(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+}
+</script>
+
+</body>
+</html>
+
+{% endblock %}
