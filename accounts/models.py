@@ -1,8 +1,10 @@
 # accounts/models.py
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from institutions.models import Institution, Branch
+from institutions.models import Institution, Branch, Department  # Import Department model
 from django.utils import timezone
+from datetime import timedelta
+
 
 class User(AbstractUser):
     ROLE_CHOICES = (
@@ -36,10 +38,15 @@ class User(AbstractUser):
         Branch, null=True, blank=True, on_delete=models.SET_NULL
     )
 
+    # Add department field
+    department = models.ForeignKey(
+        Department, null=True, blank=True, on_delete=models.SET_NULL
+    )
+
     def __str__(self):
         return self.username
-from django.utils import timezone
-from datetime import timedelta  
+
+
 class PasswordResetOTP(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     code = models.CharField(max_length=6)

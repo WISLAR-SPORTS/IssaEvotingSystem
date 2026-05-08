@@ -6,8 +6,11 @@ from .models import Vote
 from elections.models import Candidate
 from elections.models import Position
 from django.contrib.auth.decorators import login_required
+from django.db.models import Prefetch, Count
+from django.http import JsonResponse
+from django.shortcuts import render
 
-from django.db import IntegrityError
+
 @login_required
 @require_POST
 def cast_vote(request, candidate_id):
@@ -21,14 +24,19 @@ def cast_vote(request, candidate_id):
 
     position = candidate.position
 
-    
+    # Check if the user has already voted for this position
     if Vote.objects.filter(voter=user, position=position).exists():
         messages.error(request, "You have already voted for this position.")
         return redirect("elections:position_candidates", position_id=position.id)
 
-    # 🔒 branch protection
+    # Branch protection
     if not position.is_central and candidate.branch != user.branch:
         messages.error(request, "Invalid candidate for your branch.")
+        return redirect("elections:position_candidates", position_id=position.id)
+
+    # Department protection
+    if candidate.department and candidate.department != user.department:
+        messages.error(request, "Invalid candidate for your department.")
         return redirect("elections:position_candidates", position_id=position.id)
 
     try:
@@ -37,10 +45,11 @@ def cast_vote(request, candidate_id):
             candidate=candidate,
             position=position,
             institution=user.institution,
-            branch=user.branch
+            branch=user.branch,
+            department=user.department,  # Link department
         )
 
-        vote.full_clean()  # ✅ VERY IMPORTANT
+        vote.full_clean()  # Validate the vote
         vote.save()
 
         messages.success(request, "Vote cast successfully!")
@@ -53,8 +62,9 @@ def cast_vote(request, candidate_id):
 
     return redirect("elections:position_candidates", position_id=position.id)
 
+
+
 from django.db.models import Count
-from django.shortcuts import get_object_or_404, render
 from django.shortcuts import render
 from django.http import JsonResponse
 
@@ -82,19 +92,19 @@ def election_results(request):
 
         candidates = list(candidates)
 
-        # 🔥 total votes across all candidates
+        #  total votes across all candidates
         total_votes = sum(c.total_votes for c in candidates)
 
         winner = None
         max_votes = 0
 
-        # 🚫 CASE 1: NO VOTES YET
+        #  CASE 1: NO VOTES YET
         if total_votes == 0:
             for c in candidates:
                 c.vote_percent = 0
                 c.is_winner = False
 
-        # ✅ CASE 2: VOTES EXIST
+        #  CASE 2: VOTES EXIST
         else:
             for c in candidates:
                 c.vote_percent = round((c.total_votes / total_votes) * 100, 1)
@@ -136,8 +146,13 @@ def live_results_api(request):
         # Use pre-fetched candidates
         candidates = position.candidate_set.all()
 
+        # Branch filtering
         if not position.is_central:
             candidates = candidates.filter(branch=user.branch)
+
+        # Department filtering
+        if user.department:
+            candidates = candidates.filter(department=user.department)
 
         candidates = list(candidates)
 

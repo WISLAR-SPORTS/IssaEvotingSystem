@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import StudentRecord, StudentUpload
 from core.admin_mixins import InstitutionAdminMixin
-from institutions.models import Branch, Institution
+from institutions.models import Branch, Institution, Department  # Import Department
 from accounts.models import User
 from .services.student_upload_service import process_student_upload
 from django.contrib import messages
@@ -14,8 +14,8 @@ from django.contrib import messages
 @admin.register(StudentRecord)
 class StudentRecordAdmin(InstitutionAdminMixin, admin.ModelAdmin):
 
-    list_display = ("id", "student_id", "name", "branch", "institution", "has_voted")
-    list_filter = ("institution", "branch", "has_voted")
+    list_display = ("id", "student_id", "name", "branch", "department", "institution", "has_voted")
+    list_filter = ("institution", "branch", "department", "has_voted")  # Added department to filters
     search_fields = ("student_id", "name")
 
     def get_queryset(self, request):
@@ -41,16 +41,12 @@ class StudentRecordAdmin(InstitutionAdminMixin, admin.ModelAdmin):
 # =========================
 # STUDENT UPLOAD ADMIN
 # =========================
-from django.contrib import admin, messages
-from .models import StudentUpload
-from .services.student_upload_service import process_student_upload
-
 
 @admin.register(StudentUpload)
 class StudentUploadAdmin(InstitutionAdminMixin, admin.ModelAdmin):
 
-    list_display = ("id", "branch", "institution", "uploaded_by", "processed", "uploaded_at")
-    list_filter = ("institution", "processed")
+    list_display = ("id", "branch", "department", "institution", "uploaded_by", "processed", "uploaded_at")
+    list_filter = ("institution", "branch", "department", "processed")  # Added department to filters
     readonly_fields = ("processed", "uploaded_at")
 
     # ✅ SAVE + PROCESS FILE
@@ -117,6 +113,11 @@ class StudentUploadAdmin(InstitutionAdminMixin, admin.ModelAdmin):
                     institution=request.user.institution
                 )
 
+            if db_field.name == "department":
+                kwargs["queryset"] = Department.objects.filter(
+                    branch__institution=request.user.institution
+                )
+
         if request.user.role == "branch_admin":
 
             if db_field.name == "institution":
@@ -128,6 +129,11 @@ class StudentUploadAdmin(InstitutionAdminMixin, admin.ModelAdmin):
                 kwargs["queryset"] = Branch.objects.filter(
                     id=request.user.branch_id,
                     institution=request.user.institution
+                )
+
+            if db_field.name == "department":
+                kwargs["queryset"] = Department.objects.filter(
+                    branch=request.user.branch
                 )
 
             if db_field.name == "uploaded_by":

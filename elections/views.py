@@ -3,7 +3,7 @@ from .models import Position, Election
 from voting.models import Vote
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-
+from django.db.models import Q
 
 @login_required
 def positions_list(request):
@@ -22,20 +22,20 @@ def positions_list(request):
     active_elections = []
     ended_elections = []
 
-    # ✅ FIXED LOGIC (do NOT rely on election.status)
+    # FIXED LOGIC (do NOT rely on election.status)
     for election in elections:
 
-        # 🟡 UPCOMING
+        # UPCOMING
         if election.start_time > now:
             upcoming_elections.append(election)
             continue
 
-        # 🟢 ACTIVE
+        # ACTIVE
         if election.start_time <= now <= election.end_time:
             active_elections.append(election)
             continue
 
-        # 🔴 ENDED
+        # ENDED
         ended_elections.append(election)
 
     # Only active positions
@@ -49,6 +49,13 @@ def positions_list(request):
             election__in=active_elections
         )
 
+        # Include branch, department, and central positions
+        positions = positions.filter(
+            Q(branch=user.branch) |  # Branch positions
+            Q(department=user.department) |  # Department positions
+            Q(is_central=True)  # Central positions
+        )
+
     no_active_elections = len(active_elections) == 0
 
     return render(request, "elections/positions.html", {
@@ -59,6 +66,12 @@ def positions_list(request):
     })
 from django.shortcuts import render, get_object_or_404
 from .models import Position, Candidate
+from voting.models import Vote
+from django.utils import timezone
+
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, render
+from django.utils import timezone
 
 def position_candidates(request, position_id):
     user = request.user
@@ -72,26 +85,34 @@ def position_candidates(request, position_id):
     election = position.election
     now = timezone.now()
 
-    # 🚫 Not started yet
+    # Not started yet
     if now < election.start_time:
         return render(request, "elections/not_started.html", {
             "election": election
         })
 
-    # 🚫 Already ended
+    # Already ended
     if now > election.end_time:
         return render(request, "elections/ended.html", {
             "election": election
         })
 
-    # ✅ Only runs if election is ACTIVE (current time is within range)
+    # Only runs if election is ACTIVE
     candidates = Candidate.objects.filter(
         position=position,
         institution=user.institution
     )
 
+    # Branch filtering (UNCHANGED CORE LOGIC)
     if not position.is_central:
         candidates = candidates.filter(branch=user.branch)
+
+    # ✅ FIXED Department filtering (now safe + flexible)
+    if user.department:
+        candidates = candidates.filter(
+            Q(department=user.department) |
+            Q(department__isnull=True)
+        )
 
     has_voted = Vote.objects.filter(
         voter=user,

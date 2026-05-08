@@ -14,6 +14,26 @@ body {
     padding: 0;
 }
 
+.icon-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(13, 110, 253, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.card {
+    transition: 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08);
+}
+
 /* Responsive container spacing */
 .container, .container-fluid {
     padding-left: 15px;

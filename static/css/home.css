@@ -1,7 +1,6 @@
 /* ======================
    GLOBAL THEME SYSTEM
 ====================== */
-
 :root {
     --bg: #f8fafc;
     --text: #0f172a;
@@ -9,21 +8,20 @@
     --primary: #dde3ee;
 }
 
+* {
+    box-sizing: border-box;
+}
 
-
-/* BASE BODY */
 body {
     background: var(--bg);
     color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
     transition: 0.3s;
 
-    /* ======================
-       GRID BACKGROUND
-    ====================== */
     background-image:
         radial-gradient(circle at 20% 20%, rgba(23, 97, 15, 0.05), transparent 40%),
         radial-gradient(circle at 80% 80%, rgba(15, 79, 13, 0.04), transparent 40%),
-
         linear-gradient(rgba(35, 4, 4, 0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(119, 92, 8, 0.04) 1px, transparent 1px);
 
@@ -41,7 +39,6 @@ body {
 /* ======================
    HERO SECTION
 ====================== */
-
 body.dark-mode {
     --bg: #0f172a;
     --text: #f8fafc;
@@ -53,18 +50,25 @@ body.dark-mode {
 .hero {
     background: linear-gradient(135deg, #72e466, #2563eb);
     color: white;
-    padding: 120px 0;
     text-align: center;
+
+    padding: clamp(60px, 10vh, 120px) 16px;
 }
 
 .hero h1 {
-    font-size: 52px;
+    font-size: clamp(22px, 5vw, 52px);
     font-weight: 800;
 }
 
 .typing {
     border-right: 3px solid white;
     display: inline-block;
+}
+.container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 16px;
+    margin: 0 auto;
 }
 
 /* ======================
@@ -74,6 +78,8 @@ body.dark-mode {
     background: var(--card);
     border: none;
     border-radius: 14px;
+
+    padding: 16px;
     transition: 0.3s;
 }
 
@@ -85,7 +91,7 @@ body.dark-mode {
    COUNTERS
 ====================== */
 .counter {
-    font-size: 32px;
+    font-size: clamp(20px, 3vw, 32px);
     font-weight: bold;
 }
 
@@ -95,8 +101,8 @@ body.dark-mode {
 .cta {
     background: linear-gradient(135deg, #72e466, #2563eb);
     color: white;
-    padding: 80px 0;
     text-align: center;
+    padding: clamp(50px, 8vh, 80px) 16px;
 }
 
 /* ======================
@@ -109,44 +115,46 @@ body.dark-mode {
 /* =========================
    CONTROLLED SAAS NAVBAR CARD
 ========================= */
-.navbar-brand {
-    font-size: 26px;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: 0.3s ease;
+.navbar {
+    background: var(--card);
+    transition: 0.3s;
 }
 
-.navbar-brand:hover {
-    transform: scale(1.03);
-    opacity: 0.9;
-}
 .navbar-card {
-    width: 90%;
+    width: 92%;
     max-width: 1200px;
-
-    margin: 15px auto;   /* centers it */
+    margin: 15px auto;
 
     background: var(--card);
     color: var(--text);
 
     border-radius: 18px;
-
-    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
     border: 1px solid var(--border);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
 
     backdrop-filter: blur(12px);
 
-    transition: all 0.3s ease;
-
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;   /* 🔥 FIX MOBILE OVERFLOW */
+
+    padding: 10px 16px;
+
     position: sticky;
     top: 10px;
     z-index: 1000;
+}
 
-    transition: all 0.3s ease;
+.navbar-brand {
+    font-size: clamp(18px, 2vw, 26px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.navbar-brand:hover {
+    transform: scale(1.03);
+    opacity: 0.9;
 }
 
 /* Hover effect (SaaS feel) */
@@ -159,10 +167,30 @@ body.dark-mode {
    RESPONSIVE
 ========================= */
 
-@media (max-width: 992px) {
-    .navbar-card {
-        width: 95%;
-        margin: 10px auto;
-        border-radius: 14px;
+@media (max-width: 768px) {
+    .card {
+        border-radius: 12px;
+        margin-bottom: 16px;
+    }
+
+    .hero {
+        text-align: center;
+    }
+    navbar-card {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .hero h1 {
+        line-height: 1.2;
+    }
+
+    .card {
+        margin-bottom: 16px;
+    }
+
+    .counter {
+        font-size: 24px;
     }
 }

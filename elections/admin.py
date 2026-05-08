@@ -11,25 +11,35 @@ class ElectionAdmin(InstitutionAdminMixin, admin.ModelAdmin):
     list_filter = ("institution",)
     search_fields = ("name",)
 
-
 @admin.register(Position)
 class PositionAdmin(InstitutionAdminMixin, admin.ModelAdmin):
-    list_display = ("id", "name", "election", "institution", "is_central")
-    list_filter = ("institution", "is_central")
+    list_display = ("id", "name", "election", "institution", "is_central", "department", "branch")
+    list_filter = ("institution", "is_central", "department")
     search_fields = ("name",)
 from django.contrib import admin
 from django.db.models import Q
 from .models import Candidate, Branch, User
 from institutions.models import Institution
 
+from django.contrib import admin
+from django.db.models import Q
+from django.core.exceptions import ValidationError
+
+from .models import Candidate
+from institutions.models import Institution, Branch, Department
+from accounts.models import User
+
 
 @admin.register(Candidate)
 class CandidateAdmin(admin.ModelAdmin):
 
     list_display = ("id", "user", "position", "branch", "institution")
-    list_filter = ("institution", "position")
+    list_filter = ("institution", "position", "branch")
     search_fields = ("user__username",)
 
+    # =========================
+    # QUERYSET FILTERING
+    # =========================
     def get_queryset(self, request):
         qs = super().get_queryset(request)
 
@@ -51,47 +61,88 @@ class CandidateAdmin(admin.ModelAdmin):
 
         return qs.none()
 
+    # =========================
+    # FOREIGN KEY FILTERING
+    # =========================
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
 
         if request.user.is_superuser:
             return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-        # INSTITUTION ADMIN CONTROLS
-        if request.user.role == "institution_admin":
+        user = request.user
+
+        # =====================
+        # INSTITUTION ADMIN
+        # =====================
+        if user.role == "institution_admin":
 
             if db_field.name == "institution":
                 kwargs["queryset"] = Institution.objects.filter(
-                    id=request.user.institution_id
+                    id=user.institution_id
                 )
 
-            if db_field.name == "branch":
+            elif db_field.name == "branch":
                 kwargs["queryset"] = Branch.objects.filter(
-                    institution=request.user.institution
+                    institution=user.institution
                 )
 
-            if db_field.name == "user":
+            elif db_field.name == "department":
+                kwargs["queryset"] = Department.objects.filter(
+                    branch__institution=user.institution
+                )
+
+            elif db_field.name == "user":
                 kwargs["queryset"] = User.objects.filter(
-                    institution=request.user.institution
+                    institution=user.institution
                 )
 
-        # BRANCH ADMIN CONTROLS
-        if request.user.role == "branch_admin":
+        # =====================
+        # BRANCH ADMIN
+        # =====================
+        elif user.role == "branch_admin":
 
             if db_field.name == "institution":
                 kwargs["queryset"] = Institution.objects.filter(
-                    id=request.user.institution_id
+                    id=user.institution_id
                 )
 
-            if db_field.name == "branch":
+            elif db_field.name == "branch":
                 kwargs["queryset"] = Branch.objects.filter(
-                    id=request.user.branch_id,
-                    institution=request.user.institution
+                    id=user.branch_id,
+                    institution=user.institution
                 )
 
-            if db_field.name == "user":
+            elif db_field.name == "department":
+                kwargs["queryset"] = Department.objects.filter(
+                    branch=user.branch
+                )
+
+            elif db_field.name == "user":
                 kwargs["queryset"] = User.objects.filter(
-                    institution=request.user.institution,
-                    branch=request.user.branch
+                    institution=user.institution,
+                    branch=user.branch
                 )
 
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    # =========================
+    # 🔐 VALIDATION (IMPORTANT FIX)
+    # =========================
+    def clean(self):
+        """
+        Prevent:
+        - cross-branch department selection
+        - invalid branch-department mismatch
+        """
+        cleaned_data = super().clean()
+
+        branch = cleaned_data.get("branch")
+        department = cleaned_data.get("department")
+
+        if branch and department:
+            if department.branch_id != branch.id:
+                raise ValidationError({
+                    "department": "This department does not belong to the selected branch."
+                })
+
+        return cleaned_data

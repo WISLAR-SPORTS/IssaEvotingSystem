@@ -30,13 +30,14 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    ".onrender.com"
+    #".onrender.com"
+    
 ]
 
 AUTH_USER_MODEL = "accounts.User"
 LOGOUT_REDIRECT_URL = '/'
 
-SESSION_COOKIE_AGE = 180  # 3 minutes logs out due to inactivity 
+SESSION_COOKIE_AGE = 120  # 2 minutes logs out due to inactivity 
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  #when a user closes the browser he's logged out
 
@@ -69,6 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django.contrib.sites",
     
+    
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -81,7 +83,7 @@ INSTALLED_APPS = [
     'audit',
      
 ]
-
+SITE_ID = 2
 
 LOGIN_REDIRECT_URL = "students:dashboard"
 SOCIALACCOUNT_PROVIDERS = {
@@ -138,7 +140,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Evoting.wsgi.application'
+#WSGI_APPLICATION = 'Evoting.wsgi.application'
 
 
 import os
@@ -161,7 +163,7 @@ else:
             'NAME': BASE_DIR / "db.sqlite3",
         }
     }
-    """
+"""
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
@@ -170,8 +172,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}"""
-
+}
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -232,4 +234,4 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True  
+CSRF_COOKIE_SECURE = True   

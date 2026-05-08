@@ -1,5 +1,6 @@
 # institutions/models.py
 from django.db import models
+
 class Institution(models.Model):
     name = models.CharField(max_length=255, unique=True)
     logo = models.ImageField(upload_to="institution_logos/", null=True, blank=True)
@@ -29,3 +30,14 @@ class Branch(InstitutionScopedModel):
 
     def __str__(self):
         return f"{self.name} ({self.institution.name})"
+
+
+class Department(models.Model):
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        unique_together = ("branch", "name")
+
+    def __str__(self):
+        return f"{self.name} ({self.branch.name} - {self.branch.institution.name})"

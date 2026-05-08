@@ -19,14 +19,20 @@
                         <h5 class="mb-2">{{ position.name }}</h5>
 
                         {% if position.is_central %}
-                            <span class="badge bg-primary">Central</span>
-                        {% else %}
-                            <span class="badge bg-secondary">Branch</span>
-                        {% endif %}
-
-                        <p class="mt-2 text-muted small">
-                            Click to view candidates
+                        <span class="badge bg-primary">Central</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Branch</span>
+                    {% endif %}
+                    
+                    {% if position.department %}
+                        <p class="small text-muted mt-2 mb-1">
+                            Department: {{ position.department.name }}
                         </p>
+                    {% endif %}
+                    
+                    <p class="mt-2 text-muted small">
+                        Click to view candidates
+                    </p>
 
                     </div>
                 </a>

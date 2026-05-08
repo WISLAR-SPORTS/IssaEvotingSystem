@@ -67,6 +67,16 @@
                 {% endif %}
             </span>
         </div>
+        <div class="info-row">
+            <span class="label">Department</span>
+            <span class="value">
+                {% if user.department %}
+                    {{ user.department.name }}
+                {% else %}
+                    Not assigned
+                {% endif %}
+            </span>
+        </div>
 
         <div class="info-row">
             <span class="label">Email</span>

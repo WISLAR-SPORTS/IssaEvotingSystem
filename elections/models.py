@@ -1,6 +1,6 @@
 # elections/models.py
 from django.db import models
-from institutions.models import InstitutionScopedModel, Branch
+from institutions.models import InstitutionScopedModel, Branch, Department
 from accounts.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
@@ -16,19 +16,26 @@ class Election(InstitutionScopedModel):
         return self.name
    
         
-
-
 class Position(InstitutionScopedModel):
     election = models.ForeignKey(Election, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
 
     # KEY FIELD
     is_central = models.BooleanField(default=False)
+    branch = models.ForeignKey(Branch, null=True, blank=True, on_delete=models.CASCADE)
+    # ✅ NEW FIELD (simple addition)
+    department = models.ForeignKey(
+        "institutions.Department",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f"{self.name} ({self.election.name})"
+
     class Meta:
-     unique_together = ('election', 'name')
+        unique_together = ('election', 'name')
 from django.core.exceptions import ValidationError
 
 class Candidate(InstitutionScopedModel):
@@ -36,7 +43,10 @@ class Candidate(InstitutionScopedModel):
     position = models.ForeignKey(Position, on_delete=models.CASCADE)
     branch = models.ForeignKey(Branch, null=True, blank=True, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="candidate_images/", null=True, blank=True)
-
+    department = models.ForeignKey(Department,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL)
 
     def clean(self):
         if self.position.is_central:

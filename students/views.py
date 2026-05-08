@@ -68,7 +68,6 @@ from students.models import StudentRecord
 from .form import StudentRegistrationForm
 
 User = get_user_model()
-
 def student_register(request):
     if request.method == "POST":
         form = StudentRegistrationForm(request.POST)
@@ -81,25 +80,25 @@ def student_register(request):
             email = form.cleaned_data["email"]
             phone = form.cleaned_data["phone_number"]
 
-            # 🔒 prevent duplicate username
+            # prevent duplicate username
             if User.objects.filter(username=username).exists():
                 messages.error(request, "Username already taken")
                 return redirect("students:register")
 
-            # 🔒 prevent duplicate phone (SAFE CHECK)
+            # prevent duplicate phone (SAFE CHECK)
             if hasattr(User, "phone_number"):
                 if User.objects.filter(phone_number=phone).exists():
                     messages.error(request, "Phone number already in use")
                     return redirect("students:register")
 
-            # 📌 get student safely
+            # get student safely
             try:
                 student = StudentRecord.objects.get(student_id=student_id)
             except StudentRecord.DoesNotExist:
                 messages.error(request, "Invalid student ID")
                 return redirect("students:register")
 
-            # 📌 safe branch check (THIS WAS A COMMON CRASH POINT)
+            # safe branch check (THIS WAS A COMMON CRASH POINT)
             if not student.branch or not hasattr(student.branch, "institution"):
                 messages.error(request, "Student branch/institution not assigned")
                 return redirect("students:register")
@@ -109,12 +108,17 @@ def student_register(request):
                 messages.error(request, "Name does not match student record")
                 return redirect("students:register")
 
-            # 📌 check if already linked
+            # check if already linked
             if student.user:
                 messages.error(request, "Student already registered")
                 return redirect("students:register")
 
-            # ✅ create user
+            # validate department
+            if not student.department:
+                messages.error(request, "Student department not assigned")
+                return redirect("students:register")
+
+            # create user
             user = User.objects.create_user(
                 username=username,
                 password=password,
@@ -124,11 +128,13 @@ def student_register(request):
                 phone_number=phone,
                 institution=student.branch.institution,
                 branch=student.branch,
+                department=student.department,  # Link department
             )
 
-            # 🔗 link student safely
+            # link student safely
             user.institution = student.branch.institution
             user.branch = student.branch
+            user.department = student.department  # Link department
             user.save()
 
             student.user = user
