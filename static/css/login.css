@@ -228,21 +228,62 @@ body {
         padding: 1.5rem;
         border-radius: 12px;
     }
+@media (max-width: 768px) {
+        .google-btn {
+            font-size: 15px;
+            padding: 11px 14px;
+        }
+    
+        .google-icon {
+            width: 18px;
+            height: 18px;
+        }
+    }
 }
-
 .google-btn {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 6px;
-    border-radius: 10px;
+
+    padding: 12px 16px;
+    border-radius: 8px;
+
+    background-color: #ffffff;
     border: 1px solid #ddd;
-    background: white;
-    cursor: pointer;
-    text-decoration: none;
+
+    font-size: 16px;
     font-weight: 500;
+    color: #333;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+
+    /* 🧠 FIX: prevents overflow issues */
+    box-sizing: border-box;
+    white-space: nowrap;
 }
+
+.google-btn:hover {
+    background-color: #f8f8f8;
+    border-color: #ccc;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+}
+
+.google-btn:active {
+    transform: scale(0.98);
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
 .form-group .span{
     text-decoration: none;
 

@@ -30,7 +30,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    #".onrender.com"
+    ".onrender.com"
     
 ]
 
@@ -71,10 +71,10 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     
     
-    "allauth",
+    #"allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
+    #"allauth.socialaccount.providers.google",
     'accounts',
     'institutions',
     'elections',
@@ -83,24 +83,9 @@ INSTALLED_APPS = [
     'audit',
      
 ]
-SITE_ID = 2
 
-LOGIN_REDIRECT_URL = "students:dashboard"
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "SCOPE": ["profile", "email"],
-        "AUTH_PARAMS": {"access_type": "online"},
-        "APP": {
-            "client_id": config("GOOGLE_CLIENT_ID"),
-            "secret": config("GOOGLE_CLIENT_SECRET"),
-            "key": ""
-        }
-    }
-}
 
-SOCIALACCOUNT_ADAPTER = "accounts.adapter.CustomSocialAccountAdapter"
 
-SOCIALACCOUNT_LOGIN_ON_GET = True #skip django confirmation page when signing with googgle
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -121,7 +106,7 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-SITE_ID = 2
+
 
 ROOT_URLCONF = 'Evoting.urls'
 TEMPLATES = [
@@ -228,10 +213,9 @@ JAZZMIN_SETTINGS = {
 }
 
 
-
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True   
+CSRF_COOKIE_SECURE = True  

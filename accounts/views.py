@@ -286,3 +286,7 @@ def health_check(request):
         return HttpResponseNotAllowed(["GET", "HEAD"])
     
     return JsonResponse({"status": "ok"})
+
+from django.shortcuts import redirect
+
+

@@ -13,3 +13,5 @@ def send_otp_email(email, code):
         from_email=None,
         recipient_list=[email]
     )
+
+

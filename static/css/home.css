@@ -6,10 +6,14 @@
     --text: #0f172a;
     --card: #ffffff;
     --primary: #dde3ee;
+    --muted: #94a3b8;
+    --border: rgba(0, 0, 0, 0.1);
 }
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -28,6 +32,9 @@ body {
     background-size: 50px 50px;
 }
 
+
+
+
 /* ======================
    NAVBAR
 ====================== */
@@ -36,17 +43,53 @@ body {
     transition: 0.3s;
 }
 
+.navbar-card {
+    width: 92%;
+    max-width: 1200px;
+    margin: 15px auto;
+
+    background: var(--card);
+    color: var(--text);
+
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+
+    backdrop-filter: blur(12px);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; /* 🔥 FIX MOBILE OVERFLOW */
+
+    padding: 10px 16px;
+
+    position: sticky;
+    top: 10px;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    font-size: clamp(18px, 2vw, 26px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.03);
+    opacity: 0.9;
+}
+
+/* Hover effect (SaaS feel) */
+.navbar-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+}
+
 /* ======================
    HERO SECTION
 ====================== */
-body.dark-mode {
-    --bg: #0f172a;
-    --text: #f8fafc;
-    --card: #1e293b;
-    --muted: #94a3b8;
-    --primary: #3b82f6;
-    --border: rgba(255,255,255,0.08);
-}
 .hero {
     background: linear-gradient(135deg, #72e466, #2563eb);
     color: white;
@@ -58,12 +101,14 @@ body.dark-mode {
 .hero h1 {
     font-size: clamp(22px, 5vw, 52px);
     font-weight: 800;
+    line-height: 1.2;
 }
 
 .typing {
     border-right: 3px solid white;
     display: inline-block;
 }
+
 .container {
     width: 100%;
     max-width: 1200px;
@@ -81,6 +126,7 @@ body.dark-mode {
 
     padding: 16px;
     transition: 0.3s;
+    margin-bottom: 16px;
 }
 
 .card:hover {
@@ -113,59 +159,17 @@ body.dark-mode {
 }
 
 /* =========================
-   CONTROLLED SAAS NAVBAR CARD
+   RESPONSIVE DESIGN
 ========================= */
-.navbar {
-    background: var(--card);
-    transition: 0.3s;
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 24px;
+    }
+
+    .hero h1 {
+        font-size: clamp(20px, 4vw, 48px);
+    }
 }
-
-.navbar-card {
-    width: 92%;
-    max-width: 1200px;
-    margin: 15px auto;
-
-    background: var(--card);
-    color: var(--text);
-
-    border-radius: 18px;
-    border: 1px solid var(--border);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-
-    backdrop-filter: blur(12px);
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;   /* 🔥 FIX MOBILE OVERFLOW */
-
-    padding: 10px 16px;
-
-    position: sticky;
-    top: 10px;
-    z-index: 1000;
-}
-
-.navbar-brand {
-    font-size: clamp(18px, 2vw, 26px);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.navbar-brand:hover {
-    transform: scale(1.03);
-    opacity: 0.9;
-}
-
-/* Hover effect (SaaS feel) */
-.navbar-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
 
 @media (max-width: 768px) {
     .card {
@@ -176,7 +180,8 @@ body.dark-mode {
     .hero {
         text-align: center;
     }
-    navbar-card {
+
+    .navbar-card {
         flex-direction: column;
         gap: 10px;
         text-align: center;
@@ -186,11 +191,26 @@ body.dark-mode {
         line-height: 1.2;
     }
 
-    .card {
-        margin-bottom: 16px;
-    }
-
     .counter {
         font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: 40px 16px;
+    }
+
+    .hero h1 {
+        font-size: clamp(18px, 4vw, 36px);
+    }
+
+    .navbar-card {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .navbar-brand {
+        font-size: 18px;
     }
 }
