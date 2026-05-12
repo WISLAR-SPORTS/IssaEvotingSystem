@@ -6,7 +6,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px; /* Added padding for smaller screens */
+    padding: 21px; /* Added padding for smaller screens */
+    ;
 }
 
 /* ======================
