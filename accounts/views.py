@@ -8,7 +8,6 @@ from .models import User
 from django.utils import timezone
 from .models import PasswordResetOTP
 from .utils import generate_otp, send_otp_email 
-
 def role_based_login(request):
     if request.method == "POST":
 
@@ -16,18 +15,17 @@ def role_based_login(request):
         password = request.POST.get("password")
         remember_me = request.POST.get("remember_me")
 
-        # 🔍 FIND USER BY USERNAME OR EMAIL
+        # 🔍 FIND USER
         user_obj = User.objects.filter(username__iexact=identifier).first()
 
         if not user_obj:
-            user_obj = User.objects.filter(email=identifier).first()
+            user_obj = User.objects.filter(email__iexact=identifier).first()
 
-        # ❌ USER NOT FOUND
         if not user_obj:
             messages.error(request, "Invalid username or password")
             return render(request, "accounts/login.html")
 
-        # 🔐 AUTHENTICATE USING USERNAME (ALWAYS SAFE)
+        # 🔐 AUTHENTICATE
         user = authenticate(
             request,
             username=user_obj.username,
@@ -38,8 +36,8 @@ def role_based_login(request):
             messages.error(request, "Invalid username or password")
             return render(request, "accounts/login.html")
 
-        # 🔒 SINGLE DEVICE LOGIN CHECK
-        if user.current_session_key:
+        # 🔒 SINGLE DEVICE CHECK
+        if getattr(user, "current_session_key", None):
             session = Session.objects.filter(
                 session_key=user.current_session_key
             ).first()
@@ -48,46 +46,44 @@ def role_based_login(request):
                 messages.error(request, "You are already logged in on another device.")
                 return redirect("accounts:login")
 
-            # cleanup expired session
-            user.current_session_key = None
-            user.save()
-
-        # ✅ LOGIN USER
+        # ✅ LOGIN USER (THIS CREATES SESSION PROPERLY)
         login(request, user)
 
-        # 🔑 SAVE SESSION KEY
-        request.session.save()
+        # 🔑 ENSURE SESSION EXISTS (SAFE WAY)
+        if not request.session.session_key:
+            request.session.create()
+
         user.current_session_key = request.session.session_key
         user.save()
 
-        # 🧠 REMEMBER ME LOGIC
+        # 🧠 REMEMBER ME
         if remember_me:
-            request.session.set_expiry(60 * 60 * 12)  # 12 hours
+            request.session.set_expiry(60 * 60 * 12)
         else:
-            request.session.set_expiry(0)  # browser close
+            request.session.set_expiry(0)
 
-        # 🚨 SAFETY: SUPERUSER FIRST
+        # 🚨 SUPERUSER
         if user.is_superuser:
             return redirect("/admin/")
 
-        # 🚨 SAFETY: ROLE MUST EXIST
-        if not user.role:
+        # 🚨 ROLE CHECK
+        role = getattr(user, "role", None)
+
+        if not role:
             messages.error(request, "User role not assigned.")
             return redirect("accounts:login")
 
-        # 🔥 ROLE ROUTING
-        if user.role in ["super_admin", "institution_admin", "branch_admin"]:
+        # 🔥 ROUTING
+        if role in ["super_admin", "institution_admin", "branch_admin"]:
             return redirect("/admin/")
 
-        if user.role == "student":
+        if role == "student":
             return redirect("students:dashboard")
 
-        # ❌ UNKNOWN ROLE FALLBACK
         messages.error(request, "Invalid user role.")
         return redirect("accounts:login")
 
     return render(request, "accounts/login.html")
-
 def custom_admin_logout(request):
     if request.user.is_authenticated:
         request.user.current_session_key = None
