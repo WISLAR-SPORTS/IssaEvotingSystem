@@ -1,26 +1,37 @@
+/* ======================
+   PROFILE WRAPPER
+====================== */
 .profile-wrapper {
     min-height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 20px; /* Added padding for smaller screens */
 }
 
+/* ======================
+   PROFILE CARD
+====================== */
 .profile-card {
     max-width: 520px;
     width: 100%;
     border-radius: 18px;
-    background: rgba(255,255,255,0.85);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(0,0,0,0.05);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     transition: 0.3s ease;
+    padding: 20px; /* Added padding for better spacing */
 }
 
 .profile-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
+/* ======================
+   AVATAR CIRCLE
+====================== */
 .avatar-circle {
     width: 90px;
     height: 90px;
@@ -33,24 +44,31 @@
     font-weight: bold;
     color: white;
     margin: 0 auto;
-    box-shadow: 0 8px 20px rgba(13,110,253,0.3);
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.3);
 }
 
 .profile-name {
     font-weight: 700;
     margin-top: 10px;
+    font-size: 1.5rem; /* Responsive font size */
+    text-align: center;
 }
 
 .profile-id {
-    font-size: 13px;
+    font-size: 0.9rem;
     color: #6c757d;
+    text-align: center;
 }
 
+/* ======================
+   INFO ROWS
+====================== */
 .info-row {
     display: flex;
     justify-content: space-between;
     padding: 10px 0;
     border-bottom: 1px solid #f1f1f1;
+    font-size: 1rem; /* Responsive font size */
 }
 
 .info-row:last-child {
@@ -64,14 +82,19 @@
 
 .value {
     color: #212529;
+    text-align: right;
 }
 
+/* ======================
+   BADGE STATUS
+====================== */
 .badge-status {
     display: inline-block;
     padding: 6px 12px;
     border-radius: 20px;
-    font-size: 13px;
+    font-size: 0.9rem;
     font-weight: 600;
+    text-align: center;
 }
 
 .badge-success {
@@ -82,4 +105,83 @@
 .badge-warning {
     background: #fff3cd;
     color: #664d03;
+}
+
+/* ======================
+   RESPONSIVE DESIGN
+====================== */
+@media (max-width: 1024px) {
+    .profile-card {
+        padding: 16px; /* Reduce padding for tablets */
+    }
+
+    .avatar-circle {
+        width: 80px;
+        height: 80px;
+        font-size: 28px; /* Adjust avatar size */
+    }
+
+    .profile-name {
+        font-size: 1.3rem; /* Adjust font size for tablets */
+    }
+
+    .info-row {
+        font-size: 0.95rem; /* Adjust font size for tablets */
+    }
+
+    .badge-status {
+        font-size: 0.85rem; /* Adjust badge size for tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-card {
+        padding: 12px; /* Reduce padding for smaller devices */
+    }
+
+    .avatar-circle {
+        width: 70px;
+        height: 70px;
+        font-size: 24px; /* Adjust avatar size for smaller devices */
+    }
+
+    .profile-name {
+        font-size: 1.2rem; /* Adjust font size for smaller devices */
+    }
+
+    .info-row {
+        font-size: 0.9rem; /* Adjust font size for smaller devices */
+    }
+
+    .badge-status {
+        font-size: 0.8rem; /* Adjust badge size for smaller devices */
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-wrapper {
+        padding: 10px; /* Add padding for very small screens */
+    }
+
+    .profile-card {
+        padding: 10px; /* Reduce padding for very small screens */
+    }
+
+    .avatar-circle {
+        width: 60px;
+        height: 60px;
+        font-size: 20px; /* Adjust avatar size for very small screens */
+    }
+
+    .profile-name {
+        font-size: 1rem; /* Adjust font size for very small screens */
+    }
+
+    .info-row {
+        font-size: 0.85rem; /* Adjust font size for very small screens */
+    }
+
+    .badge-status {
+        font-size: 0.75rem; /* Adjust badge size for very small screens */
+    }
 }

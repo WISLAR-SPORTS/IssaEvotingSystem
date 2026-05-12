@@ -7,7 +7,7 @@
 }
 
 /* =========================
-   BACKGROUND (SAME STYLE AS REGISTER)
+   BACKGROUND
 ========================= */
 body {
     margin: 0;
@@ -24,10 +24,11 @@ body {
 
     display: flex;
     justify-content: center;
-    align-items: center;   /* 🔥 FIX ADDED */
+    align-items: center;
 
-    padding: 20px;         /* 🔥 reduced from 80px */
+    padding: 20px;
 }
+
 /* =========================
    LOGIN CARD
 ========================= */
@@ -43,6 +44,11 @@ body {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 
     transition: all 0.3s ease;
+}
+
+.login-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
 /* =========================
@@ -98,6 +104,78 @@ body {
 }
 
 /* =========================
+   GOOGLE BUTTON
+========================= */
+.google-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 12px 16px;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+    white-space: nowrap;
+}
+
+.google-btn:hover {
+    background-color: #f8f8f8;
+    border-color: #ccc;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.google-btn:active {
+    transform: scale(0.98);
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* =========================
+   DIVIDER
+========================= */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 18px 0;
+    color: #9ca3af;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+.divider span {
+    padding: 0 10px;
+    background: #fff;
+    color: #6b7280;
+}
+
+/* =========================
    ERROR MESSAGES
 ========================= */
 .error {
@@ -131,7 +209,9 @@ body {
     text-decoration: underline;
 }
 
-/* password wrapper */
+/* =========================
+   PASSWORD WRAPPER
+========================= */
 .password-wrapper {
     position: relative;
 }
@@ -149,65 +229,11 @@ body {
     cursor: pointer;
 }
 
-/* checkbox styling optional enhancement */
-.login-box input[type="checkbox"] {
-    accent-color: #6366f1;
-    width: 20%;
-}
-
-/* Auth link container */
-.auth-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-
-    margin-top: 15px;
-
-    font-size: 0.9rem;
-    color: #555;
-}
-
-/* icon bubble feel */
-.auth-icon {
-    font-size: 1rem;
-    opacity: 0.8;
-}
-
-/* link styling */
-.auth-link a {
-    color: #6366f1;
-    font-weight: 1000;
-    text-decoration: none;
-    
-
-    transition: 0.2s;
-}
-.auth-text a {
-    color: #6366f1;
-    font-weight: 1000;
-    text-decoration: none;
-    
-
-    transition: 0.2s;
-}
-
-
-
-.auth-text a:hover {
-   
-    color: green;
-    text-decoration: solid;
-}
-.auth-link a:hover {
-    color: green;
-
-   
-    text-decoration: wavy;
-}
 /* =========================
-   RESPONSIVE
+   RESPONSIVE DESIGN
 ========================= */
+
+/* Tablets */
 @media (max-width: 768px) {
     body {
         padding: 40px 16px;
@@ -216,8 +242,19 @@ body {
     .login-box {
         max-width: 90%;
     }
+
+    .google-btn {
+        font-size: 15px;
+        padding: 11px 14px;
+    }
+
+    .google-icon {
+        width: 18px;
+        height: 18px;
+    }
 }
 
+/* Mobile */
 @media (max-width: 480px) {
     body {
         padding: 20px 12px;
@@ -228,95 +265,14 @@ body {
         padding: 1.5rem;
         border-radius: 12px;
     }
-@media (max-width: 768px) {
-        .google-btn {
-            font-size: 15px;
-            padding: 11px 14px;
-        }
-    
-        .google-icon {
-            width: 18px;
-            height: 18px;
-        }
+
+    .google-btn {
+        font-size: 14px;
+        padding: 10px 12px;
     }
-}
-.google-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
 
-    padding: 12px 16px;
-    border-radius: 8px;
-
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-
-    /* 🧠 FIX: prevents overflow issues */
-    box-sizing: border-box;
-    white-space: nowrap;
-}
-
-.google-btn:hover {
-    background-color: #f8f8f8;
-    border-color: #ccc;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    transform: translateY(-1px);
-}
-
-.google-btn:active {
-    transform: scale(0.98);
-}
-
-.google-icon {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-}
-
-.form-group .span{
-    text-decoration: none;
-
-}
-
-.google-btn:hover {
-    background: #f8f9fa;
-}
-.google-icon {
-    width: 20px;
-    height: 20px;
-}
-
-.divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin: 18px 0;
-    color: #9ca3af;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.divider::before,
-.divider::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #e5e7eb;
-}
-
-.divider span {
-    padding: 0 10px;
-    background: #fff;
-    color: #6b7280;
+    .google-icon {
+        width: 16px;
+        height: 16px;
+    }
 }

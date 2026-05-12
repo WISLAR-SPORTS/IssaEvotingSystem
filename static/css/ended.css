@@ -1,0 +1,66 @@
+/* 🌐 Full page wrapper */
+.election-wrapper {
+    min-height: 70vh;
+    padding: 20px;
+}
+
+/* 🧾 Card */
+.election-card {
+    max-width: 500px;
+    width: 100%;
+    border-radius: 16px;
+    padding: 2.5rem;
+}
+
+/* 🔴 Icon */
+.election-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6c757d, #adb5bd);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: white;
+}
+
+/* 📱 Mobile */
+@media (max-width: 576px) {
+    .election-card {
+        padding: 1.5rem;
+        border-radius: 14px;
+    }
+
+    .election-icon {
+        width: 65px;
+        height: 65px;
+        font-size: 26px;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .election-wrapper {
+        min-height: 60vh;
+        padding: 12px;
+    }
+}
+
+/* 📲 Tablet */
+@media (min-width: 577px) and (max-width: 991px) {
+    .election-card {
+        padding: 2rem;
+    }
+
+    .election-icon {
+        width: 75px;
+        height: 75px;
+    }
+}

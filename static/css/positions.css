@@ -1,11 +1,74 @@
+/* 🟦 Base Card */
 .position-card {
     border-radius: 14px;
-    transition: 0.3s;
+    transition: all 0.25s ease-in-out;
     border: none;
     background: #ffffff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 18px;
 }
 
+/* ✨ Hover effect (desktop only feel) */
 .position-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* 🧠 Prevent text overflow */
+.position-card h5 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.position-card p {
+    margin-bottom: 0;
+}
+
+/* 📱 MOBILE (phones) */
+@media (max-width: 576px) {
+    .position-card {
+        padding: 14px;
+        border-radius: 12px;
+    }
+
+    .position-card h5 {
+        font-size: 1rem;
+    }
+
+    .position-card p {
+        font-size: 0.85rem;
+    }
+
+    /* reduce hover effect on touch devices */
+    .position-card:hover {
+        transform: none;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+    }
+
+    .row.g-4 {
+        --bs-gutter-x: 1rem;
+        --bs-gutter-y: 1rem;
+    }
+}
+
+/* 📲 TABLETS */
+@media (min-width: 577px) and (max-width: 991px) {
+    .position-card {
+        padding: 16px;
+    }
+
+    .position-card h5 {
+        font-size: 1.05rem;
+    }
+}
+
+/* 💻 LARGE SCREENS */
+@media (min-width: 1200px) {
+    .position-card {
+        padding: 20px;
+    }
 }
