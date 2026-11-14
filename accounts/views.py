@@ -75,31 +75,14 @@ def role_based_login(request):
             messages.error(request, "Invalid username or password")
             return render(request, "accounts/login.html")
 
-        # Single device login check
-        if user.current_session_key:
-            session = Session.objects.filter(
-                session_key=user.current_session_key
-            ).first()
-
-            if session and session.expire_date > timezone.now():
-                messages.error(
-                    request,
-                    "You are already logged in on another device."
-                )
-                return redirect("accounts:login")
-
-            user.current_session_key = None
-            user.save(update_fields=["current_session_key"])
-
-        # Login user
+        # Login user (multiple devices allowed)
         login(request, user)
 
-     
-
-        # Save session key
-        request.session.save()
-        user.current_session_key = request.session.session_key
-        user.save(update_fields=["current_session_key"])
+        # Remember me
+        if remember_me:
+            request.session.set_expiry(1209600)  # 2 weeks
+        else:
+            request.session.set_expiry(0)  # Browser closes
 
         # Superuser first
         if user.is_superuser:
