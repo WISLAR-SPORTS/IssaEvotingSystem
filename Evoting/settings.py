@@ -34,6 +34,14 @@ ALLOWED_HOSTS = [
     
 ]
 
+import cloudinary
+cloudinary.config(
+    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.environ.get("CLOUDINARY_API_KEY"),
+    api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
+)
+
+
 AUTH_USER_MODEL = "accounts.User"
 LOGOUT_REDIRECT_URL = '/'
 
@@ -70,7 +78,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django.contrib.sites",
     
-    
+    'cloudinary',
+    'cloudinary_storage',
     #"allauth",
     "allauth.account",
     "allauth.socialaccount",

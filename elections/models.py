@@ -4,6 +4,7 @@ from institutions.models import InstitutionScopedModel, Branch, Department
 from accounts.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from cloudinary.models import CloudinaryField
 
 
 class Election(InstitutionScopedModel):
@@ -42,7 +43,14 @@ class Candidate(InstitutionScopedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     position = models.ForeignKey(Position, on_delete=models.CASCADE)
     branch = models.ForeignKey(Branch, null=True, blank=True, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="candidate_images/", null=True, blank=True)
+    
+
+    image = CloudinaryField(
+        'image',
+        folder='candidate_images',
+        null=True,
+        blank=True
+)
     department = models.ForeignKey(Department,
         null=True,
         blank=True,

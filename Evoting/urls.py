@@ -24,7 +24,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from accounts.views import health_check
 from elections.views import live_results_view
-
+from django.conf.urls.static import static
 urlpatterns = [
 
     path('admin/logout/', custom_admin_logout, name='logout'),
