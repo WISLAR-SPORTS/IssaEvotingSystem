@@ -1,6 +1,8 @@
 asgiref==3.11.1
 certifi==2026.4.22
 cloudinary==1.46.2
+cloudinary
+django-cloudinary-storage
 cffi==2.0.0
 charset-normalizer==3.4.7
 cryptography==47.0.0
