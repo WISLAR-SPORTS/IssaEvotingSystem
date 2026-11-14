@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bf#-#a)8g!6)_+hs_ih3b*u*hdup1zih^clq#@batvu1l^eiw_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = [
@@ -123,7 +123,7 @@ TEMPLATES = [
             ],
         },
     },
-]
+] 
 
 #WSGI_APPLICATION = 'Evoting.wsgi.application'
 
@@ -133,31 +133,25 @@ import dj_database_url
 from decouple import config
  #uses sqlite3 database locally and postgres on render.com
 
-"""if config("DATABASE_URL", default=""):
-    DATABASES = {
+
+DATABASES = {
         'default': dj_database_url.config(
             default=config("DATABASE_URL"),
             conn_max_age=600,
             ssl_require=True
         )
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / "db.sqlite3",
-        }
-    }
-"""
+
+
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+} """
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
