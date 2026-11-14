@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import role_based_login, request_password_reset,institution_register, verify_otp, set_new_password, resend_otp
+from .views import role_based_login, request_password_reset,institution_register, database_status, verify_otp, set_new_password, resend_otp
 
 
 
@@ -17,6 +17,11 @@ urlpatterns = [
             name="institution_register",
         ),
   
+    path(
+        "database-status/",
+        database_status,
+        name="database_status"
+    ),
 
 
 ]

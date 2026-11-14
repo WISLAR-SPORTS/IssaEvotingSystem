@@ -18,6 +18,31 @@ from django.contrib.sessions.models import Session
 from django.shortcuts import render, redirect
 from django.utils import timezone
 
+from django.http import JsonResponse
+from django.db import connection
+
+def database_status(request):
+    try:
+        connection.ensure_connection()
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            result = cursor.fetchone()
+
+        return JsonResponse({
+            "database": connection.vendor,
+            "connected": connection.is_usable(),
+            "query_test": result[0] == 1,
+            "status": "SUCCESS"
+        })
+
+    except Exception as e:
+        return JsonResponse({
+            "connected": False,
+            "status": "FAILED",
+            "error": str(e)
+        }, status=500)
+
 
 def role_based_login(request):
     if request.method == "POST":
