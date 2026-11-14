@@ -94,11 +94,7 @@ def role_based_login(request):
         # Login user
         login(request, user)
 
-        # Remember me
-        if remember_me:
-            request.session.set_expiry(60 * 60 * 12)
-        else:
-            request.session.set_expiry(0)
+     
 
         # Save session key
         request.session.save()

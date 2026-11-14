@@ -37,7 +37,7 @@ ALLOWED_HOSTS = [
 AUTH_USER_MODEL = "accounts.User"
 LOGOUT_REDIRECT_URL = '/'
 
-SESSION_COOKIE_AGE = 1200  # 20 minutes logs out due to inactivity 
+SESSION_COOKIE_AGE = 120  # 2 minutes logs out due to inactivity 
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  #when a user closes the browser he's logged out
 
