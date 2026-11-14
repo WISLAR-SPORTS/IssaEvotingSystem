@@ -1,75 +1,406 @@
-.election-schedule-wrapper {
-    min-height: 70vh;
-    padding: 20px;
+
+/* =========================================
+   ELECTION STATUS — WARM WHITE & SAGE
+========================================= */
+
+:root {
+    --status-bg: #faf9f6;
+    --status-surface: #ffffff;
+    --status-soft: #f4f5ef;
+
+    --status-primary: #526b59;
+    --status-primary-dark: #3e5445;
+    --status-primary-soft: #e9efe8;
+
+    --status-text: #292d29;
+    --status-muted: #777d73;
+    --status-border: #e7e8df;
+
+    --status-radius: 24px;
+    --status-shadow: 0 12px 40px rgba(41, 45, 41, 0.07);
+    --status-transition: 180ms ease;
 }
 
-/* 🧾 Card */
-.election-schedule-card {
-    max-width: 520px;
+/* Page */
+
+.election-status-page,
+.election-status-page * {
+    box-sizing: border-box;
+}
+
+.election-status-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    border-radius: 16px;
-    padding: 2.5rem;
+    min-height: 75vh;
+    padding: 40px 20px;
+    color: var(--status-text);
+    background: var(--status-bg);
 }
 
-/* ⏳ Icon */
-.election-schedule-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #0d6efd, #6ea8fe);
+/* Main card */
+
+.election-status-card {
+    position: relative;
+    width: 100%;
+    max-width: 540px;
+    overflow: hidden;
+    background: var(--status-surface);
+    border: 1px solid var(--status-border);
+    border-radius: var(--status-radius);
+    box-shadow: var(--status-shadow);
+}
+
+.status-accent {
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(
+        90deg,
+        var(--status-primary-dark),
+        #a2b59c
+    );
+}
+
+.status-content {
+    padding: 38px;
+}
+
+/* Icon */
+
+.status-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
-    color: white;
+    width: 76px;
+    height: 76px;
+    margin-bottom: 24px;
+    border: 1px solid #dce6da;
+    border-radius: 22px;
+    background: var(--status-primary-soft);
+    color: var(--status-primary-dark);
 }
 
-/* 📦 Countdown box */
-.countdown-box {
-    background: #f8f9fa;
+.status-icon svg {
+    width: 34px;
+    height: 34px;
+    stroke-width: 1.7;
 }
 
-/* 📱 Mobile */
-@media (max-width: 576px) {
+/* Status label */
 
-    .election-schedule-card {
-        padding: 1.5rem;
-        border-radius: 14px;
+.status-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 13px;
+    color: var(--status-primary-dark);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #8caa80;
+}
+
+/* Heading */
+
+.status-content h1 {
+    margin: 0 0 12px;
+    color: var(--status-text);
+    font-size: clamp(1.8rem, 4vw, 2.25rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.8px;
+}
+
+.status-description {
+    margin: 0 0 28px;
+    color: var(--status-muted);
+    font-size: 0.94rem;
+    line-height: 1.8;
+}
+
+/* Election details */
+
+.election-information {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 19px;
+    margin-bottom: 18px;
+    border: 1px solid var(--status-border);
+    border-radius: 16px;
+    background: #fcfcfa;
+}
+
+.information-icon,
+.date-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: var(--status-primary-soft);
+    color: var(--status-primary-dark);
+}
+
+.information-icon svg,
+.date-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+.information-details {
+    min-width: 0;
+}
+
+.information-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--status-muted);
+    font-size: 0.76rem;
+    font-weight: 600;
+}
+
+.information-details h2 {
+    margin: 0;
+    color: var(--status-text);
+    font-size: 1rem;
+    font-weight: 750;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Countdown panel */
+
+.countdown-panel {
+    padding: 22px;
+    margin-bottom: 22px;
+    border: 1px solid #dfe7db;
+    border-radius: 17px;
+    background: var(--status-primary-soft);
+}
+
+.countdown-heading {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--status-primary-dark);
+    font-size: 0.83rem;
+    font-weight: 700;
+}
+
+.countdown-heading svg {
+    width: 18px;
+    height: 18px;
+}
+
+.countdown-value {
+    margin: 15px 0 8px;
+    color: var(--status-primary-dark);
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+    font-weight: 800;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.countdown-note {
+    margin: 0;
+    color: #647365;
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+
+/* Scheduled date */
+
+.scheduled-date {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 4px 0 24px;
+}
+
+.scheduled-date p {
+    margin: 0;
+    color: var(--status-text);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.scheduled-date .scheduled-time {
+    margin-top: 4px;
+    color: var(--status-muted);
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+/* Action */
+
+.status-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 50px;
+    padding: 13px 20px;
+    border: 1px solid var(--status-primary-dark);
+    border-radius: 13px;
+    background: var(--status-primary-dark);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    transition:
+        background var(--status-transition),
+        transform var(--status-transition),
+        box-shadow var(--status-transition);
+}
+
+.status-action svg {
+    width: 18px;
+    height: 18px;
+}
+
+.status-action:hover {
+    transform: translateY(-2px);
+    background: var(--status-primary);
+    box-shadow: 0 6px 15px rgba(62, 84, 69, 0.16);
+    color: #ffffff;
+}
+
+.status-action:focus-visible {
+    outline: 3px solid #a2b59c;
+    outline-offset: 4px;
+}
+
+/* Footer */
+
+.status-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 22px 0 0;
+    color: var(--status-muted);
+    font-size: 0.74rem;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.status-footer svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* Tablet and mobile */
+
+@media (max-width: 600px) {
+    .election-status-page {
+        min-height: auto;
+        padding: 24px 14px;
     }
 
-    .election-schedule-icon {
-        width: 65px;
-        height: 65px;
-        font-size: 26px;
+    .election-status-card {
+        border-radius: 19px;
     }
 
-    h3 {
+    .status-content {
+        padding: 26px 21px;
+    }
+
+    .status-icon {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 21px;
+        border-radius: 18px;
+    }
+
+    .status-icon svg {
+        width: 29px;
+        height: 29px;
+    }
+
+    .status-description {
+        font-size: 0.88rem;
+    }
+
+    .election-information {
+        padding: 15px;
+    }
+
+    .countdown-panel {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 360px) {
+    .status-content {
+        padding: 23px 16px;
+    }
+
+    .status-content h1 {
+        font-size: 1.65rem;
+    }
+
+    .countdown-value {
         font-size: 1.3rem;
     }
+}
 
-    h5 {
-        font-size: 1rem;
-    }
+/* Accessibility */
 
-    .btn {
-        width: 100%;
-    }
-
-    .election-schedule-wrapper {
-        min-height: 60vh;
-        padding: 12px;
+@media (prefers-reduced-motion: reduce) {
+    .status-action {
+        transition: none;
     }
 }
 
-/* 📲 Tablet */
-@media (min-width: 577px) and (max-width: 991px) {
-    .election-schedule-card {
-        padding: 2rem;
-    }
+/* Optional dark theme */
 
-    .election-schedule-icon {
-        width: 75px;
-        height: 75px;
-    }
+html[data-theme="dark"] {
+    --status-bg: #171b18;
+    --status-surface: #202621;
+    --status-soft: #272e28;
+
+    --status-primary: #a2bba5;
+    --status-primary-dark: #d3e2d4;
+    --status-primary-soft: #303d32;
+
+    --status-text: #edf1eb;
+    --status-muted: #a5aea3;
+    --status-border: #374038;
+
+    --status-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="dark"] .election-information {
+    background: #232a24;
+}
+
+html[data-theme="dark"] .countdown-panel {
+    border-color: #425345;
+}
+
+html[data-theme="dark"] .countdown-note {
+    color: #b1c0b1;
+}
+
+html[data-theme="dark"] .status-action {
+    color: #202621;
+    background: #d3e2d4;
+    border-color: #d3e2d4;
+}
+
+html[data-theme="dark"] .status-action:hover {
+    background: #b9cfbc;
 }

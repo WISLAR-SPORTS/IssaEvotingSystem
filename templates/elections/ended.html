@@ -1,40 +1,112 @@
+
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Election Closed | E-Voting{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ended.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<div class="election-wrapper d-flex justify-content-center align-items-center">
+<section class="election-status-page">
 
-    <div class="card election-card shadow-lg border-0 text-center">
+    <article class="election-status-card">
 
-        <!-- Icon -->
-        <div class="mb-4">
-            <div class="election-icon">
-                ❌
+        <div class="status-accent closed-accent"></div>
+
+        <div class="status-content">
+
+            <!-- Status icon -->
+            <div class="status-icon closed-icon">
+                <i data-lucide="calendar-check-2"></i>
             </div>
-        </div>
 
-        <!-- Title -->
-        <h3 class="mb-3 fw-bold">Election Closed</h3>
+            <!-- Status label -->
+            <span class="status-eyebrow closed-eyebrow">
+                <span class="status-dot closed-dot"></span>
+                ELECTION COMPLETED
+            </span>
 
-        <!-- Description -->
-        <p class="text-muted mb-4">
-            The election for <strong>{{ election.name }}</strong> has officially ended.
-        </p>
+            <!-- Heading -->
+            <h1>Election Closed</h1>
 
-        <!-- Optional extra info -->
-        <p class="small text-muted">
-            Voting is no longer available. Results may be announced soon.
-        </p>
+            <p class="status-description">
+                This election has officially ended. The voting period
+                is now closed, and ballots can no longer be submitted.
+            </p>
 
-        <!-- Button -->
-        <div class="mt-4">
-            <a href="{% url 'elections:positions_list' %}" class="btn btn-dark px-4 py-2 w-100 w-sm-auto">
-                Back to Positions
+            <!-- Election information -->
+            <div class="election-information">
+
+                <div class="information-icon closed-information-icon">
+                    <i data-lucide="vote"></i>
+                </div>
+
+                <div class="information-details">
+                    <span class="information-label">Election</span>
+                    <h2>{{ election.name }}</h2>
+                </div>
+
+            </div>
+
+            <!-- Closed status panel -->
+            <div class="closed-status-panel">
+
+                <div class="closed-status-heading">
+                    <i data-lucide="lock-keyhole"></i>
+                    <span>Voting period ended</span>
+                </div>
+
+                <p class="closed-status-message">
+                    Vote submission is no longer available for this election.
+                </p>
+
+            </div>
+
+            <!-- End date -->
+            <div class="scheduled-date">
+
+                <div class="date-icon closed-date-icon">
+                    <i data-lucide="calendar-days"></i>
+                </div>
+
+                <div>
+                    <span class="information-label">Election end date</span>
+                    <p>{{ election.end_time|date:"M d, Y" }}</p>
+                    <p class="scheduled-time">
+                        {{ election.end_time|date:"H:i" }}
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Action -->
+            <a href="{% url 'elections:positions_list' %}"
+               class="status-action closed-action">
+                <i data-lucide="arrow-left"></i>
+                <span>Back to Positions</span>
             </a>
+
+            <!-- Footer -->
+            <p class="status-footer">
+                <i data-lucide="shield-check"></i>
+                <span>Election information is provided according to available voting data.</span>
+            </p>
+
         </div>
 
-    </div>
+    </article>
 
-</div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
+});
+</script>
 
 {% endblock %}

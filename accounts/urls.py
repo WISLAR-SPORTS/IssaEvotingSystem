@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import role_based_login, request_password_reset, verify_otp, set_new_password, resend_otp
+from .views import role_based_login, request_password_reset,institution_register, verify_otp, set_new_password, resend_otp
 
 
 
@@ -11,7 +11,13 @@ urlpatterns = [
     path("verify-otp/", verify_otp, name="verify_otp"),
     path("new-password/", set_new_password, name="set_new_password"),
     path("resend-otp/", resend_otp, name="resend_otp"),
+     path(
+            "institutions/register/",
+            institution_register,
+            name="institution_register",
+        ),
   
 
 
 ]
+

@@ -18,35 +18,69 @@ from elections.models import Election
 
 from django.http import HttpResponseForbidden
 
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from django.utils import timezone
+
+from elections.models import Election
+from .models import StudentRecord
+
+
 @login_required
 def student_dashboard(request):
     user = request.user
 
-    # 🔒 ONLY STUDENTS ALLOWED
+    # Only students can access this dashboard.
     if user.role != "student":
         return HttpResponseForbidden("Access denied: Students only")
 
     student = StudentRecord.objects.filter(user=user).first()
-
     now = timezone.now()
 
-    active_elections = Election.objects.filter(
-        institution=user.institution,
-        start_time__lte=now,
-        end_time__gte=now
-    )
+    # Safely handle students without an assigned institution.
+    if not user.institution:
+        return render(request, "students/dashboard.html", {
+            "student": student,
+            "elections": [],
+            "active_elections": [],
+            "upcoming_elections": [],
+        })
 
-    upcoming_elections = Election.objects.filter(
-        institution=user.institution,
-        start_time__gt=now
-    )
+    # Get all elections, including ended ones.
+    elections = Election.objects.filter(
+        institution=user.institution
+    ).order_by("-start_time")
+
+    # Assign a display status to every election.
+    for election in elections:
+        if now < election.start_time:
+            election.display_status = "upcoming"
+            election.display_status_label = "Upcoming"
+        elif now <= election.end_time:
+            election.display_status = "active"
+            election.display_status_label = "Active"
+        else:
+            election.display_status = "ended"
+            election.display_status_label = "Ended"
+
+    active_elections = [
+        election for election in elections
+        if election.display_status == "active"
+    ]
+
+    upcoming_elections = [
+        election for election in elections
+        if election.display_status == "upcoming"
+    ]
 
     return render(request, "students/dashboard.html", {
         "student": student,
+        "elections": elections,
         "active_elections": active_elections,
         "upcoming_elections": upcoming_elections,
-        "user": user,
     })
+
 
 @login_required
 def student_profile(request):

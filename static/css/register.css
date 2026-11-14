@@ -1,219 +1,776 @@
-/* =========================
-   RESET
-========================= */
-* {
+
+/* ==========================================
+   VOTER REGISTRATION
+   Modern Emerald Green Theme
+========================================== */
+
+:root {
+    --primary: #15803d;
+    --primary-dark: #166534;
+    --primary-light: #22c55e;
+    --primary-soft: #f0fdf4;
+
+    --text-primary: #172b21;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+
+    --border: #e2e8e5;
+    --surface: #ffffff;
+    --surface-soft: #f8fbf9;
+
+    --danger: #dc2626;
+
+    --radius-sm: 9px;
+    --radius-md: 13px;
+    --radius-lg: 22px;
+
+    --shadow:
+        0 20px 55px rgba(22, 101, 52, 0.09),
+        0 3px 10px rgba(15, 23, 42, 0.03);
+
+    --transition: 200ms ease;
+}
+
+/* ---------- RESET ---------- */
+*,
+*::before,
+*::after {
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body,
+input,
+button {
     font-family: 'Inter', sans-serif;
 }
 
 body {
-    margin: 0;
-    min-height: 100vh;
-    color:green;
-    background-color:rgba(165, 234, 165, 0.161);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 
-    /* 🌈 modern gradient + grid background */
+    min-height: 100vh;
+    margin: 0;
+    padding: 42px 20px;
+    font-family: 'Times New Roman', Times, serif;
+
+    color: var(--text-primary);
+    background-color: #f4f9f5;
 
     background-image:
-        radial-gradient(circle at 20% 20%, rgba(23, 124, 12, 0.05), transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(144, 45, 9, 0.04), transparent 40%),
+        radial-gradient(
+            ellipse at 12% 5%,
+            rgba(34, 197, 94, 0.13),
+            transparent 40%
+        ),
+        radial-gradient(
+            ellipse at 95% 95%,
+            rgba(16, 185, 129, 0.09),
+            transparent 38%
+        ),
+        linear-gradient(
+            rgba(22, 101, 52, 0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(22, 101, 52, 0.025) 1px,
+            transparent 1px
+        );
 
-        linear-gradient(rgba(35, 4, 4, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(119, 92, 8, 0.04) 1px, transparent 1px);
-
-    background-size: 50px 50px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-
-    /* ✅ CONTROL TOP/BOTTOM SPACING HERE */
-    padding: 60px 20px;
+    background-size:
+        auto,
+        auto,
+        36px 36px,
+        36px 36px;
 }
 
-/* =========================
-   CARD (RESPONSIVE)
-========================= */
+/* ---------- MAIN CARD ---------- */
 .card {
     width: 100%;
-    max-width: 420px;
-  
+    max-width: 760px;
+    padding: 38px;
 
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.97);
 
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(226, 232, 229, 0.95);
+    border-radius: var(--radius-lg);
 
-    /* smooth responsiveness */
-    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+
+    animation: card-enter 450ms ease both;
 }
 
-
-/* Auth link container */
-.auth-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-
-    margin-top: 15px;
-
-    font-size: 0.9rem;
-    color: #555;
-}
-
-/* icon bubble feel */
-.auth-icon {
-    font-size: 1rem;
-    opacity: 0.8;
-}
-
-/* link styling */
-.auth-link a {
-    color: #6366f1;
-    font-weight: 1000;
-    text-decoration: none;
-    
-
-    transition: 0.2s;
-}
-.auth-text a {
-    color: #6366f1;
-    font-weight: 1000;
-    text-decoration: none;
-    
-
-    transition: 0.2s;
-}
-
-
-
-.auth-text a:hover {
-   
-    color: green;
-    text-decoration: solid;
-}
-.auth-link a:hover {
-    color: green;
-
-   
-    text-decoration: wavy;
-}
-
-/* =========================
-   RESPONSIVE BREAKPOINTS
-========================= */
-
-/* tablets */
-@media (max-width: 768px) {
-    body {
-        padding: 40px 16px;
+@keyframes card-enter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
     }
 
-    .card {
-        max-width: 90%;
-        padding: 1.5rem;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-/* phones */
-@media (max-width: 480px) {
-    body {
-        padding: 20px 12px;
-    }
-
-    .card {
-        max-width: 100%;
-        padding: 1.2rem;
-        border-radius: 12px;
-    }
-}
-
-/* =========================
-   TITLE
-========================= */
-.card h2 {
+/* ---------- HEADER ---------- */
+.register-header {
+    margin-bottom: 30px;
     text-align: center;
-    margin-bottom: 1.5rem;
-    color: green;
 }
 
-/* =========================
-   FORM
-========================= */
+.brand-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 18px;
+
+    color: var(--primary-dark);
+    background: linear-gradient(
+        135deg,
+        #dcfce7,
+        #bbf7d0
+    );
+
+    border: 1px solid #bbf7d0;
+    border-radius: 19px;
+}
+
+.brand-icon svg {
+    width: 31px;
+    height: 31px;
+    stroke-width: 1.8;
+}
+
+.register-header h1 {
+    margin: 0 0 10px;
+
+    color: var(--text-primary);
+
+    font-size: clamp(1.6rem, 4vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    line-height: 1.3;
+}
+
+.subtitle {
+    max-width: 500px;
+    margin: 0 auto;
+
+    color: var(--text-secondary);
+
+    font-size: 0.91rem;
+    line-height: 1.75;
+}
+
+/* ---------- FORM SECTIONS ---------- */
+.form-section {
+    margin-bottom: 24px;
+    padding: 24px;
+
+    background: var(--surface-soft);
+
+    border: 1px solid #e5eee7;
+    border-radius: var(--radius-md);
+
+    transition: border-color var(--transition);
+}
+
+.form-section:hover {
+    border-color: #c9e4d0;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin: 0 0 24px;
+    padding-bottom: 16px;
+
+    color: var(--text-primary);
+
+    border-bottom: 1px solid var(--border);
+
+    font-size: 1.04rem;
+    font-weight: 750;
+}
+
+/* ---------- SECTION NUMBERS ---------- */
+.section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 34px;
+    height: 34px;
+
+    color: var(--primary-dark);
+    background: #dcfce7;
+
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+
+    font-size: 0.84rem;
+    font-weight: 800;
+}
+
+/* ---------- FORM GRID ---------- */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 18px;
+}
+
 .form-group {
-    margin-bottom: 1rem;
+    min-width: 0;
+    margin-bottom: 2px;
 }
 
-.form-group label {
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+/* ---------- LABELS ---------- */
+.form-group > label {
     display: block;
-    font-size: 0.9rem;
-    margin-bottom: 0.3rem;
-    color: #444;
+
+    margin-bottom: 9px;
+
+    color: #334155;
+
+    font-size: 0.86rem;
+    font-weight: 650;
+    line-height: 1.5;
 }
 
-.form-group input {
+.required {
+    margin-left: 2px;
+    color: var(--danger);
+}
+
+/* ---------- INPUT WRAPPERS ---------- */
+.input-wrapper {
+    display: flex;
+    align-items: center;
+
     width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+    min-width: 0;
+    min-height: 48px;
+
+    background: var(--surface);
+
+    border: 1px solid #d7e2da;
+    border-radius: var(--radius-sm);
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+.input-wrapper > svg {
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+
+    margin-left: 13px;
+
+    color: #94a3b8;
+
+    stroke-width: 1.8;
+
+    transition: color var(--transition);
+}
+
+.input-wrapper:focus-within {
+    border-color: var(--primary-light);
+
+    box-shadow:
+        0 0 0 3px rgba(34, 197, 94, 0.12);
+}
+
+.input-wrapper:focus-within > svg {
+    color: var(--primary);
+}
+
+/* ---------- INPUT FIELDS ---------- */
+.input-wrapper input {
+    display: block;
+
+    width: 100%;
+    min-width: 0;
+    height: 46px;
+
+    padding: 0 12px;
+
+    color: var(--text-primary);
+    background: transparent;
+
+    border: none;
     outline: none;
-    transition: 0.2s;
+    border-radius: inherit;
+
+    font-size: 0.9rem;
 }
 
-.form-group input:focus {
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+.input-wrapper input::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
 }
 
-/* =========================
-   PASSWORD TOGGLE
-========================= */
-.password-wrapper {
-    position: relative;
+/* Django field error state */
+.input-wrapper:has(input[aria-invalid="true"]) {
+    border-color: var(--danger);
 }
 
-.password-wrapper span {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+.input-wrapper:has(input[aria-invalid="true"]:focus-within) {
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* ---------- PASSWORD FIELDS ---------- */
+.password-wrapper input {
+    padding-right: 4px;
+}
+
+.password-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 42px;
+    height: 42px;
+    margin-right: 2px;
+    padding: 0;
+
+    color: #64748b;
+    background: transparent;
+
+    border: none;
+    border-radius: 7px;
+
     cursor: pointer;
+
+    transition:
+        color var(--transition),
+        background var(--transition);
 }
 
-/* =========================
-   BUTTON
-========================= */
-button {
+.password-toggle:hover {
+    color: var(--primary);
+    background: var(--primary-soft);
+}
+
+.password-toggle svg {
+    width: 19px;
+    height: 19px;
+}
+
+.password-toggle:focus-visible {
+    outline: 2px solid var(--primary-light);
+    outline-offset: -3px;
+}
+
+/* ---------- HELP TEXT ---------- */
+.help-text {
+    display: block;
+
+    margin-top: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.77rem;
+    line-height: 1.6;
+}
+
+/* ---------- DJANGO ERRORS ---------- */
+.errorlist {
+    margin: 7px 0 0;
+    padding: 0;
+
+    color: var(--danger);
+
+    list-style: none;
+
+    font-size: 0.81rem;
+    line-height: 1.6;
+}
+
+.errorlist li {
+    margin-top: 3px;
+}
+
+.form-errors {
+    margin-bottom: 22px;
+    padding: 14px 16px;
+
+    color: #991b1b;
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+    border-left: 4px solid #ef4444;
+    border-radius: 10px;
+
+    font-size: 0.86rem;
+    line-height: 1.6;
+}
+
+/* ---------- DJANGO MESSAGES ---------- */
+.messages {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.message {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    padding: 12px 14px;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.message svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.message.success {
+    color: #166534;
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.message.error {
+    color: #991b1b;
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.message.info {
+    color: #1e40af;
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+/* ---------- SUBMIT BUTTON ---------- */
+.form-actions {
+    margin-top: 6px;
+}
+
+.submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
     width: 100%;
-    padding: 12px;
+    min-height: 51px;
+    padding: 14px 18px;
+
+    color: #ffffff;
+    background: linear-gradient(
+        135deg,
+        #16a34a,
+        #15803d
+    );
+
     border: none;
     border-radius: 10px;
-    background: #6366f1;
-    color: white;
-    font-weight: bold;
+
+    font-size: 0.95rem;
+    font-weight: 750;
+
     cursor: pointer;
-    transition: 0.2s;
+
+    box-shadow: 0 4px 12px rgba(21, 128, 61, 0.16);
+
+    transition:
+        background var(--transition),
+        box-shadow var(--transition),
+        transform var(--transition);
 }
 
-button:hover {
-    background: #4f46e5;
+.submit-btn:hover {
+    background: linear-gradient(
+        135deg,
+        #15803d,
+        #166534
+    );
+
+    box-shadow: 0 7px 18px rgba(21, 128, 61, 0.23);
+
+    transform: translateY(-2px);
 }
 
-/* =========================
-   ERRORS
-========================= */
-.errorlist {
-    color: red;
-    font-size: 0.85rem;
-    margin: 5px 0;
+.submit-btn:active {
+    transform: translateY(0);
 }
 
-/* =========================
-   MESSAGES
-========================= */
-.messages p {
+.submit-btn svg {
+    width: 19px;
+    height: 19px;
+
+    transition: transform var(--transition);
+}
+
+.submit-btn:hover svg {
+    transform: translateX(4px);
+}
+
+.submit-btn:focus-visible {
+    outline: 3px solid rgba(34, 197, 94, 0.35);
+    outline-offset: 4px;
+}
+
+/* ---------- AUTH LINKS ---------- */
+.auth-links {
+    margin-top: 25px;
     text-align: center;
-    font-size: 0.9rem;
+}
+
+.auth-text {
+    margin: 0 0 20px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.85rem;
+    line-height: 1.7;
+}
+
+.auth-text a {
+    margin-left: 4px;
+
+    color: var(--primary);
+
+    font-weight: 750;
+    text-decoration: none;
+
+    transition: color var(--transition);
+}
+
+.auth-text a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* ---------- NAVIGATION LINKS ---------- */
+.navigation-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.navigation-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    padding: 10px 13px;
+
+    color: #475569;
+    background: #f8faf9;
+
+    border: 1px solid #e2e8e5;
+    border-radius: 9px;
+
+    font-size: 0.79rem;
+    font-weight: 650;
+
+    text-decoration: none;
+
+    transition:
+        color var(--transition),
+        background var(--transition),
+        border-color var(--transition);
+}
+
+.navigation-link svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.navigation-link:hover {
+    color: var(--primary-dark);
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+/* ---------- FOOTER ---------- */
+.register-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    margin-top: 25px;
+    padding-top: 20px;
+
+    color: var(--text-secondary);
+
+    border-top: 1px solid #e8eeea;
+
+    font-size: 0.77rem;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.register-footer svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+
+    color: var(--primary);
+}
+
+/* ---------- TABLETS ---------- */
+@media (max-width: 768px) {
+    body {
+        padding: 30px 16px;
+    }
+
+    .card {
+        max-width: 680px;
+        padding: 30px;
+    }
+
+    .form-section {
+        padding: 21px;
+    }
+
+    .form-grid {
+        gap: 20px 14px;
+    }
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 520px) {
+    body {
+        padding: 16px 10px;
+    }
+
+    .card {
+        padding: 23px 16px;
+        border-radius: 16px;
+    }
+
+    .register-header {
+        margin-bottom: 25px;
+    }
+
+    .brand-icon {
+        width: 56px;
+        height: 56px;
+        margin-bottom: 15px;
+
+        border-radius: 16px;
+    }
+
+    .brand-icon svg {
+        width: 27px;
+        height: 27px;
+    }
+
+    .register-header h1 {
+        font-size: 1.55rem;
+        letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+        font-size: 0.86rem;
+    }
+
+    .form-section {
+        margin-bottom: 18px;
+        padding: 17px 13px;
+    }
+
+    .section-heading {
+        gap: 10px;
+
+        margin-bottom: 20px;
+        padding-bottom: 13px;
+
+        font-size: 0.97rem;
+    }
+
+    .section-number {
+        width: 31px;
+        height: 31px;
+        font-size: 0.8rem;
+    }
+
+    .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .input-wrapper input {
+        font-size: 16px;
+    }
+
+    .submit-btn {
+        min-height: 49px;
+    }
+
+    .navigation-links {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .navigation-link {
+        width: 100%;
+        padding: 11px 12px;
+    }
+}
+
+/* ---------- SMALL PHONES ---------- */
+@media (max-width: 350px) {
+    .card {
+        padding: 19px 12px;
+    }
+
+    .form-section {
+        padding: 15px 10px;
+    }
+
+    .register-header h1 {
+        font-size: 1.38rem;
+    }
+}
+
+/* ---------- REDUCED MOTION ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
 }

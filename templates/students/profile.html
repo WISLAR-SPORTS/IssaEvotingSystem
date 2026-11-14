@@ -1,129 +1,301 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "base.html" %} {% load static %}
 
-{% block title %}My Profile{% endblock %}
+{% block title %}My Profile | E-Voting{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
 
 {% block content %}
 
+<section class="profile-page">
 
-<div class="text-center mb-4">
+<!-- PAGE HEADER -->
+<header class="profile-page-header">
+    <div>
+        <span class="profile-eyebrow">
+            <i data-lucide="user-round"></i>
+            ACCOUNT MANAGEMENT
+        </span>
 
-    {% if user.institution %}
+        <h1>My Profile</h1>
+
+        <p>Manage your personal information and voting eligibility.</p>
+    </div>
+
+    <div class="profile-header-icon" aria-hidden="true">
+        <i data-lucide="contact-round"></i>
+    </div>
+</header>
+
+<!-- INSTITUTION -->
+{% if user.institution %}
+<section class="institution-banner">
+
+    <div class="institution-identity">
 
         {% if user.institution.logo %}
-            <img src="{{ user.institution.logo.url }}"
-                 class="rounded-circle shadow-sm"
-                 width="70" height="70"
-                 style="object-fit: cover;">
+            <img
+                src="{{ user.institution.logo.url }}"
+                alt="{{ user.institution.name }} logo"
+                class="institution-logo"
+            >
         {% else %}
-            <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm"
-                 style="width:70px;height:70px;
-                        background: linear-gradient(135deg,#0d6efd,#6ea8fe);
-                        color:white;font-weight:700;">
+            <div class="institution-logo-fallback">
                 {{ user.institution.name|first|upper }}
             </div>
         {% endif %}
 
-        <h5 class="mt-2 mb-0">{{ user.institution.name }}</h5>
-        <small class="text-muted">Voting Platform</small>
-
-    {% endif %}
-
-</div>
-
-<div class="profile-wrapper">
-    {% if user.institution %}
-
-
-{% endif %}
-
-    <div class="card profile-card p-4">
-        <div style="height:4px;
-            background: linear-gradient(90deg,#0d6efd,#6ea8fe);
-            border-radius: 10px;
-            margin-bottom: 15px;">
-</div>
-
-        <!-- Avatar -->
-        <div class="text-center mb-3">
-            <div class="avatar-circle">
-                {{ student.name|slice:":1"|upper }}
-            </div>
-
-            <h4 class="profile-name">{{ student.name }}</h4>
-            <div class="profile-id">{{ student.student_id }}</div>
-        </div>
-
-        <hr>
-
-        <!-- Info -->
-        <div class="info-row">
-            <span class="label">Branch</span>
-            <span class="value">
-                {% if user.branch %}
-                    {{ user.branch.name }}
-                {% else %}
-                    Not assigned
-                {% endif %}
-            </span>
-        </div>
-        <div class="info-row">
-            <span class="label">Department</span>
-            <span class="value">
-                {% if user.department %}
-                    {{ user.department.name }}
-                {% else %}
-                    Not assigned
-                {% endif %}
-            </span>
-        </div>
-
-        <div class="info-row">
-            <span class="label">Email</span>
-            <span class="value">{{ user.email|default:"No email" }}</span>
-        </div>
-
-        <div class="info-row">
-            <span class="label">First Name</span>
-            <span class="value">{{ user.first_name|default:"-" }}</span>
-        </div>
-        <div class="info-row">
-            <span class="label">Last Name</span>
-            <span class="value">{{ user.last_name|default:"-" }}</span>
-        </div>
-        
-        <div class="info-row">
-            <span class="label">Username</span>
-            <span class="value">{{ user.username|default:"-" }}</span>
-        </div>
-        <div class="info-row">
-            <span class="label">User Role</span>
-            <span class="value">{{ user.role|default:"-" }}</span>
-        </div>
-
-     
-
-        <div class="info-row">
-            <span class="label">Institution</span>
-            <span class="value">
-                {% if user.institution %}
-                    {{ user.institution.name }}
-                {% else %}
-                    No institution
-                {% endif %}
-            </span>
-        </div>
-
-        <div class="text-center mt-4">
-            {% if student.has_voted %}
-                <span class="badge-status badge-success">✔ You have already voted</span>
-            {% else %}
-                <span class="badge-status badge-warning">🟡 You are eligible to vote</span>
-            {% endif %}
+        <div class="institution-details">
+            <span class="section-overline">YOUR INSTITUTION</span>
+            <h2>{{ user.institution.name }}</h2>
+            <p>Electronic Voting Platform</p>
         </div>
 
     </div>
 
+    <div class="institution-status">
+        <i data-lucide="shield-check"></i>
+        <span>Institution linked</span>
+    </div>
+
+</section>
+{% endif %}
+
+<!-- PROFILE LAYOUT -->
+<div class="profile-layout">
+
+    <!-- IDENTITY PANEL -->
+    <aside class="profile-sidebar">
+
+        <div class="profile-identity-card">
+
+            <div class="identity-decoration"></div>
+
+            <div class="profile-avatar">
+                {{ student.name|default:user.username|slice:":1"|upper }}
+            </div>
+
+            <span class="profile-account-label">STUDENT ACCOUNT</span>
+
+            <h2 class="profile-name">
+                {{ student.name|default:user.username }}
+            </h2>
+
+            <p class="profile-student-id">
+                <i data-lucide="id-card"></i>
+                {{ student.student_id|default:"Student ID unavailable" }}
+            </p>
+
+            <div class="profile-divider"></div>
+
+            <!-- VOTING STATUS -->
+            <div class="voting-status
+                {% if student.has_voted %}
+                    voting-status-complete
+                {% else %}
+                    voting-status-eligible
+                {% endif %}">
+
+                <div class="voting-status-icon">
+                    {% if student.has_voted %}
+                        <i data-lucide="check-circle-2"></i>
+                    {% else %}
+                        <i data-lucide="vote"></i>
+                    {% endif %}
+                </div>
+
+                <div class="voting-status-content">
+                    <span class="status-caption">VOTING STATUS</span>
+
+                    {% if student.has_voted %}
+                        <strong>Vote recorded</strong>
+                        <p>You have already voted.</p>
+                    {% else %}
+                        <strong>Eligible to vote</strong>
+                        <p>You have not voted yet.</p>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <div class="profile-sidebar-footer">
+                <i data-lucide="lock-keyhole"></i>
+                <span>Your account information is displayed securely.</span>
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- PROFILE DETAILS -->
+    <main class="profile-main">
+
+        <section class="profile-details-card">
+
+            <div class="profile-section-header">
+                <div class="profile-section-icon">
+                    <i data-lucide="user-round"></i>
+                </div>
+
+                <div>
+                    <h2>Personal information</h2>
+                    <p>Your registered identity and account details.</p>
+                </div>
+            </div>
+
+            <div class="profile-information-grid">
+
+                <div class="profile-field">
+                    <span class="profile-field-label">
+                        <i data-lucide="user"></i>
+                        First name
+                    </span>
+                    <strong>{{ user.first_name|default:"Not provided" }}</strong>
+                </div>
+
+                <div class="profile-field">
+                    <span class="profile-field-label">
+                        <i data-lucide="user-round"></i>
+                        Last name
+                    </span>
+                    <strong>{{ user.last_name|default:"Not provided" }}</strong>
+                </div>
+
+                <div class="profile-field profile-field-full">
+                    <span class="profile-field-label">
+                        <i data-lucide="at-sign"></i>
+                        Username
+                    </span>
+                    <strong>{{ user.username|default:"Not provided" }}</strong>
+                </div>
+
+                <div class="profile-field profile-field-full">
+                    <span class="profile-field-label">
+                        <i data-lucide="mail"></i>
+                        Email address
+                    </span>
+                    <strong>{{ user.email|default:"No email registered" }}</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="profile-details-card">
+
+            <div class="profile-section-header">
+                <div class="profile-section-icon">
+                    <i data-lucide="graduation-cap"></i>
+                </div>
+
+                <div>
+                    <h2>Academic information</h2>
+                    <p>Your institution, department and branch assignments.</p>
+                </div>
+            </div>
+
+            <div class="profile-information-grid">
+
+                <div class="profile-field">
+                    <span class="profile-field-label">
+                        <i data-lucide="building-2"></i>
+                        Institution
+                    </span>
+                    <strong>
+                        {% if user.institution %}
+                            {{ user.institution.name }}
+                        {% else %}
+                            Not assigned
+                        {% endif %}
+                    </strong>
+                </div>
+
+                <div class="profile-field">
+                    <span class="profile-field-label">
+                        <i data-lucide="git-branch"></i>
+                        Branch
+                    </span>
+                    <strong>
+                        {% if user.branch %}
+                            {{ user.branch.name }}
+                        {% else %}
+                            Not assigned
+                        {% endif %}
+                    </strong>
+                </div>
+
+                <div class="profile-field profile-field-full">
+                    <span class="profile-field-label">
+                        <i data-lucide="book-open"></i>
+                        Department
+                    </span>
+                    <strong>
+                        {% if user.department %}
+                            {{ user.department.name }}
+                        {% else %}
+                            Not assigned
+                        {% endif %}
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="profile-details-card">
+
+            <div class="profile-section-header">
+                <div class="profile-section-icon">
+                    <i data-lucide="shield-check"></i>
+                </div>
+
+                <div>
+                    <h2>Account information</h2>
+                    <p>Your role and platform access details.</p>
+                </div>
+            </div>
+
+            <div class="profile-information-grid">
+
+                <div class="profile-field profile-field-full">
+                    <span class="profile-field-label">
+                        <i data-lucide="badge-check"></i>
+                        Account role
+                    </span>
+
+                    <strong class="profile-role-value">
+                        {{ user.role|default:"Not specified" }}
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+
+        <footer class="profile-page-footer">
+            <i data-lucide="shield-check"></i>
+            <p>
+                Your profile information is provided by your registered
+                voting account. Contact your institution if any details
+                need to be corrected.
+            </p>
+        </footer>
+
+    </main>
+
 </div>
+
+
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+if (window.lucide) {
+window.lucide.createIcons();
+}
+});
+</script>
 
 {% endblock %}

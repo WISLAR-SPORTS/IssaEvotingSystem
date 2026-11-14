@@ -1,66 +1,96 @@
-/* 🌐 Full page wrapper */
-.election-wrapper {
-    min-height: 70vh;
-    padding: 20px;
+
+/* =========================================
+   CLOSED ELECTION STATUS
+========================================= */
+
+.closed-accent {
+    background: linear-gradient(
+        90deg,
+        #68766c,
+        #a9b2a6
+    );
 }
 
-/* 🧾 Card */
-.election-card {
-    max-width: 500px;
-    width: 100%;
-    border-radius: 16px;
-    padding: 2.5rem;
+.closed-icon {
+    color: #59675c;
+    background: #edf0eb;
+    border-color: #dce3d9;
 }
 
-/* 🔴 Icon */
-.election-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6c757d, #adb5bd);
+.closed-eyebrow {
+    color: #59675c;
+}
+
+.closed-dot {
+    background: #849184;
+}
+
+.closed-information-icon,
+.closed-date-icon {
+    color: #59675c;
+    background: #edf0eb;
+}
+
+.closed-status-panel {
+    padding: 22px;
+    margin-bottom: 22px;
+    border: 1px solid var(--status-border);
+    border-radius: 17px;
+    background: var(--status-soft);
+}
+
+.closed-status-heading {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    color: white;
+    gap: 9px;
+    color: var(--status-text);
+    font-size: 0.87rem;
+    font-weight: 750;
 }
 
-/* 📱 Mobile */
-@media (max-width: 576px) {
-    .election-card {
-        padding: 1.5rem;
-        border-radius: 14px;
-    }
-
-    .election-icon {
-        width: 65px;
-        height: 65px;
-        font-size: 26px;
-    }
-
-    h3 {
-        font-size: 1.3rem;
-    }
-
-    .btn {
-        width: 100%;
-    }
-
-    .election-wrapper {
-        min-height: 60vh;
-        padding: 12px;
-    }
+.closed-status-heading svg {
+    width: 19px;
+    height: 19px;
+    color: var(--status-muted);
 }
 
-/* 📲 Tablet */
-@media (min-width: 577px) and (max-width: 991px) {
-    .election-card {
-        padding: 2rem;
-    }
+.closed-status-message {
+    margin: 12px 0 0;
+    color: var(--status-muted);
+    font-size: 0.84rem;
+    line-height: 1.7;
+}
 
-    .election-icon {
-        width: 75px;
-        height: 75px;
-    }
+.closed-action {
+    background: #414c43;
+    border-color: #414c43;
+}
+
+.closed-action:hover {
+    background: #566457;
+    border-color: #566457;
+}
+
+html[data-theme="dark"] .closed-icon,
+html[data-theme="dark"] .closed-information-icon,
+html[data-theme="dark"] .closed-date-icon {
+    color: #d3e2d4;
+    background: #303d32;
+    border-color: #425345;
+}
+
+html[data-theme="dark"] .closed-status-panel {
+    background: #272e28;
+    border-color: #374038;
+}
+
+html[data-theme="dark"] .closed-action {
+    color: #202621;
+    background: #d3e2d4;
+    border-color: #d3e2d4;
+}
+
+html[data-theme="dark"] .closed-action:hover {
+    background: #b9cfbc;
+    border-color: #b9cfbc;
 }

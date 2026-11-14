@@ -1,0 +1,177 @@
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Institution Registration</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Institution Registration CSS -->
+    <link
+        rel="stylesheet"
+        href="{% static 'css/institution_register.css' %}"
+    >
+</head>
+
+<body>
+
+    <main class="card">
+
+        <!-- Page Header -->
+        <header class="page-header">
+            <div class="logo-icon" aria-hidden="true">🏫</div>
+
+            <h2>Register Your Institution</h2>
+
+            <p class="subtitle">
+                Create your institution account to get started.
+                Complete the details below to register your institution
+                and set up your administrator account.
+            </p>
+        </header>
+
+        <!-- Django Messages -->
+        {% if messages %}
+            <div class="messages" role="status" aria-live="polite">
+                {% for message in messages %}
+                    <p class="{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% else %}info{% endif %}">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Registration Form -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-errors" role="alert">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- SECTION 1: INSTITUTION DETAILS -->
+            <section class="form-section">
+
+                <h3>
+                    <span class="section-number">01</span>
+                    Institution Details
+                </h3>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        {{ form.institution_name.label_tag }}
+                        {{ form.institution_name }}
+                        {{ form.institution_name.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.institution_email.label_tag }}
+                        {{ form.institution_email }}
+                        {{ form.institution_email.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.contact_phone.label_tag }}
+                        {{ form.contact_phone }}
+                        {{ form.contact_phone.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.logo.label_tag }}
+                        {{ form.logo }}
+                        {{ form.logo.errors }}
+
+                        <small class="help-text">
+                            Upload your institution logo if available.
+                        </small>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- SECTION 2: ADMINISTRATOR ACCOUNT -->
+            <section class="form-section">
+
+                <h3>
+                    <span class="section-number">02</span>
+                    Administrator Account
+                </h3>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        {{ form.admin_username.label_tag }}
+                        {{ form.admin_username }}
+                        {{ form.admin_username.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.admin_email.label_tag }}
+                        {{ form.admin_email }}
+                        {{ form.admin_email.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.admin_phone.label_tag }}
+                        {{ form.admin_phone }}
+                        {{ form.admin_phone.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        <div class="password-field">
+                            {{ form.password.label_tag }}
+                            {{ form.password }}
+                            {{ form.password.errors }}
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        {{ form.confirm_password.label_tag }}
+                        {{ form.confirm_password }}
+                        {{ form.confirm_password.errors }}
+                    </div>
+
+                </div>
+
+                <p class="help-text">
+                    Use a strong password to protect your administrator account.
+                </p>
+
+            </section>
+
+            <!-- SUBMIT BUTTON -->
+            <div class="form-actions">
+                <button type="submit">
+                    Create Institution Account
+                    <span aria-hidden="true">→</span>
+                </button>
+            </div>
+
+            <!-- LOGIN LINK -->
+            <div class="auth-link">
+                Already registered?
+                <a href="{% url 'accounts:login' %}">Sign in</a>
+            </div>
+
+        </form>
+
+    </main>
+
+</body>
+</html>

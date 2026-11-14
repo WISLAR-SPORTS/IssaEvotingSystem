@@ -1,0 +1,1171 @@
+
+/* =========================================
+   STUDENT DASHBOARD
+   Warm White Design System
+========================================= */
+
+/* =========================================
+   STUDENT DASHBOARD — WARM WHITE & SAGE
+========================================= */
+
+.student-dashboard {
+    /* Brand */
+    --sd-primary: #526b59;
+    --sd-primary-dark: #3e5445;
+    --sd-primary-soft: #e9efe8;
+
+    /* Surfaces */
+    --sd-background: #faf9f6;
+    --sd-surface: #ffffff;
+    --sd-surface-soft: #f5f3ed;
+    --sd-surface-hover: #f0eee7;
+
+    /* Typography */
+    --sd-text: #292d29;
+    --sd-muted: #858980;
+    --sd-text-secondary: #626961;
+
+    /* Borders */
+    --sd-border: #e9e6de;
+    --sd-border-strong: #dcd8ce;
+
+    /* Accent */
+    --sd-accent: #b66d50;
+    --sd-accent-soft: #f8eee8;
+
+    /* Status */
+    --sd-success: #387653;
+    --sd-success-bg: #eaf4ed;
+    --sd-warning: #98652a;
+    --sd-warning-bg: #fbf1df;
+    --sd-danger: #a94442;
+    --sd-danger-bg: #f9e9e7;
+    --sd-info: #526b59;
+    --sd-info-bg: #e9efe8;
+
+    /* Shadows */
+    --sd-shadow-sm: 0 2px 8px rgba(44, 47, 39, .035);
+    --sd-shadow-md: 0 8px 28px rgba(44, 47, 39, .055);
+    --sd-shadow-hover: 0 12px 32px rgba(44, 47, 39, .085);
+
+    /* Layout */
+    --sd-radius-sm: 10px;
+    --sd-radius-md: 16px;
+    --sd-radius-lg: 22px;
+    --sd-transition: 180ms ease;
+
+    min-height: 100vh;
+    padding: 34px 0 52px;
+    background: var(--sd-background);
+    color: var(--sd-text);
+
+    transition:
+        background-color var(--sd-transition),
+        color var(--sd-transition);
+}
+
+/* =========================================
+   DARK MODE — AMBER & GRAPHITE
+========================================= */
+
+[data-theme="dark"] .student-dashboard {
+    /* Primary — Amber */
+    --sd-primary: #F0B84B;
+    --sd-primary-dark: #FFD985;
+    --sd-primary-soft: #4B4028;
+
+    /* Backgrounds */
+    --sd-background: #191A1C;
+    --sd-surface: #26282C;
+    --sd-surface-soft: #303237;
+    --sd-surface-hover: #383A3F;
+
+    /* Text */
+    --sd-text: #F5F4F0;
+    --sd-muted: #B5B4AE;
+    --sd-text-secondary: #D2D0C8;
+
+    /* Borders */
+    --sd-border: #414247;
+    --sd-border-strong: #56585E;
+
+    /* Accent */
+    --sd-accent: #E8A18A;
+    --sd-accent-soft: #422E28;
+
+    /* Success — keep green for positive status */
+    --sd-success: #8FD0A3;
+    --sd-success-bg: #24382B;
+
+    /* Warning — warm amber */
+    --sd-warning: #FFD985;
+    --sd-warning-bg: #4B4028;
+
+    /* Danger — muted red */
+    --sd-danger: #EFA19B;
+    --sd-danger-bg: #402927;
+
+    /* Info — use the primary palette */
+    --sd-info: #FFD985;
+    --sd-info-bg: #383321;
+
+    /* Shadows */
+    --sd-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.16);
+    --sd-shadow-md: 0 8px 28px rgba(0, 0, 0, 0.24);
+    --sd-shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.32);
+}
+
+
+/* =========================================
+   AMBER & GRAPHITE — DASHBOARD BACKGROUND
+========================================= */
+
+[data-theme="dark"] body {
+    background-color: #191A1C;
+
+    background-image:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(240, 184, 75, 0.055),
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 90% 85%,
+            rgba(240, 184, 75, 0.025),
+            transparent 35%
+        );
+
+    color: #F5F4F0;
+}
+
+/* Student dashboard */
+[data-theme="dark"] .student-dashboard {
+    --sd-background: #191A1C;
+    --sd-surface: #26282C;
+    --sd-surface-soft: #303237;
+    --sd-surface-hover: #383A3F;
+
+    --sd-primary: #F0B84B;
+    --sd-primary-dark: #FFD985;
+    --sd-primary-soft: #4B4028;
+
+    --sd-text: #F5F4F0;
+    --sd-muted: #B5B4AE;
+    --sd-text-secondary: #D2D0C8;
+
+    --sd-border: #414247;
+    --sd-border-strong: #56585E;
+}
+
+/* Remove green backgrounds from dashboard sections */
+[data-theme="dark"] .student-dashboard,
+[data-theme="dark"] .student-dashboard .sd-section {
+    background-color: transparent;
+}
+
+/* Dashboard cards */
+[data-theme="dark"] .student-dashboard .sd-election-card,
+[data-theme="dark"] .student-dashboard .sd-stat-card,
+[data-theme="dark"] .student-dashboard .sd-section-card {
+    background-color: #26282C;
+    border-color: #414247;
+}
+
+/* Dashboard icons and active highlights */
+[data-theme="dark"] .student-dashboard .sd-section-icon,
+[data-theme="dark"] .student-dashboard .sd-election-icon {
+    background-color: #4B4028;
+    color: #FFD985;
+    border-color: #66532F;
+}
+
+
+
+/* Apply theme variables to dashboard components */
+
+.student-dashboard .sd-section,
+.student-dashboard .sd-institution {
+    background: var(--sd-surface);
+    color: var(--sd-text);
+    border-color: var(--sd-border);
+     font-family: "Times New Roman", Times, serif;
+}
+
+.student-dashboard .sd-election-card {
+    background: var(--sd-surface);
+    color: var(--sd-text);
+    border-color: var(--sd-border);
+     font-family: "Times New Roman", Times, serif;
+
+}
+
+.student-dashboard .sd-election-icon,
+.student-dashboard .sd-contact-icon,
+.student-dashboard .sd-empty-icon {
+    background: var(--sd-surface-soft);
+    color: var(--sd-primary);
+     font-family: "Times New Roman", Times, serif;
+}
+
+.student-dashboard .sd-detail-row,
+.student-dashboard .sd-contact-list,
+.student-dashboard .sd-contact-item,
+.student-dashboard .sd-election-dates {
+    border-color: var(--sd-border);
+}
+
+.student-dashboard .sd-detail-row > strong,
+.student-dashboard .sd-election-info h3,
+.student-dashboard .sd-section-header h2,
+.student-dashboard .sd-empty-state h3 {
+    color: var(--sd-text);
+}
+
+.student-dashboard .sd-detail-row > span,
+.student-dashboard .sd-section-header p,
+.student-dashboard .sd-support-description,
+.student-dashboard .sd-election-info span {
+    color: var(--sd-muted);
+}
+
+.student-dashboard .sd-election-card:hover {
+    border-color: var(--sd-primary);
+    box-shadow: var(--sd-shadow-hover);
+}
+
+.student-dashboard .sd-empty-state {
+    background: var(--sd-surface-soft);
+    border-color: var(--sd-border-strong);
+}
+
+.student-dashboard .sd-institution-initial,
+.student-dashboard .sd-section-icon {
+    background: var(--sd-primary-soft);
+    color: var(--sd-primary);
+}
+
+.student-dashboard .sd-contact-item a {
+    color: var(--sd-primary);
+}
+
+.student-dashboard .sd-status-panel {
+    background: linear-gradient(
+        120deg,
+        #344b3a,
+        #526b59,
+        #708a75
+    );
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 767.98px) {
+    .student-dashboard {
+        padding: 24px 0 36px;
+    }
+}
+
+
+.student-dashboard * {
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.student-dashboard a {
+    overflow-wrap: anywhere;
+}
+
+.student-dashboard svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    stroke-width: 1.8;
+}
+
+/* Header */
+
+.sd-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.sd-header-copy h1 {
+    margin: 6px 0 8px;
+    font-size: clamp(1.8rem, 3vw, 2.3rem);
+    font-weight: 800;
+    letter-spacing: -1.2px;
+    color: var(--sd-text);
+}
+
+.sd-header-copy p {
+    margin: 0;
+    color: var(--sd-muted);
+    font-size: .95rem;
+}
+
+.sd-eyebrow {
+    color: var(--sd-primary);
+    font-size: .73rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+/* Institution identity */
+
+.sd-institution {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    max-width: 100%;
+    padding: 12px 16px;
+    background: var(--sd-surface);
+    border: 1px solid var(--sd-border);
+    border-radius: 16px;
+}
+
+.sd-institution-logo,
+.sd-institution-initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.sd-institution-initial {
+    background: var(--sd-primary-soft);
+    color: var(--sd-primary);
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.sd-institution-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.sd-institution-info strong {
+    font-size: .9rem;
+    overflow-wrap: anywhere;
+}
+
+.sd-muted-label,
+.sd-institution-caption {
+    color: var(--sd-muted);
+    font-size: .76rem;
+}
+
+/* Voting status panel */
+
+.sd-status-panel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    min-height: 260px;
+    margin-bottom: 34px;
+    padding: 34px;
+    border-radius: 24px;
+    background: linear-gradient(
+        120deg,
+        #312e81 0%,
+        #4338ca 52%,
+        #6366f1 100%
+    );
+    color: #fff;
+    box-shadow: 0 14px 34px rgba(67, 56, 202, .16);
+}
+
+.sd-status-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
+.sd-status-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, .1);
+    font-size: .8rem;
+    font-weight: 650;
+}
+
+.sd-status-kicker svg {
+    width: 17px;
+    height: 17px;
+}
+
+.sd-status-content h2 {
+    margin: 22px 0 10px;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.sd-status-content > p {
+    max-width: 550px;
+    margin-bottom: 24px;
+    color: rgba(255, 255, 255, .82);
+    font-size: .96rem;
+    line-height: 1.7;
+}
+
+.sd-status-bottom {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.sd-vote-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255, .2);
+    border-radius: 11px;
+    background: rgba(255, 255, 255, .1);
+    font-size: .84rem;
+    font-weight: 650;
+}
+
+.sd-vote-status svg {
+    width: 17px;
+    height: 17px;
+}
+
+.sd-voted svg {
+    color: #a7f3d0;
+}
+
+.sd-not-voted svg {
+    color: #fde68a;
+}
+
+.sd-primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 17px;
+    border-radius: 11px;
+    background: #fff;
+    color: var(--sd-primary-dark);
+    font-size: .9rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.sd-primary-button:hover {
+    background: #eef2ff;
+    color: var(--sd-primary-dark);
+    transform: translateY(-1px);
+}
+
+.sd-primary-button svg {
+    width: 17px;
+    height: 17px;
+}
+
+.sd-status-decoration {
+    position: absolute;
+    right: 55px;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 175px;
+    height: 175px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .045);
+    transform: translateY(-50%);
+}
+
+.sd-status-decoration::before,
+.sd-status-decoration::after {
+    position: absolute;
+    content: "";
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 50%;
+}
+
+.sd-status-decoration::before {
+    inset: -22px;
+}
+
+.sd-status-decoration::after {
+    inset: -44px;
+}
+
+.sd-status-decoration svg {
+    width: 76px;
+    height: 76px;
+    color: rgba(255, 255, 255, .72);
+    stroke-width: 1.1;
+}
+
+/* Sections and cards */
+
+.sd-section {
+    height: 100%;
+    padding: 25px;
+    border: 1px solid var(--sd-border);
+    border-radius: 20px;
+    background: var(--sd-surface);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, .025);
+}
+
+.sd-section-header {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 23px;
+}
+
+.sd-section-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--sd-primary-soft);
+    color: var(--sd-primary);
+    flex-shrink: 0;
+}
+
+.sd-section-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.sd-section-header h2 {
+    margin: 0 0 5px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -.25px;
+}
+
+.sd-section-header p {
+    margin: 0;
+    color: var(--sd-muted);
+    font-size: .82rem;
+    line-height: 1.5;
+}
+
+/* Elections */
+
+.sd-section:first-of-type {
+    margin-bottom: 24px;
+}
+
+.sd-election-card {
+    padding: 18px;
+    border: 1px solid var(--sd-border);
+    border-radius: 15px;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.sd-election-card + .sd-election-card {
+    margin-top: 13px;
+}
+
+.sd-election-card:hover {
+    border-color: #c7d2fe;
+    box-shadow: 0 5px 16px rgba(79, 70, 229, .055);
+}
+
+.sd-election-main {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 19px;
+}
+
+.sd-election-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #f1f5f9;
+    color: #475569;
+    flex-shrink: 0;
+}
+
+.sd-election-info {
+    min-width: 0;
+}
+
+.sd-election-info h3 {
+    margin: 0 0 5px;
+    font-size: .97rem;
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+.sd-election-info span {
+    color: var(--sd-muted);
+    font-size: .8rem;
+}
+
+.sd-election-dates {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+    padding-top: 16px;
+    border-top: 1px solid #eef1f5;
+}
+
+.sd-date-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+}
+
+.sd-date-item > svg {
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+    color: var(--sd-primary);
+}
+
+.sd-date-item div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.sd-date-item span {
+    color: var(--sd-muted);
+    font-size: .76rem;
+}
+
+.sd-date-item strong {
+    font-size: .82rem;
+    font-weight: 700;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Profile */
+
+.sd-details-list {
+    margin-top: 4px;
+}
+
+.sd-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid #eef1f5;
+}
+
+.sd-detail-row:first-child {
+    padding-top: 4px;
+}
+
+.sd-detail-row:last-child {
+    padding-bottom: 2px;
+    border-bottom: 0;
+}
+
+.sd-detail-row > span {
+    color: var(--sd-muted);
+    font-size: .86rem;
+}
+
+.sd-detail-row > strong {
+    max-width: 60%;
+    color: var(--sd-text);
+    font-size: .87rem;
+    font-weight: 700;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.sd-unassigned {
+    color: #94a3b8 !important;
+    font-weight: 500 !important;
+}
+
+/* Support */
+
+.sd-support-description {
+    margin: -3px 0 18px;
+    color: var(--sd-muted);
+    font-size: .87rem;
+    line-height: 1.7;
+}
+
+.sd-contact-list {
+    border-top: 1px solid #eef1f5;
+}
+
+.sd-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eef1f5;
+}
+
+.sd-contact-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.sd-contact-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 39px;
+    height: 39px;
+    border-radius: 11px;
+    background: #f1f5f9;
+    color: #475569;
+    flex-shrink: 0;
+}
+
+.sd-contact-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.sd-contact-item > div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.sd-contact-item span {
+    color: var(--sd-muted);
+    font-size: .78rem;
+}
+
+.sd-contact-item strong,
+.sd-contact-item a {
+    font-size: .88rem;
+    font-weight: 700;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.sd-contact-item a {
+    color: var(--sd-primary);
+    text-decoration: none;
+}
+
+.sd-contact-item a:hover {
+    text-decoration: underline;
+}
+
+/* Empty states */
+
+.sd-empty-state {
+    padding: 35px 18px;
+    border: 1px dashed #d7deea;
+    border-radius: 15px;
+    background: #fbfcfe;
+    text-align: center;
+}
+
+.sd-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 15px;
+    border-radius: 16px;
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.sd-empty-icon svg {
+    width: 25px;
+    height: 25px;
+}
+
+.sd-empty-state h3 {
+    margin-bottom: 8px;
+    color: var(--sd-text);
+    font-size: .95rem;
+    font-weight: 750;
+}
+
+.sd-empty-state p {
+    max-width: 360px;
+    margin: 0 auto;
+    color: var(--sd-muted);
+    font-size: .84rem;
+    line-height: 1.65;
+}
+
+.sd-contact-empty {
+    margin-top: 10px;
+}
+
+.sd-bottom-grid {
+    align-items: stretch;
+}
+
+/* Election links */
+.sd-election-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    border-radius: 18px;
+}
+
+.sd-election-link:focus-visible {
+    outline: 3px solid #8ca991;
+    outline-offset: 4px;
+}
+
+.sd-election-card {
+    padding: 22px;
+    border: 1px solid #e7e6dd;
+    border-radius: 18px;
+    background: #fff;
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        border-color 180ms ease;
+}
+
+.sd-election-link:hover .sd-election-card {
+    transform: translateY(-3px);
+    border-color: #cbd8ca;
+    box-shadow: 0 10px 26px rgba(41, 45, 41, 0.07);
+}
+
+.sd-election-top,
+.sd-election-main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.sd-election-top {
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.sd-election-main {
+    min-width: 0;
+}
+
+.sd-election-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #e9efe8;
+    color: #3e5445;
+}
+
+.sd-election-icon svg {
+    width: 23px;
+    height: 23px;
+}
+
+.sd-election-info {
+    min-width: 0;
+}
+
+.sd-election-info h3 {
+    margin: 0 0 5px;
+    color: #292d29;
+    font-size: 1rem;
+    font-weight: 750;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.sd-election-info > span {
+    color: #777d73;
+    font-size: 0.82rem;
+}
+
+/* Status badges */
+.sd-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex-shrink: 0;
+    padding: 7px 10px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 0.73rem;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+.sd-status-badge svg {
+    width: 14px;
+    height: 14px;
+}
+
+.sd-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.sd-status-active {
+    color: #387653;
+    background: #eaf4ed;
+    border-color: #d4e8d8;
+}
+
+.sd-status-upcoming {
+    color: #806323;
+    background: #fbf4e5;
+    border-color: #eee1bf;
+}
+
+.sd-status-ended {
+    color: #686d67;
+    background: #f0f1ed;
+    border-color: #e0e2dc;
+}
+
+/* Start and end dates */
+.sd-election-dates {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 17px 0;
+    border-top: 1px solid #eeede7;
+    border-bottom: 1px solid #eeede7;
+}
+
+.sd-date-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+}
+
+.sd-date-item > svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: #718572;
+}
+
+.sd-date-item div {
+    min-width: 0;
+}
+
+.sd-date-item span {
+    display: block;
+    margin-bottom: 6px;
+    color: #777d73;
+    font-size: 0.75rem;
+}
+
+.sd-date-item strong {
+    display: block;
+    color: #292d29;
+    font-size: 0.8rem;
+    font-weight: 650;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Footer link cue */
+.sd-election-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 17px;
+    color: #526b59;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.sd-election-footer svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 180ms ease;
+}
+
+.sd-election-link:hover .sd-election-footer svg {
+    transform: translate(2px, -2px);
+}
+
+
+/* Responsive */
+
+@media (max-width: 991.98px) {
+    .sd-status-decoration {
+        right: 25px;
+        opacity: .45;
+    }
+
+    .sd-status-content {
+        max-width: 80%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .student-dashboard {
+        padding: 24px 0 36px;
+    }
+
+    .sd-header {
+        align-items: flex-start;
+        margin-bottom: 23px;
+    }
+
+    .sd-institution {
+        width: 100%;
+    }
+
+    .sd-status-panel {
+        min-height: auto;
+        padding: 26px 22px;
+        border-radius: 19px;
+    }
+
+    .sd-status-content {
+        max-width: 100%;
+    }
+
+    .sd-status-decoration {
+        top: 18px;
+        right: -65px;
+        width: 130px;
+        height: 130px;
+        transform: none;
+        opacity: .2;
+    }
+
+    .sd-status-decoration svg {
+        width: 55px;
+        height: 55px;
+    }
+
+    .sd-status-content h2 {
+        font-size: 1.7rem;
+    }
+
+    .sd-status-content > p {
+        font-size: .9rem;
+    }
+
+    .sd-section {
+        padding: 20px;
+        border-radius: 17px;
+    }
+
+    .sd-election-dates {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+}
+/* Mobile */
+@media (max-width: 520px) {
+    .sd-election-card {
+        padding: 17px;
+        border-radius: 15px;
+    }
+
+    .sd-election-top {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .sd-election-main {
+        gap: 10px;
+    }
+
+    .sd-election-icon {
+        width: 42px;
+        height: 42px;
+    }
+
+    .sd-election-info h3 {
+        font-size: 0.93rem;
+    }
+
+    .sd-status-badge {
+        padding: 6px 8px;
+        font-size: 0.68rem;
+    }
+
+    .sd-election-dates {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sd-election-card,
+    .sd-election-footer svg {
+        transition: none;
+    }
+}
+
+
+@media (max-width: 420px) {
+    .sd-status-bottom {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .sd-primary-button {
+        width: 100%;
+    }
+
+    .sd-vote-status {
+        align-self: flex-start;
+    }
+
+    .sd-detail-row {
+        gap: 12px;
+    }
+
+    .sd-detail-row > strong {
+        max-width: 58%;
+    }
+
+    .sd-section-header {
+        gap: 10px;
+    }
+
+    .sd-section-header p {
+        font-size: .77rem;
+    }
+}

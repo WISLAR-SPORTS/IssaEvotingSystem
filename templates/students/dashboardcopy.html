@@ -1,0 +1,366 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="student-dashboard">
+
+    <div class="container">
+
+        <!-- Dashboard header -->
+        <header class="sd-header">
+            <div class="sd-header-copy">
+                <span class="sd-eyebrow">STUDENT PORTAL</span>
+                <h1>Dashboard</h1>
+                <p>Manage your elections and voting activity.</p>
+            </div>
+
+            {% if user.institution %}
+            <div class="sd-institution">
+                {% if user.institution.logo %}
+                    <img
+                        src="{{ user.institution.logo.url }}"
+                        alt="{{ user.institution.name }} logo"
+                        class="sd-institution-logo"
+                    >
+                {% else %}
+                    <div class="sd-institution-initial">
+                        {{ user.institution.name|first|upper }}
+                    </div>
+                {% endif %}
+
+                <div class="sd-institution-info">
+                    <span class="sd-muted-label">Your institution</span>
+                    <strong>{{ user.institution.name }}</strong>
+                    <span class="sd-institution-caption">Voting platform</span>
+                </div>
+            </div>
+            {% endif %}
+        </header>
+
+        <!-- Voting status -->
+        <section class="sd-status-panel">
+            <div class="sd-status-content">
+                <span class="sd-status-kicker">
+                    <i data-lucide="shield-check"></i>
+                    Election participation
+                </span>
+
+                <h2>Your voice matters.</h2>
+
+                <p>
+                    Review election positions and participate in your
+                    institution's electoral process.
+                </p>
+
+                <div class="sd-status-bottom">
+                    {% if has_voted %}
+                        <span class="sd-vote-status sd-voted">
+                            <i data-lucide="check-circle-2"></i>
+                            You have voted
+                        </span>
+                    {% else %}
+                        <span class="sd-vote-status sd-not-voted">
+                            <i data-lucide="clock-3"></i>
+                            Not yet voted
+                        </span>
+                    {% endif %}
+
+                    <a
+                        href="{% url 'elections:positions_list' %}"
+                        class="sd-primary-button"
+                    >
+                        View positions
+                        <i data-lucide="arrow-up-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="sd-status-decoration" aria-hidden="true">
+                <i data-lucide="vote"></i>
+            </div>
+        </section>
+
+<!-- Available elections -->
+<section class="sd-section">
+
+    <div class="sd-section-header">
+        <div class="sd-section-icon">
+            <i data-lucide="calendar-days"></i>
+        </div>
+
+        <div>
+            <h2>Available Elections</h2>
+            <p>Election schedules for your institution</p>
+        </div>
+    </div>
+
+    <div class="sd-election-list">
+
+        {% for election in elections %}
+
+            <a href="{% url 'elections:positions_list' %}"
+               class="sd-election-link"
+               aria-label="View positions for {{ election.name }}">
+
+                <article class="sd-election-card">
+
+                    <div class="sd-election-top">
+
+                        <div class="sd-election-main">
+                            <div class="sd-election-icon">
+                                <i data-lucide="vote"></i>
+                            </div>
+
+                            <div class="sd-election-info">
+                                <h3>{{ election.name }}</h3>
+                                <span>Election schedule</span>
+                            </div>
+                        </div>
+
+                        {% if election.display_status == "active" %}
+                            <span class="sd-status-badge sd-status-active">
+                                <span class="sd-status-dot"></span>
+                                Active
+                            </span>
+
+                        {% elif election.display_status == "upcoming" %}
+                            <span class="sd-status-badge sd-status-upcoming">
+                                <i data-lucide="clock-3"></i>
+                                Upcoming
+                            </span>
+
+                        {% else %}
+                            <span class="sd-status-badge sd-status-ended">
+                                <i data-lucide="calendar-check"></i>
+                                Ended
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="sd-election-dates">
+
+                        <div class="sd-date-item">
+                            <i data-lucide="calendar-check"></i>
+                            <div>
+                                <span>Starts</span>
+                                <strong>
+                                    {{ election.start_time|date:"M d, Y, H:i" }}
+                                </strong>
+                            </div>
+                        </div>
+
+                        <div class="sd-date-item">
+                            <i data-lucide="calendar-clock"></i>
+                            <div>
+                                <span>Ends</span>
+                                <strong>
+                                    {{ election.end_time|date:"M d, Y, H:i" }}
+                                </strong>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="sd-election-footer">
+                        <span>
+                            {% if election.display_status == "active" %}
+                                View available positions
+                            {% elif election.display_status == "upcoming" %}
+                                View election positions
+                            {% else %}
+                                View positions
+                            {% endif %}
+                        </span>
+
+                        <i data-lucide="arrow-up-right"></i>
+                    </div>
+
+                </article>
+
+            </a>
+
+        {% empty %}
+
+            <div class="sd-empty-state">
+                <div class="sd-empty-icon">
+                    <i data-lucide="calendar-x"></i>
+                </div>
+
+                <h3>No elections available</h3>
+
+                <p>
+                    There are currently no elections listed for
+                    your institution.
+                </p>
+            </div>
+
+        {% endfor %}
+
+    </div>
+</section>
+
+
+        <!-- Profile and support -->
+        <div class="row g-4 sd-bottom-grid">
+
+            <!-- Student profile -->
+            <div class="col-12 col-lg-6">
+                <section class="sd-section sd-info-card">
+                    <div class="sd-section-header">
+                        <div class="sd-section-icon">
+                            <i data-lucide="user-round"></i>
+                        </div>
+
+                        <div>
+                            <h2>My profile</h2>
+                            <p>Your registered student information</p>
+                        </div>
+                    </div>
+
+                    <div class="sd-details-list">
+                        <div class="sd-detail-row">
+                            <span>Student ID</span>
+                            <strong>{{ user.username }}</strong>
+                        </div>
+
+                        <div class="sd-detail-row">
+                            <span>Branch</span>
+                            <strong>
+                                {% if user.branch %}
+                                    {{ user.branch.name }}
+                                {% else %}
+                                    <span class="sd-unassigned">Not assigned</span>
+                                {% endif %}
+                            </strong>
+                        </div>
+
+                        <div class="sd-detail-row">
+                            <span>Department</span>
+                            <strong>
+                                {% if user.department %}
+                                    {{ user.department.name }}
+                                {% else %}
+                                    <span class="sd-unassigned">Not assigned</span>
+                                {% endif %}
+                            </strong>
+                        </div>
+
+                        <div class="sd-detail-row">
+                            <span>Institution</span>
+                            <strong>
+                                {% if user.institution %}
+                                    {{ user.institution.name }}
+                                {% else %}
+                                    <span class="sd-unassigned">Not assigned</span>
+                                {% endif %}
+                            </strong>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Help and contact -->
+            <div class="col-12 col-lg-6">
+                <section class="sd-section sd-info-card">
+                    <div class="sd-section-header">
+                        <div class="sd-section-icon">
+                            <i data-lucide="headset"></i>
+                        </div>
+
+                        <div>
+                            <h2>Help & support</h2>
+                            <p>Contact your institution's support team</p>
+                        </div>
+                    </div>
+
+                    <p class="sd-support-description">
+                        If you experience issues while voting, use the
+                        contact details below to reach your institution.
+                    </p>
+
+                    {% if user.institution %}
+                        <div class="sd-contact-list">
+
+                            <div class="sd-contact-item">
+                                <div class="sd-contact-icon">
+                                    <i data-lucide="building-2"></i>
+                                </div>
+                                <div>
+                                    <span>Institution</span>
+                                    <strong>{{ user.institution.name }}</strong>
+                                </div>
+                            </div>
+
+                            <div class="sd-contact-item">
+                                <div class="sd-contact-icon">
+                                    <i data-lucide="mail"></i>
+                                </div>
+                                <div>
+                                    <span>Email address</span>
+                                    {% if user.institution.email %}
+                                        <a href="mailto:{{ user.institution.email }}">
+                                            {{ user.institution.email }}
+                                        </a>
+                                    {% else %}
+                                        <strong class="sd-unassigned">Not available</strong>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="sd-contact-item">
+                                <div class="sd-contact-icon">
+                                    <i data-lucide="phone"></i>
+                                </div>
+                                <div>
+                                    <span>Contact hotline</span>
+                                    {% if user.institution.contact_phone %}
+                                        <a href="tel:{{ user.institution.contact_phone }}">
+                                            {{ user.institution.contact_phone }}
+                                        </a>
+                                    {% else %}
+                                        <strong class="sd-unassigned">Not available</strong>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+                    {% else %}
+                        <div class="sd-empty-state sd-contact-empty">
+                            <div class="sd-empty-icon">
+                                <i data-lucide="contact-round"></i>
+                            </div>
+                            <h3>Contact information unavailable</h3>
+                            <p>Your account is not linked to an institution.</p>
+                        </div>
+                    {% endif %}
+                </section>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+    });
+</script>
+<script>
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
+</script>
+
+{% endblock %}

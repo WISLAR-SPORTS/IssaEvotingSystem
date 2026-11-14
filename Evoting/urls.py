@@ -23,9 +23,16 @@ from accounts.views import custom_admin_logout
 from django.conf import settings
 from django.conf.urls.static import static
 from accounts.views import health_check
+from elections.views import live_results_view
 
 urlpatterns = [
+
     path('admin/logout/', custom_admin_logout, name='logout'),
+    path(
+        "admin/live-results/",
+        admin.site.admin_view(live_results_view),
+        name="live_results",
+    ),
     path('', landing_page, name='landing'),
     path("", role_based_login, name="home"),
     path("admin/login/", role_based_login, name="home"),

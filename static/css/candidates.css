@@ -1,0 +1,781 @@
+/* ========================================= CANDIDATES — SAGE GREEN DESIGN ========================================= */
+
+:root { --candidate-bg: #f7f8f5; --candidate-surface: #ffffff; --candidate-surface-soft: #f1f5ef;
+
+--candidate-primary: #526b59;
+--candidate-primary-dark: #3e5445;
+--candidate-primary-soft: #e8efe7;
+
+--candidate-accent: #b66d50;
+--candidate-accent-soft: #f8eee8;
+
+--candidate-text: #292d29;
+--candidate-muted: #777d73;
+--candidate-border: #e5e9e1;
+--candidate-border-strong: #d3ddd0;
+
+--candidate-success: #387653;
+--candidate-success-soft: #eaf4ed;
+
+--candidate-warning: #91691f;
+--candidate-warning-soft: #fbf4e5;
+
+--candidate-radius-sm: 12px;
+--candidate-radius-md: 18px;
+--candidate-radius-lg: 24px;
+
+--candidate-shadow: 0 5px 22px rgba(41, 45, 41, 0.045);
+--candidate-shadow-hover: 0 14px 32px rgba(41, 45, 41, 0.09);
+
+--candidate-transition: 180ms ease;
+
+
+}
+
+/* ========================================= PAGE ========================================= */
+
+.candidates-page, .candidates-page *, .candidates-page *::before, .candidates-page *::after { box-sizing: border-box; }
+
+.candidates-page { width: 100%; max-width: 1200px; margin-inline: auto; padding: 28px 22px 44px; color: var(--candidate-text); font-family: "Times New Roman", Times, serif; }
+
+/* ========================================= HEADER ========================================= */
+
+.candidates-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+
+.candidates-heading { min-width: 0; }
+
+.candidates-back-link { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 22px; color: var(--candidate-muted); font-size: 0.9rem; text-decoration: none; transition: color var(--candidate-transition); }
+
+.candidates-back-link:hover { color: var(--candidate-primary); }
+
+.candidates-back-link svg { width: 17px; height: 17px; }
+
+.candidates-eyebrow { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; color: var(--candidate-primary); font-size: 0.76rem; font-weight: 800; letter-spacing: 1.3px; }
+
+.candidates-eyebrow svg { width: 17px; height: 17px; }
+
+.candidates-heading h1 { margin: 0 0 10px; color: var(--candidate-text); font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.5px; overflow-wrap: anywhere; }
+
+.candidates-heading > p { max-width: 620px; margin: 0; color: var(--candidate-muted); font-size: 1rem; line-height: 1.7; }
+
+.candidates-header-icon { display: flex; align-items: center; justify-content: center; width: 68px; height: 68px; flex-shrink: 0; border: 1px solid var(--candidate-border); border-radius: 21px; background: var(--candidate-surface); color: var(--candidate-primary); }
+
+.candidates-header-icon svg { width: 31px; height: 31px; }
+
+/* ========================================= POSITION OVERVIEW ========================================= */
+
+.position-overview { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 34px; padding: 23px; background: var(--candidate-surface); border: 1px solid var(--candidate-border); border-radius: var(--candidate-radius-lg); box-shadow: var(--candidate-shadow); }
+
+.position-overview-main { display: flex; align-items: flex-start; gap: 16px; min-width: 0; }
+
+.position-overview-icon { display: flex; align-items: center; justify-content: center; width: 51px; height: 51px; flex-shrink: 0; border: 1px solid #dce6da; border-radius: 16px; background: var(--candidate-primary-soft); color: var(--candidate-primary-dark); }
+
+.position-overview-icon svg { width: 25px; height: 25px; }
+
+.position-overview-details { min-width: 0; }
+
+.overview-label { display: block; margin-bottom: 5px; color: var(--candidate-muted); font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; }
+
+.position-overview-details h2 { margin: 0 0 13px; font-size: 1.25rem; font-weight: 800; overflow-wrap: anywhere; }
+
+.position-context { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+.context-badge { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid transparent; border-radius: 999px; font-size: 0.78rem; font-weight: 700; overflow-wrap: anywhere; }
+
+.context-badge svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+.badge-central { color: var(--candidate-primary-dark); background: var(--candidate-primary-soft); border-color: #dce6da; }
+
+.badge-branch { color: #765744; background: var(--candidate-accent-soft); border-color: #f0dfd4; }
+
+.badge-department { color: var(--candidate-muted); background: var(--candidate-surface-soft); border-color: var(--candidate-border); }
+
+.position-overview-meta { display: flex; align-items: center; gap: 10px; flex-shrink: 0; padding-left: 20px; border-left: 1px solid var(--candidate-border); }
+
+.position-overview-meta > svg { width: 21px; height: 21px; color: var(--candidate-primary); }
+
+.position-overview-meta div { display: flex; flex-direction: column; gap: 5px; }
+
+.position-overview-meta span { color: var(--candidate-muted); font-size: 0.77rem; }
+
+.position-overview-meta strong { font-size: 0.87rem; }
+
+/* ========================================= CANDIDATES SECTION HEADER ========================================= */
+
+.candidates-section { margin-bottom: 32px; }
+
+.candidates-section-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+
+.section-overline { display: block; margin-bottom: 7px; color: var(--candidate-primary); font-size: 0.72rem; font-weight: 800; letter-spacing: 1.2px; }
+
+.candidates-section-header h2 { margin: 0 0 7px; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.3px; }
+
+.candidates-section-header p { margin: 0; color: var(--candidate-muted); font-size: 0.95rem; line-height: 1.6; }
+
+.voting-status { display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; padding: 9px 12px; border: 1px solid transparent; border-radius: 999px; font-size: 0.8rem; font-weight: 750; }
+
+.voting-status svg { width: 16px; height: 16px; }
+
+.status-open { color: var(--candidate-success); background: var(--candidate-success-soft); border-color: #d5e8da; }
+
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--candidate-success); }
+
+.status-complete { color: var(--candidate-primary-dark); background: var(--candidate-primary-soft); border-color: #dce6da; }
+
+/* ========================================= VOTED NOTICE ========================================= */
+
+.voted-notice { display: flex; align-items: flex-start; gap: 13px; margin-bottom: 23px; padding: 17px 19px; background: var(--candidate-success-soft); border: 1px solid #d5e8da; border-radius: var(--candidate-radius-md); }
+
+.voted-notice > svg { width: 22px; height: 22px; flex-shrink: 0; margin-top: 1px; color: var(--candidate-success); }
+
+.voted-notice strong { display: block; margin-bottom: 5px; color: var(--candidate-success); font-size: 0.95rem; }
+
+.voted-notice p { margin: 0; color: var(--candidate-muted); font-size: 0.88rem; line-height: 1.65; }
+
+/* ========================================= CANDIDATE GRID ========================================= */
+
+.candidates-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; gap: 22px; }
+
+/* ========================================= CANDIDATE CARD ========================================= */
+
+.candidate-card { display: flex; flex-direction: column; min-width: 0; padding: 21px; background: var(--candidate-surface); border: 1px solid var(--candidate-border); border-radius: var(--candidate-radius-lg); box-shadow: var(--candidate-shadow); transition: transform var(--candidate-transition), box-shadow var(--candidate-transition), border-color var(--candidate-transition); }
+
+.candidate-card:hover { transform: translateY(-4px); border-color: var(--candidate-border-strong); box-shadow: var(--candidate-shadow-hover); }
+
+.candidate-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 27px; margin-bottom: 21px; }
+
+.candidate-number { color: var(--candidate-muted); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.8px; }
+
+.selected-indicator { display: inline-flex; align-items: center; gap: 5px; padding: 5px 8px; border: 1px solid #d5e8da; border-radius: 999px; background: var(--candidate-success-soft); color: var(--candidate-success); font-size: 0.68rem; font-weight: 750; }
+
+.selected-indicator svg { width: 14px; height: 14px; }
+
+/* ========================================= CANDIDATE PHOTO ========================================= */
+
+.candidate-photo-wrapper { display: flex; align-items: center; justify-content: center; min-height: 155px; margin-bottom: 20px; }
+
+.candidate-photo, .candidate-avatar { width: 132px; height: 132px; flex-shrink: 0; border: 4px solid var(--candidate-primary-soft); border-radius: 50%; }
+
+.candidate-photo { display: block; background: var(--candidate-surface-soft); object-fit: cover; object-position: center; }
+
+.candidate-avatar { display: flex; align-items: center; justify-content: center; background: var(--candidate-primary-soft); color: var(--candidate-primary-dark); font-size: 3rem; font-weight: 800; }
+
+/* ========================================= CANDIDATE DETAILS ========================================= */
+
+.candidate-details { flex: 1; min-width: 0; text-align: center; }
+
+.candidate-details h3 { margin: 0 0 9px; color: var(--candidate-text); font-size: 1.25rem; font-weight: 800; line-height: 1.4; overflow-wrap: anywhere; }
+
+.candidate-student-id { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 0; color: var(--candidate-muted); font-size: 0.86rem; overflow-wrap: anywhere; }
+
+.candidate-student-id svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* ========================================= VOTE BUTTON ========================================= */
+
+.candidate-card-footer { margin-top: 23px; padding-top: 18px; border-top: 1px solid var(--candidate-border); }
+
+.candidate-vote-form { width: 100%; margin: 0; }
+
+.candidate-action { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 46px; padding: 12px 15px; border: 1px solid transparent; border-radius: var(--candidate-radius-sm); font-family: inherit; font-size: 0.9rem; font-weight: 750; cursor: pointer; transition: background var(--candidate-transition), border-color var(--candidate-transition), transform var(--candidate-transition); }
+
+.candidate-action svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+.action-vote { justify-content: space-between; background: var(--candidate-primary); border-color: var(--candidate-primary); color: #ffffff; }
+
+.action-vote:hover { transform: translateY(-1px); background: var(--candidate-primary-dark); border-color: var(--candidate-primary-dark); }
+
+.action-vote:focus-visible { outline: 3px solid var(--candidate-primary); outline-offset: 3px; }
+
+.action-selected { background: var(--candidate-success-soft); border-color: #d5e8da; color: var(--candidate-success); cursor: default; }
+
+.action-disabled { background: var(--candidate-surface-soft); border-color: var(--candidate-border); color: var(--candidate-muted); cursor: not-allowed; }
+
+/* ========================================= ELECTION STATE CARDS ========================================= */
+
+.election-state-card { display: flex; align-items: flex-start; gap: 22px; max-width: 800px; margin: 40px auto; padding: 32px; background: var(--candidate-surface); border: 1px solid var(--candidate-border); border-radius: var(--candidate-radius-lg); box-shadow: var(--candidate-shadow); }
+
+.state-icon { display: flex; align-items: center; justify-content: center; width: 62px; height: 62px; flex-shrink: 0; border-radius: 19px; }
+
+.state-icon svg { width: 29px; height: 29px; }
+
+.state-upcoming .state-icon { background: var(--candidate-warning-soft); color: var(--candidate-warning); }
+
+.state-ended .state-icon { background: var(--candidate-surface-soft); color: var(--candidate-muted); }
+
+.state-content { min-width: 0; }
+
+.state-label { display: block; margin-bottom: 7px; color: var(--candidate-muted); font-size: 0.72rem; font-weight: 800; letter-spacing: 1px; }
+
+.state-content h2 { margin: 0 0 9px; font-size: 1.55rem; font-weight: 800; }
+
+.state-content > p { margin: 0 0 19px; color: var(--candidate-muted); font-size: 0.95rem; line-height: 1.7; }
+
+.state-detail { display: flex; align-items: flex-start; gap: 9px; margin-top: 10px; color: var(--candidate-muted); font-size: 0.88rem; line-height: 1.6; }
+
+.state-detail svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px; color: var(--candidate-primary); }
+
+.state-detail strong { color: var(--candidate-text); }
+
+/* ========================================= EMPTY STATE ========================================= */
+
+.candidates-empty { grid-column: 1 / -1; padding: 45px 25px; background: var(--candidate-surface); border: 1px solid var(--candidate-border); border-radius: var(--candidate-radius-lg); text-align: center; }
+
+.empty-icon { display: flex; align-items: center; justify-content: center; width: 68px; height: 68px; margin: 0 auto 19px; border-radius: 21px; background: var(--candidate-primary-soft); color: var(--candidate-primary); }
+
+.empty-icon svg { width: 30px; height: 30px; }
+
+.candidates-empty h3 { margin: 0 0 10px; font-size: 1.3rem; font-weight: 800; }
+
+.candidates-empty p { max-width: 420px; margin: 0 auto; color: var(--candidate-muted); font-size: 0.92rem; line-height: 1.7; }
+
+/* ========================================= VOTING GUIDANCE ========================================= */
+
+.voting-guidance { display: flex; align-items: flex-start; gap: 11px; margin-top: 25px; padding: 15px 17px; background: var(--candidate-surface-soft); border: 1px solid var(--candidate-border); border-radius: var(--candidate-radius-md); }
+
+.voting-guidance svg { width: 19px; height: 19px; flex-shrink: 0; margin-top: 2px; color: var(--candidate-primary); }
+
+.voting-guidance p { margin: 0; color: var(--candidate-muted); font-size: 0.86rem; line-height: 1.7; }
+
+/* ========================================= FOOTER ========================================= */
+
+.candidates-footer { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 36px; padding: 16px; border-top: 1px solid var(--candidate-border); }
+
+.candidates-footer svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--candidate-primary); }
+
+.candidates-footer p { margin: 0; color: var(--candidate-muted); font-size: 0.85rem; line-height: 1.6; text-align: center; }
+
+/* ========================================= TABLETS ========================================= */
+
+@media (max-width: 950px) { .candidates-page { padding: 24px 18px 38px; }
+
+.candidates-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.position-overview {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.position-overview-meta {
+    width: 100%;
+    padding: 16px 0 0;
+    border-top: 1px solid var(--candidate-border);
+    border-left: 0;
+}
+
+
+}
+
+/* ========================================= MOBILE ========================================= */
+
+@media (max-width: 600px) { .candidates-page { padding: 18px 14px 30px; }
+
+.candidates-header {
+    gap: 13px;
+    margin-bottom: 23px;
+}
+
+.candidates-back-link {
+    margin-bottom: 17px;
+}
+
+.candidates-heading h1 {
+    font-size: 1.85rem;
+}
+
+.candidates-heading > p {
+    font-size: 0.91rem;
+}
+
+.candidates-header-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+}
+
+.candidates-header-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.position-overview {
+    margin-bottom: 28px;
+    padding: 17px;
+    border-radius: var(--candidate-radius-md);
+}
+
+.position-overview-main {
+    gap: 12px;
+}
+
+.position-overview-icon {
+    width: 43px;
+    height: 43px;
+    border-radius: 13px;
+}
+
+.position-overview-details h2 {
+    font-size: 1.1rem;
+}
+
+.position-context {
+    gap: 7px;
+}
+
+.context-badge {
+    font-size: 0.73rem;
+}
+
+.candidates-section-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 13px;
+    margin-bottom: 18px;
+}
+
+.candidates-section-header h2 {
+    font-size: 1.4rem;
+}
+
+.candidates-section-header p {
+    font-size: 0.88rem;
+}
+
+.candidates-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+}
+
+.candidate-card {
+    padding: 19px;
+    border-radius: var(--candidate-radius-md);
+}
+
+.candidate-photo-wrapper {
+    min-height: 140px;
+    margin-bottom: 17px;
+}
+
+.candidate-photo,
+.candidate-avatar {
+    width: 118px;
+    height: 118px;
+}
+
+.candidate-avatar {
+    font-size: 2.6rem;
+}
+
+.candidate-card:hover {
+    transform: none;
+}
+
+.election-state-card {
+    gap: 16px;
+    margin: 25px auto;
+    padding: 22px 18px;
+    border-radius: var(--candidate-radius-md);
+}
+
+.state-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+}
+
+.state-icon svg {
+    width: 23px;
+    height: 23px;
+}
+
+.state-content h2 {
+    font-size: 1.3rem;
+}
+
+.state-content > p {
+    font-size: 0.89rem;
+}
+
+.candidates-empty {
+    padding: 35px 19px;
+    border-radius: var(--candidate-radius-md);
+}
+
+.candidates-footer {
+    justify-content: flex-start;
+    margin-top: 25px;
+}
+
+.candidates-footer p {
+    font-size: 0.8rem;
+    text-align: left;
+}
+
+
+}
+
+/* ========================================= SMALL PHONES ========================================= */
+
+@media (max-width: 360px) { .candidates-page { padding-inline: 11px; }
+
+.candidates-heading h1 {
+    font-size: 1.6rem;
+}
+
+.candidates-header-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.position-overview {
+    padding: 14px;
+}
+
+.candidate-card {
+    padding: 15px;
+}
+
+.candidate-number {
+    font-size: 0.61rem;
+}
+
+.selected-indicator {
+    gap: 4px;
+    padding: 5px 6px;
+    font-size: 0.63rem;
+}
+
+.candidate-action {
+    gap: 7px;
+    padding-inline: 11px;
+    font-size: 0.83rem;
+}
+
+.election-state-card {
+    gap: 12px;
+    padding: 18px 14px;
+}
+
+
+}
+
+/* ========================================= ACCESSIBILITY ========================================= */
+
+@media (prefers-reduced-motion: reduce) { .candidates-page *, .candidates-page *::before, .candidates-page *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+
+/* ========================================= DARK MODE ========================================= */
+
+html[data-theme="dark"] { --candidate-bg: #171b18; --candidate-surface: #202621; --candidate-surface-soft: #272e28;
+
+--candidate-primary: #a2bba5;
+--candidate-primary-dark: #d3e2d4;
+--candidate-primary-soft: #303d32;
+
+--candidate-accent: #d59b7e;
+--candidate-accent-soft: #3c2e27;
+
+--candidate-text: #edf1eb;
+--candidate-muted: #a5aea3;
+--candidate-border: #374038;
+--candidate-border-strong: #4a564b;
+
+--candidate-success: #a2d2ad;
+--candidate-success-soft: #293c2e;
+
+--candidate-warning: #e2c276;
+--candidate-warning-soft: #393326;
+
+--candidate-shadow: 0 5px 22px rgba(0, 0, 0, 0.12);
+--candidate-shadow-hover: 0 14px 32px rgba(0, 0, 0, 0.2);
+
+
+}
+
+html[data-theme="dark"] .badge-branch { background: #40332c; border-color: #5b4639; color: #e5bba1; }
+
+html[data-theme="dark"] .badge-central { border-color: #425345; }
+
+html[data-theme="dark"] .candidate-photo, html[data-theme="dark"] .candidate-avatar { border-color: #425345; }
+
+html[data-theme="dark"] .action-vote { color: #ffffff; }
+
+html[data-theme="dark"] .voted-notice { border-color: #405745; }
+
+html[data-theme="dark"] .status-open, html[data-theme="dark"] .status-complete { border-color: #405745; }
+
+
+
+
+/* =========================================
+   RESPONSIVE IMPROVEMENTS
+   Append after your existing stylesheet
+========================================= */
+
+/* Prevent viewport overflow */
+html {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+.candidates-page {
+    width: 100%;
+    min-width: 0;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-left: clamp(12px, 3vw, 28px);
+    padding-right: clamp(12px, 3vw, 28px);
+}
+
+/* Ensure nested elements can shrink */
+.candidates-page *,
+.candidates-page *::before,
+.candidates-page *::after {
+    min-width: 0;
+}
+
+.candidates-header,
+.position-overview,
+.position-overview-main,
+.candidates-section-header,
+.election-state-card {
+    min-width: 0;
+}
+
+/* Responsive candidate grid */
+.candidates-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(12px, 2vw, 22px);
+    align-items: stretch;
+}
+
+.candidate-card {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.candidate-details h3,
+.position-overview-details h2,
+.state-content h2 {
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+/* Images scale without distortion */
+.candidate-photo,
+.candidate-avatar {
+    width: clamp(96px, 11vw, 132px);
+    height: auto;
+    aspect-ratio: 1;
+    max-width: 100%;
+}
+
+.candidate-photo {
+    object-fit: cover;
+}
+
+/* Flexible header and overview */
+.candidates-header {
+    flex-wrap: wrap;
+}
+
+.position-overview {
+    flex-wrap: wrap;
+}
+
+.position-overview-main {
+    flex: 1 1 320px;
+}
+
+.position-overview-meta {
+    max-width: 100%;
+}
+
+/* Buttons: comfortable touch targets */
+.candidate-action {
+    min-height: 46px;
+    touch-action: manipulation;
+    overflow-wrap: anywhere;
+}
+
+button,
+input,
+select,
+textarea {
+    max-width: 100%;
+}
+
+/* Tablet and smaller laptops */
+@media (max-width: 900px) {
+    .candidates-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .position-overview {
+        align-items: stretch;
+    }
+
+    .position-overview-meta {
+        flex: 1 1 100%;
+    }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+    .candidates-page {
+        padding: 16px 12px 28px;
+    }
+
+    .candidates-header {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .candidates-heading {
+        flex: 1 1 0;
+    }
+
+    .candidates-heading h1 {
+        font-size: clamp(1.5rem, 6vw, 1.85rem);
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+    }
+
+    .candidates-header-icon {
+        width: 44px;
+        height: 44px;
+        flex-shrink: 0;
+    }
+
+    .position-overview-main {
+        flex: 1 1 100%;
+    }
+
+    .position-context {
+        align-items: flex-start;
+    }
+
+    .context-badge {
+        max-width: 100%;
+        white-space: normal;
+    }
+
+    .candidates-section-header {
+        align-items: flex-start;
+    }
+
+    .voting-status {
+        max-width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .candidates-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+    }
+
+    .candidate-card {
+        padding: 18px;
+    }
+
+    .candidate-photo-wrapper {
+        min-height: 0;
+        padding-top: 8px;
+    }
+
+    .candidate-photo,
+    .candidate-avatar {
+        width: 116px;
+    }
+
+    .election-state-card {
+        gap: 14px;
+        padding: 20px 16px;
+    }
+
+    .state-icon {
+        width: 44px;
+        height: 44px;
+    }
+
+    .voted-notice,
+    .voting-guidance {
+        padding: 14px;
+    }
+
+    .candidates-footer {
+        align-items: flex-start;
+        gap: 9px;
+    }
+}
+
+/* Extra-small phones */
+@media (max-width: 380px) {
+    .candidates-page {
+        padding-inline: 10px;
+    }
+
+    .candidate-card {
+        padding: 14px;
+    }
+
+    .election-state-card {
+        gap: 10px;
+        padding: 16px 12px;
+    }
+
+    .state-icon {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+    }
+
+    .state-content h2 {
+        font-size: 1.2rem;
+    }
+
+    .candidate-action {
+        padding-inline: 10px;
+        font-size: 0.82rem;
+    }
+}
+
+/* Large desktop displays */
+@media (min-width: 1440px) {
+    .candidates-page {
+        max-width: 1280px;
+    }
+
+    .candidates-grid {
+        gap: 24px;
+    }
+}
+
+/* Keyboard accessibility and reduced motion */
+.candidate-action:focus-visible,
+.candidates-back-link:focus-visible {
+    outline: 3px solid var(--candidate-primary);
+    outline-offset: 3px;
+}
+
+@media (hover: none) {
+    .candidate-card:hover {
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .candidates-page *,
+    .candidates-page *::before,
+    .candidates-page *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important;
+    }
+}

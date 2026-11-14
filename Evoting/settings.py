@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bf#-#a)8g!6)_+hs_ih3b*u*hdup1zih^clq#@batvu1l^eiw_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = [
@@ -37,7 +37,7 @@ ALLOWED_HOSTS = [
 AUTH_USER_MODEL = "accounts.User"
 LOGOUT_REDIRECT_URL = '/'
 
-SESSION_COOKIE_AGE = 120  # 2 minutes logs out due to inactivity 
+SESSION_COOKIE_AGE = 1200  # 20 minutes logs out due to inactivity 
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  #when a user closes the browser he's logged out
 
@@ -57,7 +57,7 @@ EMAIL_HOST_PASSWORD = config("BREVO_SMTP_PASSWORD")
 
 DEFAULT_FROM_EMAIL = config(
     "DEFAULT_FROM_EMAIL",
-    default="wamaniissa0@gmail.com"
+    default="UniVote <wamaniissa0@gmail.com>"
 )
 
 INSTALLED_APPS = [
@@ -133,7 +133,7 @@ import dj_database_url
 from decouple import config
  #uses sqlite3 database locally and postgres on render.com
 
-if config("DATABASE_URL", default=""):
+"""if config("DATABASE_URL", default=""):
     DATABASES = {
         'default': dj_database_url.config(
             default=config("DATABASE_URL"),
@@ -158,7 +158,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-"""
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -177,8 +176,23 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+JAZZMIN_SETTINGS = {
+    "site_title": "UniVote Administration",
+    "site_header": "UniVote",
+    "site_brand": "UniVote",
 
-
+    "topmenu_links": [
+        {
+            "name": "Home",
+            "url": "admin:index",
+        },
+        {
+            "name": "Live Election Results",
+            "url": "/admin/live-results/",
+            "icon": "fas fa-chart-bar",
+        },
+    ],
+}
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
@@ -204,18 +218,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-JAZZMIN_SETTINGS = {
-    "show_ui_builder": False,
-    "site_title": "Election System",
-    "site_header": "Admin Panel",
-    "welcome_sign": "Welcome to the system",
-    "theme": "darkly",  # try 'flatly', 'cosmo', etc.
-}
 
 
-SECURE_BROWSER_XSS_FILTER = True
+
+"""SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True  
+CSRF_COOKIE_SECURE = True  """

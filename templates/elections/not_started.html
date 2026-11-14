@@ -1,47 +1,117 @@
+
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Election Scheduled | E-Voting{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/notstarted.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<div class="election-schedule-wrapper d-flex justify-content-center align-items-center">
+<section class="election-status-page">
 
-    <div class="card election-schedule-card shadow-lg border-0 text-center">
+    <article class="election-status-card">
 
-        <!-- Icon -->
-        <div class="mb-4">
-            <div class="election-schedule-icon">
-                ⏳
+        <div class="status-accent"></div>
+
+        <div class="status-content">
+
+            <!-- Status icon -->
+            <div class="status-icon scheduled-icon">
+                <i data-lucide="calendar-clock"></i>
             </div>
+
+            <!-- Status label -->
+            <span class="status-eyebrow">
+                <span class="status-dot"></span>
+                UPCOMING ELECTION
+            </span>
+
+            <!-- Heading -->
+            <h1>Election Scheduled</h1>
+
+            <p class="status-description">
+                Voting is not open yet. The election below is scheduled
+                to begin at the announced date and time.
+            </p>
+
+            <!-- Election information -->
+            <div class="election-information">
+
+                <div class="information-icon">
+                    <i data-lucide="vote"></i>
+                </div>
+
+                <div class="information-details">
+                    <span class="information-label">Election</span>
+                    <h2>{{ election.name }}</h2>
+                </div>
+
+            </div>
+
+            <!-- Countdown information -->
+            <div class="countdown-panel">
+
+                <div class="countdown-heading">
+                    <i data-lucide="clock-3"></i>
+                    <span>Time until voting opens</span>
+                </div>
+
+                <p class="countdown-value">
+                    {{ election.start_time|timeuntil }}
+                </p>
+
+                <p class="countdown-note">
+                    Voting will become available when the election starts.
+                </p>
+
+            </div>
+
+            <!-- Scheduled date -->
+            <div class="scheduled-date">
+
+                <div class="date-icon">
+                    <i data-lucide="calendar-days"></i>
+                </div>
+
+                <div>
+                    <span class="information-label">Scheduled start</span>
+                    <p>
+                        {{ election.start_time|date:"M d, Y" }}
+                    </p>
+                    <p class="scheduled-time">
+                        {{ election.start_time|date:"H:i" }}
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Action -->
+            <a href="{% url 'elections:positions_list' %}"
+               class="status-action">
+                <i data-lucide="arrow-left"></i>
+                <span>Back to Elections</span>
+            </a>
+
+            <p class="status-footer">
+                <i data-lucide="shield-check"></i>
+                <span>Election access is managed securely.</span>
+            </p>
+
         </div>
 
-        <!-- Title -->
-        <h3 class="fw-bold mb-2">Election Scheduled</h3>
+    </article>
 
-        <!-- Subtitle -->
-        <p class="text-muted mb-4">
-            <strong>{{ election.name }}</strong> has not started yet.
-        </p>
+</section>
 
-        <!-- Countdown -->
-        <div class="countdown-box p-3 mb-4 rounded">
-            <p class="mb-1 text-muted small">Starts in</p>
-            <h5 class="mb-0 fw-bold">
-                {{ election.start_time|timeuntil }}
-            </h5>
-        </div>
-
-        <!-- Date -->
-        <p class="small text-muted mb-4">
-            Scheduled for {{ election.start_time|date:"M d, Y - H:i" }}
-        </p>
-
-        <!-- CTA -->
-        <a href="{% url 'elections:positions_list' %}" 
-           class="btn btn-primary w-100 w-sm-auto px-4 py-2">
-            Back to Dashboard
-        </a>
-
-    </div>
-
-</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
+});
+</script>
 
 {% endblock %}

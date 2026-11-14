@@ -1,0 +1,595 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Live Election Results{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/live_results.css' %}">
+
+    <style>
+     
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="live-results-page">
+
+    <div class="results-header">
+        <div>
+            <h1 class="results-title">Live Election Results</h1>
+
+            {% if institution %}
+                <p class="results-subtitle">
+                    Institution: {{ institution.name }}
+                </p>
+            {% else %}
+                <p class="results-subtitle">
+                    No institution is associated with your account.
+                </p>
+            {% endif %}
+        </div>
+
+        <span class="live-indicator">Live monitoring</span>
+    </div>
+
+    {% if error %}
+        <div class="results-empty">
+            <h3>Unable to load results</h3>
+            <p>{{ error }}</p>
+        </div>
+
+    {% elif not institution %}
+        <div class="results-empty">
+            <h3>Institution not found</h3>
+            <p>Your account is not associated with an institution.</p>
+        </div>
+
+    {% elif not elections %}
+        <div class="results-empty">
+            <h3>No active elections</h3>
+            <p>
+                There are currently no elections in progress
+                for your institution.
+            </p>
+        </div>
+
+    {% else %}
+
+        <div class="results-controls">
+            <input
+                type="search"
+                id="candidateSearch"
+                class="results-search"
+                placeholder="Search candidates or positions..."
+                aria-label="Search candidates or positions"
+                autocomplete="off"
+            >
+
+            <select
+                id="scopeFilter"
+                class="results-filter"
+                aria-label="Filter by election scope"
+            >
+                <option value="">All scopes</option>
+                <option value="institution-wide">Institution-wide</option>
+                <option value="branch">Branch</option>
+                <option value="department">Department</option>
+            </select>
+<button
+    type="button"
+    id="exportPdf"
+    class="results-refresh"
+    style="background: #15803d;"
+>
+    <i class="fas fa-file-pdf" aria-hidden="true"></i>
+    Export Results to PDF
+</button>
+            <button
+                type="button"
+                id="refreshResults"
+                class="results-refresh"
+            >
+                <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                Refresh now
+            </button>
+
+            <div
+                id="refreshStatus"
+                class="refresh-status"
+                aria-live="polite"
+            >
+                Results refresh automatically every 30 seconds.
+            </div>
+        </div>
+
+        <div id="noSearchResults" class="results-empty results-hidden">
+            <h3>No matching results</h3>
+            <p>Try changing your search term or scope filter.</p>
+        </div>
+
+        {% for election in elections %}
+            <section class="election-card" data-election-card>
+
+                <div class="election-header">
+                    <h2 class="election-title">
+                        {{ election.name }}
+                    </h2>
+
+                    <div class="election-meta">
+                        Started:
+                        {{ election.start_time|date:"M d, Y H:i" }}
+                        &nbsp; | &nbsp;
+                        Ends:
+                        {{ election.end_time|date:"M d, Y H:i" }}
+                    </div>
+                </div>
+
+                <div class="election-body">
+
+                    {% for result in results %}
+                        {% if result.election.pk == election.pk %}
+
+                            <section
+                                class="position-card"
+                                data-position-card
+                                data-scope="{% if result.position.is_central %}institution-wide{% elif result.position.department_id %}department{% elif result.position.branch_id %}branch{% else %}unspecified{% endif %}"
+                            >
+
+                                <div class="position-header">
+                                    <h3 class="position-title">
+                                        {{ result.position.name }}
+                                    </h3>
+
+                                    <span class="position-scope">
+                                        {% if result.position.is_central %}
+                                            Institution-wide
+                                        {% elif result.position.department %}
+                                            {{ result.position.department.name }}
+                                        {% elif result.position.branch %}
+                                            {{ result.position.branch.name }}
+                                        {% else %}
+                                            Unspecified
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="position-content">
+
+                                    <div class="results-position-summary">
+                                        <div class="results-stat">
+                                            <strong>Total votes:</strong>
+                                            {{ result.total_votes|default:0 }}
+                                        </div>
+
+                                        <div class="results-stat">
+                                            <strong>Candidates:</strong>
+                                            {{ result.candidates|length }}
+                                        </div>
+                                    </div>
+
+                                    {% if result.candidates %}
+                                        <div class="results-table-wrapper">
+                                            <table class="results-table">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th>Rank</th>
+                                                        <th>Candidate</th>
+                                                        <th>Branch</th>
+                                                        <th>Department</th>
+                                                        <th>Votes / Percentage</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    {% for candidate in result.candidates %}
+                                                        <tr
+                                                            data-candidate-row
+                                                            data-search-text="{{ candidate.user.get_full_name|default:candidate.user.username }} {{ candidate.position.name }} {{ candidate.branch.name|default:'' }} {{ candidate.department.name|default:'' }}"
+                                                        >
+                                                            <td>
+                                                                {% if candidate.rank == 1 and candidate.votes > 0 %}
+                                                                    <span class="rank-badge rank-leading">
+                                                                        <i class="fas fa-trophy" aria-hidden="true"></i>
+                                                                        #{{ candidate.rank }}
+                                                                    </span>
+                                                                {% else %}
+                                                                    <span class="rank-badge">
+                                                                        #{{ candidate.rank|default:"—" }}
+                                                                    </span>
+                                                                {% endif %}
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="candidate-info">
+
+                                                                    {% if candidate.image %}
+                                                                        <img
+                                                                            src="{{ candidate.image.url }}"
+                                                                            alt="{{ candidate.user.get_full_name|default:candidate.user.username }}"
+                                                                            class="candidate-avatar"
+                                                                            loading="lazy"
+                                                                        >
+                                                                    {% else %}
+                                                                        <div class="candidate-avatar candidate-avatar-placeholder">
+                                                                            <i class="fas fa-user" aria-hidden="true"></i>
+                                                                        </div>
+                                                                    {% endif %}
+
+                                                                    <div>
+                                                                        <div class="candidate-name">
+                                                                            {{ candidate.user.get_full_name|default:candidate.user.username }}
+                                                                        </div>
+
+                                                                        <div class="candidate-label">
+                                                                            {{ candidate.position.name }}
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                {{ candidate.branch.name|default:"—" }}
+                                                            </td>
+
+                                                            <td>
+                                                                {{ candidate.department.name|default:"—" }}
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="candidate-vote-details">
+                                                                    <span class="vote-count">
+                                                                        {{ candidate.votes|default:0 }}
+                                                                    </span>
+
+                                                                    <div
+                                                                        class="vote-progress"
+                                                                        role="progressbar"
+                                                                        aria-label="Candidate vote percentage"
+                                                                        aria-valuemin="0"
+                                                                        aria-valuemax="100"
+                                                                        aria-valuenow="{{ candidate.percentage|default:0 }}"
+                                                                    >
+                                                                        <div
+                                                                            class="vote-progress-bar"
+                                                                            style="width: {% if candidate.percentage > 100 %}100{% elif candidate.percentage > 0 %}{{ candidate.percentage }}{% else %}0{% endif %}%;"
+                                                                        ></div>
+                                                                    </div>
+
+                                                                    <small class="vote-percentage">
+                                                                        {{ candidate.percentage|default:0 }}%
+                                                                    </small>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+                                    {% else %}
+                                        <div class="position-empty">
+                                            No candidates found for this position.
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+                            </section>
+
+                        {% endif %}
+                    {% endfor %}
+
+                </div>
+            </section>
+        {% endfor %}
+
+    {% endif %}
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const exportButton = document.getElementById("exportPdf");
+
+    if (!exportButton) return;
+
+    exportButton.addEventListener("click", async function () {
+        const page = document.querySelector(".live-results-page");
+
+        if (!page) {
+            alert("No election results found to export.");
+            return;
+        }
+
+        if (typeof html2pdf === "undefined") {
+            alert("The PDF library could not load. Check your internet connection.");
+            return;
+        }
+
+        const originalText = exportButton.innerHTML;
+
+        try {
+            exportButton.disabled = true;
+            exportButton.textContent = "Generating PDF...";
+
+            const clone = page.cloneNode(true);
+
+            // Remove controls and elements not needed in the report.
+            clone.querySelectorAll(
+                ".results-controls, #noSearchResults, .live-indicator"
+            ).forEach(function (element) {
+                element.remove();
+            });
+
+            // Export every candidate, including rows hidden by search filters.
+            clone.querySelectorAll(".results-hidden").forEach(function (element) {
+                element.classList.remove("results-hidden");
+            });
+
+            // Remove the export and refresh buttons from the PDF.
+            clone.querySelectorAll("button").forEach(function (button) {
+                button.remove();
+            });
+
+            // Give the PDF a clean report heading.
+            const heading = document.createElement("h1");
+            heading.textContent = "Live Election Results Report";
+            heading.style.textAlign = "center";
+            heading.style.marginBottom = "20px";
+            clone.prepend(heading);
+
+            // Use a clean printable layout.
+            clone.style.padding = "15px";
+            clone.style.background = "#ffffff";
+            clone.style.color = "#111827";
+            clone.style.width = "100%";
+            clone.style.boxSizing = "border-box";
+
+            clone.querySelectorAll(".results-table-wrapper").forEach(function (wrapper) {
+                wrapper.style.overflow = "visible";
+            });
+
+            clone.querySelectorAll(".results-table").forEach(function (table) {
+                table.style.width = "100%";
+                table.style.minWidth = "0";
+                table.style.fontSize = "9px";
+            });
+
+            clone.querySelectorAll(".election-card, .position-card").forEach(function (card) {
+                card.style.breakInside = "avoid";
+                card.style.pageBreakInside = "avoid";
+            });
+
+            // Render off-screen so the live page remains unchanged.
+            const container = document.createElement("div");
+            container.style.position = "fixed";
+            container.style.left = "-10000px";
+            container.style.top = "0";
+            container.style.width = "1100px";
+            container.appendChild(clone);
+            document.body.appendChild(container);
+
+            try {
+                await html2pdf()
+                    .set({
+                        margin: [10, 8, 10, 8],
+                        filename: "live-election-results.pdf",
+                        image: {
+                            type: "jpeg",
+                            quality: 0.98
+                        },
+                        html2canvas: {
+                            scale: 2,
+                            useCORS: true,
+                            backgroundColor: "#ffffff"
+                        },
+                        jsPDF: {
+                            unit: "mm",
+                            format: "a4",
+                            orientation: "landscape"
+                        },
+                        pagebreak: {
+                            mode: ["css", "legacy"]
+                        }
+                    })
+                    .from(clone)
+                    .save();
+            } finally {
+                container.remove();
+            }
+        } catch (error) {
+            console.error("PDF export failed:", error);
+            alert("Could not generate the PDF. Please try again.");
+        } finally {
+            exportButton.disabled = false;
+            exportButton.innerHTML = originalText;
+        }
+    });
+});
+</script>
+<script>
+(function () {
+    "use strict";
+
+    const searchInput = document.getElementById("candidateSearch");
+    const scopeFilter = document.getElementById("scopeFilter");
+    const refreshButton = document.getElementById("refreshResults");
+    const refreshStatus = document.getElementById("refreshStatus");
+    const noResults = document.getElementById("noSearchResults");
+
+    const AUTO_REFRESH_MS = 30000;
+    let refreshTimer = null;
+    let secondsRemaining = AUTO_REFRESH_MS / 1000;
+
+    function applyFilters() {
+        const searchTerm = searchInput
+            ? searchInput.value.trim().toLowerCase()
+            : "";
+
+        const selectedScope = scopeFilter
+            ? scopeFilter.value
+            : "";
+
+        let visiblePositions = 0;
+
+        document.querySelectorAll("[data-position-card]").forEach(function (card) {
+            const scope = card.dataset.scope || "";
+            const title = card.querySelector(".position-title");
+            const positionName = title ? title.textContent.toLowerCase() : "";
+
+            const scopeMatches =
+                !selectedScope || scope === selectedScope;
+
+            const positionMatches =
+                positionName.includes(searchTerm);
+
+            const rows = Array.from(
+                card.querySelectorAll("[data-candidate-row]")
+            );
+
+            let visibleCandidates = 0;
+
+            rows.forEach(function (row) {
+                const candidateText = (
+                    row.dataset.searchText || row.textContent
+                ).toLowerCase();
+
+                const candidateMatches =
+                    !searchTerm || candidateText.includes(searchTerm);
+
+                const showCandidate =
+                    scopeMatches &&
+                    (positionMatches || candidateMatches);
+
+                row.classList.toggle("results-hidden", !showCandidate);
+
+                if (showCandidate) {
+                    visibleCandidates++;
+                }
+            });
+
+            const showPosition =
+                scopeMatches &&
+                (
+                    !searchTerm ||
+                    positionMatches ||
+                    visibleCandidates > 0
+                );
+
+            card.classList.toggle("results-hidden", !showPosition);
+
+            if (showPosition) {
+                visiblePositions++;
+            }
+        });
+
+        document.querySelectorAll("[data-election-card]").forEach(function (card) {
+            const hasVisiblePosition = Array.from(
+                card.querySelectorAll("[data-position-card]")
+            ).some(function (position) {
+                return !position.classList.contains("results-hidden");
+            });
+
+            card.classList.toggle(
+                "results-hidden",
+                !hasVisiblePosition
+            );
+        });
+
+        if (noResults) {
+            noResults.classList.toggle(
+                "results-hidden",
+                visiblePositions > 0
+            );
+        }
+    }
+
+    function clearRefreshTimer() {
+        if (refreshTimer !== null) {
+            clearInterval(refreshTimer);
+            refreshTimer = null;
+        }
+    }
+
+    function startAutoRefresh() {
+        clearRefreshTimer();
+
+        if (document.hidden) {
+            return;
+        }
+
+        secondsRemaining = AUTO_REFRESH_MS / 1000;
+
+        if (refreshStatus) {
+            refreshStatus.textContent =
+                "Results refresh automatically in " +
+                secondsRemaining +
+                " seconds.";
+        }
+
+        refreshTimer = setInterval(function () {
+            if (document.hidden) {
+                clearRefreshTimer();
+                return;
+            }
+
+            const activeElement = document.activeElement;
+            const isInteracting =
+                activeElement &&
+                (
+                    activeElement === searchInput ||
+                    activeElement === scopeFilter
+                );
+
+            if (isInteracting) {
+                if (refreshStatus) {
+                    refreshStatus.textContent =
+                        "Auto-refresh paused while you use the filters.";
+                }
+                return;
+            }
+
+            secondsRemaining--;
+
+            if (secondsRemaining <= 0) {
+                window.location.reload();
+                return;
+            }
+
+            if (refreshStatus) {
+                refreshStatus.textContent =
+                    "Results refresh automatically in " +
+                    secondsRemaining +
+                    " seconds.";
+            }
+        }, 1000);
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener("input", applyFilters);
+    }
+
+    if (scopeFilter) {
+        scopeFilter.addEventListener("change", applyFilters);
+    }
+
+    if (refreshButton) {
+        refreshButton.addEventListener("click", function () {
+            window.location.reload();
+        });
+    }
+
+    document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+            clearRefreshTimer();
+        } else {
+            startAutoRefresh();
+        }
+    });
+
+    applyFilters();
+    startAutoRefresh();
+})();
+</script>
+{% endblock %}

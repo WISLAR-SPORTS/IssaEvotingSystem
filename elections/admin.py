@@ -4,18 +4,213 @@ from .models import Election, Position, Candidate
 from core.branchadmin_mixin import BranchAdminMixin
 
 
+from django.contrib import admin
+from django.urls import path
+from django.shortcuts import render
+from django.utils import timezone
+
+from .models import Election, Position, Candidate
+from institutions.admin import InstitutionAdminMixin
+
 
 @admin.register(Election)
 class ElectionAdmin(InstitutionAdminMixin, admin.ModelAdmin):
-    list_display = ("id", "name", "institution", "start_time", "end_time")
+
+    list_display = (
+        "id",
+        "name",
+        "institution",
+        "start_time",
+        "end_time",
+    )
+
     list_filter = ("institution",)
     search_fields = ("name",)
 
+    def get_urls(self):
+        urls = super().get_urls()
+
+        custom_urls = [
+            path(
+                "live-results/",
+                self.admin_site.admin_view(self.live_results_view),
+                name="elections_live_results",
+            ),
+        ]
+
+        return custom_urls + urls
+
+    def live_results_view(self, request):
+        institution = getattr(request.user, "institution", None)
+        now = timezone.now()
+
+        elections = Election.objects.none()
+        results = []
+
+        if institution:
+            elections = Election.objects.filter(
+                institution=institution,
+                start_time__lte=now,
+                end_time__gte=now,
+            )
+
+            for election in elections:
+                positions = Position.objects.filter(
+                    election=election,
+                    institution=institution,
+                ).select_related(
+                    "branch",
+                    "department",
+                )
+
+                for position in positions:
+                    candidates = Candidate.objects.filter(
+                        position=position,
+                        institution=institution,
+                    ).select_related(
+                        "user",
+                        "branch",
+                        "department",
+                    )
+
+                    results.append({
+                        "election": election,
+                        "position": position,
+                        "candidates": candidates,
+                    })
+
+        context = {
+            **self.admin_site.each_context(request),
+            "title": "Live Election Results",
+            "institution": institution,
+            "elections": elections,
+            "results": results,
+        }
+
+        return render(
+            request,
+            "admin/elections/live_results.html",
+            context,
+        )
+    
+
+from django.contrib import admin
+from django.utils import timezone
+
+from django.contrib import admin
+from django.utils import timezone
+
+from .models import Position, Election
+from students.models import Branch
+from institutions.models import Department
+
+
 @admin.register(Position)
 class PositionAdmin(InstitutionAdminMixin, admin.ModelAdmin):
-    list_display = ("id", "name", "election", "institution", "is_central", "department", "branch")
-    list_filter = ("institution", "is_central", "department")
+    list_display = (
+        "id",
+        "name",
+        "election",
+        "institution",
+        "is_central",
+        "department",
+        "branch",
+    )
+
+    list_filter = (
+        "institution",
+        "is_central",
+        "department",
+        "branch",
+    )
+
     search_fields = ("name",)
+
+    def get_user_institution(self, request):
+        """Resolve the logged-in user's institution."""
+        institution = getattr(request, "institution", None)
+
+        if institution is None:
+            institution = getattr(request.user, "institution", None)
+
+        if institution is None:
+            profile = getattr(request.user, "profile", None)
+            if profile is not None:
+                institution = getattr(profile, "institution", None)
+
+        return institution
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        institution = self.get_user_institution(request)
+
+        if db_field.name == "election":
+            if institution is not None:
+                now = timezone.now()
+                kwargs["queryset"] = Election.objects.filter(
+                    institution=institution,
+                    start_time__lte=now,
+                    end_time__gte=now,
+                )
+            else:
+                kwargs["queryset"] = Election.objects.none()
+
+        elif db_field.name == "branch":
+            if institution is not None:
+                kwargs["queryset"] = Branch.objects.filter(
+                    institution=institution
+                )
+            else:
+                kwargs["queryset"] = Branch.objects.none()
+
+        elif db_field.name == "department":
+            if institution is not None:
+                kwargs["queryset"] = Department.objects.filter(
+                    branch__institution=institution
+                ).distinct()
+            else:
+                kwargs["queryset"] = Department.objects.none()
+
+        return super().formfield_for_foreignkey(
+            db_field, request, **kwargs
+        )
+
+    def save_model(self, request, obj, form, change):
+        """Prevent assigning a position to another institution."""
+        institution = self.get_user_institution(request)
+
+        if institution is None:
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied(
+                "Your account has no institution assigned."
+            )
+
+        # Ensure the position belongs to the logged-in user's institution.
+        obj.institution = institution
+
+        # Validate related objects even if a request bypasses the dropdown.
+        if obj.branch_id and obj.branch.institution_id != institution.id:
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied(
+                "You cannot select a branch from another institution."
+            )
+
+        if (
+            obj.department_id
+            and obj.department.branch.institution_id != institution.id
+        ):
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied(
+                "You cannot select a department from another institution."
+            )
+
+        if obj.election.institution_id != institution.id:
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied(
+                "You cannot select an election from another institution."
+            )
+
+        super().save_model(request, obj, form, change)
+
 from django.contrib import admin
 from django.db.models import Q
 from .models import Candidate, Branch, User

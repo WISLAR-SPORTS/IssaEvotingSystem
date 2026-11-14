@@ -1,0 +1,704 @@
+
+/* ========================================
+   MODERN REGISTRATION FORM
+   Theme: Emerald Green / Clean UI
+======================================== */
+
+/* ---------- CSS VARIABLES ---------- */
+:root {
+    --primary: #15803d;
+    --primary-dark: #166534;
+    --primary-light: #22c55e;
+    --primary-soft: #f0fdf4;
+
+    --text-primary: #172b21;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+
+    --border: #e2e8e5;
+    --surface: #ffffff;
+    --surface-soft: #f8fbf9;
+
+    --danger: #dc2626;
+    --success-bg: #f0fdf4;
+    --error-bg: #fef2f2;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+
+    --shadow-sm:
+        0 2px 8px rgba(15, 23, 42, 0.04);
+
+    --shadow-md:
+        0 12px 35px rgba(22, 101, 52, 0.08),
+        0 2px 8px rgba(15, 23, 42, 0.03);
+
+    --shadow-lg:
+        0 20px 55px rgba(22, 101, 52, 0.12);
+
+    --transition: 200ms ease;
+}
+
+/* ---------- RESET ---------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body,
+input,
+select,
+textarea,
+button {
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 48px 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    color: var(--text-primary);
+
+    background-color: #f4f9f5;
+    font-family: 'Times New Roman', Times, serif;
+
+    background-image:
+        radial-gradient(
+            ellipse at 10% 0%,
+            rgba(34, 197, 94, 0.12),
+            transparent 40%
+        ),
+        radial-gradient(
+            ellipse at 100% 100%,
+            rgba(16, 185, 129, 0.09),
+            transparent 38%
+        ),
+        linear-gradient(
+            rgba(22, 101, 52, 0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(22, 101, 52, 0.025) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        auto,
+        auto,
+        36px 36px,
+        36px 36px;
+}
+
+/* ---------- REGISTRATION CARD ---------- */
+.card {
+    width: 100%;
+    max-width: 760px;
+    padding: 42px;
+
+    background: rgba(255, 255, 255, 0.96);
+
+    border: 1px solid rgba(226, 232, 229, 0.9);
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-md);
+
+    transition:
+        box-shadow var(--transition),
+        transform var(--transition);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+/* ---------- HEADER ---------- */
+.card h2 {
+    margin: 0 0 10px;
+
+    color: var(--primary-dark);
+
+    font-size: clamp(1.55rem, 4vw, 2rem);
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.8px;
+
+    text-align: center;
+}
+
+.card .subtitle {
+    max-width: 520px;
+    margin: 0 auto 32px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.94rem;
+    line-height: 1.75;
+
+    text-align: center;
+}
+
+/* ---------- FORM SECTIONS ---------- */
+.form-section {
+    margin-bottom: 24px;
+    padding: 24px;
+
+    background: var(--surface-soft);
+
+    border: 1px solid #e5eee7;
+    border-radius: var(--radius-md);
+
+    transition:
+        border-color var(--transition),
+        background var(--transition);
+}
+
+.form-section:hover {
+    border-color: #c9e4d0;
+    background: #fbfefc;
+}
+
+.form-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin: 0 0 24px;
+    padding-bottom: 16px;
+
+    color: var(--text-primary);
+
+    font-size: 1.05rem;
+    font-weight: 750;
+    letter-spacing: -0.2px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+/* ---------- SECTION NUMBER ---------- */
+.section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 34px;
+    height: 34px;
+
+    color: var(--primary-dark);
+    background: #dcfce7;
+
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+
+    font-size: 0.88rem;
+    font-weight: 800;
+}
+
+/* ---------- FORM GRID ---------- */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 18px;
+}
+
+.form-group {
+    min-width: 0;
+    margin-bottom: 2px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+/* ---------- LABELS ---------- */
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #334155;
+
+    font-size: 0.88rem;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+.required {
+    margin-left: 3px;
+    color: var(--danger);
+    font-weight: 700;
+}
+
+/* ---------- INPUTS ---------- */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    display: block;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+
+    padding: 12px 14px;
+
+    color: var(--text-primary);
+    background: var(--surface);
+
+    border: 1px solid #d7e2da;
+    border-radius: var(--radius-sm);
+
+    outline: none;
+
+    font-size: 0.92rem;
+    line-height: 1.5;
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background var(--transition);
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+}
+
+/* Hover */
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+    border-color: #a7cbb0;
+}
+
+/* Focus */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    background: #ffffff;
+    border-color: var(--primary-light);
+
+    box-shadow:
+        0 0 0 3px rgba(34, 197, 94, 0.12);
+}
+
+/* Invalid fields */
+.form-group input[aria-invalid="true"],
+.form-group select[aria-invalid="true"],
+.form-group textarea[aria-invalid="true"] {
+    border-color: var(--danger);
+}
+
+.form-group input[aria-invalid="true"]:focus,
+.form-group select[aria-invalid="true"]:focus,
+.form-group textarea[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* Select dropdown */
+.form-group select {
+    cursor: pointer;
+}
+
+/* ---------- FILE INPUT ---------- */
+.form-group input[type="file"] {
+    padding: 8px;
+
+    background: #f8fbf9;
+
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.form-group input[type="file"]::file-selector-button {
+    margin-right: 12px;
+    padding: 9px 13px;
+
+    color: var(--primary-dark);
+    background: #dcfce7;
+
+    border: none;
+    border-radius: 6px;
+
+    font: inherit;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background var(--transition),
+        color var(--transition);
+}
+
+.form-group input[type="file"]::file-selector-button:hover {
+    background: #bbf7d0;
+}
+
+/* ---------- HELP TEXT ---------- */
+.help-text {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.79rem;
+    line-height: 1.6;
+}
+
+/* ---------- PASSWORD WRAPPER ---------- */
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 46px;
+}
+
+.password-wrapper span {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    transform: translateY(-50%);
+
+    color: #64748b;
+
+    cursor: pointer;
+
+    transition: color var(--transition);
+}
+
+.password-wrapper span:hover {
+    color: var(--primary);
+}
+
+/* ---------- SUBMIT BUTTON ---------- */
+button[type="submit"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 50px;
+    padding: 14px 20px;
+
+    color: #ffffff;
+
+    background: linear-gradient(
+        135deg,
+        #16a34a 0%,
+        #15803d 100%
+    );
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    font-size: 0.96rem;
+    font-weight: 750;
+    letter-spacing: 0.1px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 12px rgba(21, 128, 61, 0.16);
+
+    transition:
+        background var(--transition),
+        box-shadow var(--transition),
+        transform var(--transition);
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(
+        135deg,
+        #15803d 0%,
+        #166534 100%
+    );
+
+    box-shadow:
+        0 7px 18px rgba(21, 128, 61, 0.23);
+
+    transform: translateY(-2px);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+button[type="submit"]:focus-visible {
+    outline: 3px solid rgba(34, 197, 94, 0.35);
+    outline-offset: 4px;
+}
+
+/* ---------- AUTHENTICATION LINKS ---------- */
+.auth-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    margin-top: 24px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.88rem;
+    line-height: 1.7;
+
+    text-align: center;
+}
+
+.auth-link a,
+.auth-text a {
+    color: var(--primary);
+
+    font-weight: 750;
+    text-decoration: none;
+
+    transition: color var(--transition);
+}
+
+.auth-link a:hover,
+.auth-text a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* ---------- DJANGO FORM ERRORS ---------- */
+.errorlist {
+    margin: 7px 0 0;
+    padding: 0;
+
+    color: var(--danger);
+
+    list-style: none;
+
+    font-size: 0.81rem;
+    line-height: 1.6;
+}
+
+.errorlist li {
+    margin-top: 3px;
+}
+
+/* ---------- DJANGO MESSAGES ---------- */
+.messages {
+    display: grid;
+    gap: 12px;
+
+    margin-bottom: 24px;
+}
+
+.messages p {
+    margin: 0;
+    padding: 14px 16px;
+
+    border-radius: 10px;
+
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.6;
+
+    text-align: left;
+}
+
+.messages .success {
+    color: #166534;
+    background: var(--success-bg);
+
+    border: 1px solid #bbf7d0;
+    border-left: 4px solid #22c55e;
+}
+
+.messages .error {
+    color: #991b1b;
+    background: var(--error-bg);
+
+    border: 1px solid #fecaca;
+    border-left: 4px solid #ef4444;
+}
+
+/* ---------- GENERAL ACCESSIBILITY ---------- */
+:focus-visible {
+    scroll-margin-block: 20px;
+}
+
+button,
+input,
+select,
+textarea {
+    accent-color: var(--primary);
+}
+
+::selection {
+    color: #14532d;
+    background: #bbf7d0;
+}
+
+/* ---------- TABLETS ---------- */
+@media (max-width: 768px) {
+    body {
+        padding: 32px 16px;
+    }
+
+    .card {
+        max-width: 640px;
+        padding: 30px;
+    }
+
+    .form-section {
+        padding: 20px;
+    }
+
+    .form-grid {
+        gap: 19px 14px;
+    }
+
+    .card .subtitle {
+        margin-bottom: 28px;
+    }
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 520px) {
+    body {
+        padding: 16px 10px;
+    }
+
+    .card {
+        max-width: 100%;
+        padding: 22px 16px;
+
+        border-radius: 15px;
+    }
+
+    .card h2 {
+        font-size: 1.5rem;
+        letter-spacing: -0.5px;
+    }
+
+    .card .subtitle {
+        margin-bottom: 24px;
+
+        font-size: 0.88rem;
+        line-height: 1.65;
+    }
+
+    .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .form-section {
+        margin-bottom: 18px;
+        padding: 17px 14px;
+
+        border-radius: 11px;
+    }
+
+    .form-section h3 {
+        gap: 10px;
+
+        margin-bottom: 20px;
+        padding-bottom: 13px;
+
+        font-size: 0.98rem;
+    }
+
+    .section-number {
+        width: 31px;
+        height: 31px;
+
+        border-radius: 9px;
+        font-size: 0.82rem;
+    }
+
+    .form-group label {
+        font-size: 0.86rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        min-height: 46px;
+        padding: 12px;
+
+        /* Prevents automatic zoom on iOS */
+        font-size: 16px;
+    }
+
+    .form-group textarea {
+        min-height: 110px;
+    }
+
+    button[type="submit"] {
+        min-height: 48px;
+        padding: 13px 16px;
+
+        font-size: 0.94rem;
+    }
+
+    .auth-link {
+        margin-top: 20px;
+        font-size: 0.85rem;
+    }
+}
+
+/* ---------- SMALL PHONES ---------- */
+@media (max-width: 360px) {
+    body {
+        padding: 10px 7px;
+    }
+
+    .card {
+        padding: 19px 12px;
+    }
+
+    .form-section {
+        padding: 15px 11px;
+    }
+
+    .card h2 {
+        font-size: 1.35rem;
+    }
+}
+
+/* ---------- REDUCED MOTION ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

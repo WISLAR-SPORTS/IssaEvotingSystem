@@ -1,149 +1,314 @@
 {% extends "base.html" %}
+ {% load static %}
+
+{% block title %}Elections | E-Voting{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/positions.css' %}">
+{% endblock %}
 
 {% block content %}
 
+<section class="elections-page">
 
+<!-- PAGE HEADER -->
+<header class="elections-header">
+    <div class="elections-heading">
+        <span class="elections-eyebrow">
+            <i data-lucide="vote"></i>
+            STUDENT VOTING PORTAL
+        </span>
 
-<!-- 🟡 Upcoming Elections -->
+        <h1>Elections</h1>
+
+        <p>
+            Explore available positions, review candidates,
+            and stay informed about upcoming elections.
+        </p>
+    </div>
+
+    <div class="elections-header-icon" aria-hidden="true">
+        <i data-lucide="landmark"></i>
+    </div>
+</header>
+
 {% if positions %}
 
-    <!-- 🟢 ACTIVE STATE -->
-    <h3 class="mb-4">🗳️ Available Positions</h3>
+    <!-- AVAILABLE POSITIONS -->
+    <section class="elections-section">
 
-    <div class="row g-4">
-        {% for position in positions %}
-        <div class="col-12 col-sm-6 col-lg-4">
-                <a href="{% url 'elections:position_candidates' position.id %}" class="text-decoration-none">
-                    <div class="card position-card p-4 shadow-sm">
+        <div class="elections-section-header">
+            <div>
+                <span class="section-overline">NOW OPEN</span>
+                <h2>Available positions</h2>
+                <p>Select a position to view its candidates.</p>
+            </div>
 
-                        <h5 class="mb-2">{{ position.name }}</h5>
+            <span class="elections-count">
+                <i data-lucide="list-check"></i>
+                {{ positions|length }} position{{ positions|length|pluralize }}
+            </span>
+        </div>
+
+        <div class="positions-grid">
+
+            {% for position in positions %}
+
+                <a
+                    href="{% url 'elections:position_candidates' position.id %}"
+                    class="position-card"
+                    aria-label="View candidates for {{ position.name }}"
+                >
+
+                    <div class="position-card-top">
+                        <div class="position-icon">
+                            <i data-lucide="users-round"></i>
+                        </div>
 
                         {% if position.is_central %}
-                        <span class="badge bg-primary">Central</span>
-                    {% else %}
-                        <span class="badge bg-secondary">Branch</span>
-                    {% endif %}
-                    
-                    {% if position.department %}
-                        <p class="small text-muted mt-2 mb-1">
-                            Department: {{ position.department.name }}
-                        </p>
-                    {% endif %}
-                    
-                    <p class="mt-2 text-muted small">
-                        Click to view candidates
-                    </p>
-
+                            <span class="position-badge badge-central">
+                                <i data-lucide="building-2"></i>
+                                Central
+                            </span>
+                        {% else %}
+                            <span class="position-badge badge-branch">
+                                <i data-lucide="git-branch"></i>
+                                Branch
+                            </span>
+                        {% endif %}
                     </div>
+
+                    <div class="position-card-content">
+                        <span class="position-label">ELECTION POSITION</span>
+
+                        <h3>{{ position.name }}</h3>
+
+                        {% if position.department %}
+                            <div class="position-department">
+                                <i data-lucide="graduation-cap"></i>
+                                <span>{{ position.department.name }}</span>
+                            </div>
+                        {% else %}
+                            <div class="position-department">
+                                <i data-lucide="building"></i>
+                                <span>Institution-wide position</span>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="position-card-footer">
+                        <span>View candidates</span>
+                        <i data-lucide="arrow-up-right"></i>
+                    </div>
+
                 </a>
-            </div>
-        {% endfor %}
-    </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
 
 {% elif upcoming_elections %}
 
-    <!-- 🟡 UPCOMING STATE -->
-    <h3 class="mb-4">⏳ Upcoming Elections</h3>
+    <!-- UPCOMING ELECTIONS -->
+    <section class="elections-section">
 
-    {% for election in upcoming_elections %}
-
-    <div class="d-flex justify-content-center mb-4">
-        <div class="card shadow-lg border-0 text-center p-4"
-             style="max-width: 520px; width: 100%; border-radius: 16px;">
-
-            <div class="mb-3">
-                <div style="
-                    width: 70px;
-                    height: 70px;
-                    margin: 0 auto;
-                    border-radius: 50%;
-                    background: linear-gradient(135deg, #0d6efd, #6ea8fe);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 28px;
-                    color: white;
-                ">
-                    ⏳
-                </div>
+        <div class="elections-section-header">
+            <div>
+                <span class="section-overline">COMING SOON</span>
+                <h2>Upcoming elections</h2>
+                <p>Keep track of when the next elections begin.</p>
             </div>
+        </div>
 
-            <h5 class="fw-bold mb-2">{{ election.name }}</h5>
+        <div class="upcoming-elections-grid">
 
-            <p class="text-muted mb-2">Starts in</p>
+            {% for election in upcoming_elections %}
 
-            <h6 id="countdown-{{ election.id }}" class="fw-bold text-primary mb-3"></h6>
+                <article class="upcoming-election-card">
+
+                    <div class="upcoming-card-header">
+                        <div class="upcoming-election-icon">
+                            <i data-lucide="calendar-clock"></i>
+                        </div>
+
+                        <span class="upcoming-badge">
+                            <span class="upcoming-status-dot"></span>
+                            Upcoming
+                        </span>
+                    </div>
+
+                    <div class="upcoming-card-content">
+                        <span class="position-label">SCHEDULED ELECTION</span>
+
+                        <h3>{{ election.name }}</h3>
+
+                        <p class="upcoming-description">
+                            Voting has not started yet. The countdown
+                            below shows the time remaining until opening.
+                        </p>
+                    </div>
+
+                    <div class="countdown-panel">
+                        <div class="countdown-heading">
+                            <i data-lucide="clock-3"></i>
+                            <span>Time until voting opens</span>
+                        </div>
+
+                        <div
+                            id="countdown-{{ election.id }}"
+                            class="election-countdown"
+                            role="timer"
+                            aria-label="Time remaining until {{ election.name }} begins"
+                            aria-live="off"
+                        >
+                            Calculating...
+                        </div>
+
+                        <p class="countdown-date">
+                            <i data-lucide="calendar-days"></i>
+                            {{ election.start_time|date:"M j, Y · g:i A" }}
+                        </p>
+                    </div>
+
+                    <script type="application/json" id="election-start-{{ election.id }}">{{ election.start_time|date:"c" }}</script>
+
+                </article>
+
+            {% endfor %}
 
         </div>
-    </div>
 
-    <script>
-        const startTime{{ election.id }} = new Date("{{ election.start_time|date:'c' }}").getTime();
-        
-        function updateCountdown{{ election.id }}() {
-            const now = new Date().getTime();
-            const diff = startTime{{ election.id }} - now;
-        
-            if (diff <= 0) {
-                location.reload();
-                return;
-            }
-        
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        
-            document.getElementById("countdown-{{ election.id }}").innerText =
-                days + "d " + hours + "h " + minutes + "m " + seconds + "s remaining";
-        }
-        
-        // run immediately so no delay on load
-        updateCountdown{{ election.id }}();
-        
-        // update every second
-        setInterval(updateCountdown{{ election.id }}, 1000);
-        </script>
-
-    {% endfor %}
+    </section>
 
 {% else %}
 
-    <!-- 🔴 ENDED STATE -->
-    <div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
-        <div class="card shadow-lg border-0 text-center p-5"
-             style="max-width: 520px; width: 100%; border-radius: 16px;">
+    <!-- NO ACTIVE OR UPCOMING ELECTIONS -->
+    <section class="elections-empty-wrapper">
 
-            <div class="mb-4">
-                <div style="
-                    width: 80px;
-                    height: 80px;
-                    margin: 0 auto;
-                    border-radius: 50%;
-                    background: linear-gradient(135deg, #6c757d, #adb5bd);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 32px;
-                    color: white;
-                ">
-                    ❌
-                </div>
+        <div class="elections-empty-card">
+
+            <div class="empty-icon">
+                <i data-lucide="calendar-x-2"></i>
             </div>
 
-            <h3 class="fw-bold mb-3">Election Closed</h3>
+            <span class="section-overline">NO ELECTIONS AVAILABLE</span>
 
-            <p class="text-muted mb-3">
-                No active or upcoming elections.
+            <h2>Election period is closed</h2>
+
+            <p>
+                There are currently no active or upcoming elections.
+                Please check again later for announcements from your institution.
             </p>
 
-            <a href="{% url 'students:dashboard' %}" class="btn btn-dark">
-                Back to Dashboard
+            <a
+                href="{% url 'students:dashboard' %}"
+                class="elections-dashboard-link"
+            >
+                <i data-lucide="layout-dashboard"></i>
+                <span>Back to dashboard</span>
+                <i data-lucide="arrow-right"></i>
             </a>
 
         </div>
-    </div>
+
+    </section>
 
 {% endif %}
+
+<footer class="elections-footer">
+    <i data-lucide="shield-check"></i>
+    <p>
+        Your participation helps support transparent and accountable
+        student representation.
+    </p>
+</footer>
+
+
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+if (window.lucide) {
+window.lucide.createIcons();
+}
+
+const countdownTimers = [];
+
+document.querySelectorAll(
+'[id^="countdown-"]'
+).forEach(function (element) {
+const electionId = element.id.replace("countdown-", "");
+const startElement = document.getElementById(
+"election-start-" + electionId
+);
+
+if (!startElement) return;
+
+const startTime = new Date(
+startElement.textContent.trim()
+).getTime();
+
+if (Number.isNaN(startTime)) {
+element.textContent = "Start time unavailable";
+return;
+}
+
+function updateCountdown() {
+const difference = startTime - Date.now();
+
+if (difference <= 0) {
+element.textContent = "Starting now";
+element.classList.add("countdown-started");
+
+clearInterval(timer);
+
+// Reload so Django can display the updated election state.
+window.location.reload();
+return;
+}
+
+const days = Math.floor(
+difference / (1000 * 60 * 60 * 24)
+);
+
+const hours = Math.floor(
+(difference % (1000 * 60 * 60 * 24)) /
+(1000 * 60 * 60)
+);
+
+const minutes = Math.floor(
+(difference % (1000 * 60 * 60)) /
+(1000 * 60)
+);
+
+const seconds = Math.floor(
+(difference % (1000 * 60)) / 1000
+);
+
+const parts = [];
+
+if (days > 0) {
+parts.push(days + "d");
+}
+
+parts.push(
+String(hours).padStart(2, "0") + "h",
+String(minutes).padStart(2, "0") + "m",
+String(seconds).padStart(2, "0") + "s"
+);
+
+element.textContent = parts.join(" ");
+}
+
+updateCountdown();
+
+const timer = setInterval(updateCountdown, 1000);
+countdownTimers.push(timer);
+});
+});
+</script>
 
 {% endblock %}

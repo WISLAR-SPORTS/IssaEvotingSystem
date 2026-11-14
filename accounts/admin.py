@@ -1,18 +1,21 @@
+
+from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.models import Group
+from django.core.exceptions import ValidationError
 
 from .models import User, PasswordResetOTP
-from django.contrib import admin
-from django.contrib.auth.models import Group, Permission
 
 
+# =========================
+# GROUP ADMIN: SUPERUSER ONLY
+# =========================
 class GroupAdmin(admin.ModelAdmin):
-
     list_display = ("name",)
 
     def has_module_permission(self, request):
-        # superuser only sees Groups app in sidebar
         return request.user.is_superuser
 
     def has_view_permission(self, request, obj=None):
@@ -26,13 +29,22 @@ class GroupAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser
-admin.site.unregister(Group)
+
+
+if admin.site.is_registered(Group):
+    admin.site.unregister(Group)
+
 admin.site.register(Group, GroupAdmin)
 
+
+# =========================
+# PASSWORD RESET OTP ADMIN
+# =========================
 @admin.register(PasswordResetOTP)
 class PasswordResetOTPAdmin(admin.ModelAdmin):
     list_display = ("user", "get_email", "code", "created_at", "is_used")
     list_filter = ("is_used", "created_at")
+    search_fields = ("user__username", "user__email")
 
     def get_email(self, obj):
         return obj.user.email
@@ -40,36 +52,13 @@ class PasswordResetOTPAdmin(admin.ModelAdmin):
     get_email.short_description = "Email"
 
 
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import Group
-
-from .models import User, PasswordResetOTP
-
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-
-from .models import User
-
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.core.exceptions import ValidationError
-
-from .models import User
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django import forms
-from django.core.exceptions import ValidationError
-
-from .models import User
-
-
 # =========================
-# ADMIN FORM (FIXED VALIDATION HERE)
+# USER ADMIN FORM
+# PRESERVES DJANGO PASSWORD HANDLING
 # =========================
-class UserAdminForm(forms.ModelForm):
+class UserAdminForm(UserChangeForm):
 
-    class Meta:
+    class Meta(UserChangeForm.Meta):
         model = User
         fields = "__all__"
 
@@ -80,15 +69,20 @@ class UserAdminForm(forms.ModelForm):
         department = cleaned_data.get("department")
 
         if branch and department:
-
-            # 🔐 HARD VALIDATION (NOW WORKS)
             if department.branch_id != branch.id:
                 raise ValidationError({
-                    "department": "This department does not belong to the selected branch."
+                    "department": (
+                        "This department does not belong "
+                        "to the selected branch."
+                    )
                 })
 
         return cleaned_data
 
+
+# =========================
+# CUSTOM USER ADMIN
+# =========================
 @admin.register(User)
 class CustomUserAdmin(BaseUserAdmin):
 
@@ -152,12 +146,14 @@ class CustomUserAdmin(BaseUserAdmin):
             return qs
 
         if request.user.role == "institution_admin":
-            return qs.filter(institution=request.user.institution)
+            return qs.filter(
+                institution=request.user.institution
+            )
 
         if request.user.role == "branch_admin":
             return qs.filter(
                 institution=request.user.institution,
-                branch=request.user.branch
+                branch=request.user.branch,
             )
 
         return qs.none()
@@ -168,86 +164,106 @@ class CustomUserAdmin(BaseUserAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
 
         if request.user.is_superuser:
-            return super().formfield_for_foreignkey(db_field, request, **kwargs)
+            return super().formfield_for_foreignkey(
+                db_field, request, **kwargs
+            )
 
-        # =========================
-        # INSTITUTION ADMIN
-        # =========================
         if request.user.role == "institution_admin":
 
             if db_field.name == "institution":
-                kwargs["queryset"] = db_field.related_model.objects.filter(
-                    id=request.user.institution_id
+                kwargs["queryset"] = (
+                    db_field.related_model.objects.filter(
+                        id=request.user.institution_id
+                    )
                 )
 
             elif db_field.name == "branch":
-                kwargs["queryset"] = db_field.related_model.objects.filter(
-                    institution=request.user.institution
+                kwargs["queryset"] = (
+                    db_field.related_model.objects.filter(
+                        institution=request.user.institution
+                    )
                 )
 
             elif db_field.name == "department":
-                kwargs["queryset"] = db_field.related_model.objects.filter(
-                    branch__institution=request.user.institution
+                kwargs["queryset"] = (
+                    db_field.related_model.objects.filter(
+                        branch__institution=request.user.institution
+                    )
                 )
 
-        # =========================
-        # BRANCH ADMIN
-        # =========================
         elif request.user.role == "branch_admin":
 
             if db_field.name == "institution":
-                kwargs["queryset"] = db_field.related_model.objects.filter(
-                    id=request.user.institution_id
+                kwargs["queryset"] = (
+                    db_field.related_model.objects.filter(
+                        id=request.user.institution_id
+                    )
                 )
 
             elif db_field.name == "branch":
-                kwargs["queryset"] = db_field.related_model.objects.filter(
-                    id=request.user.branch_id
+                kwargs["queryset"] = (
+                    db_field.related_model.objects.filter(
+                        id=request.user.branch_id
+                    )
                 )
 
             elif db_field.name == "department":
-                kwargs["queryset"] = db_field.related_model.objects.filter(
-                    branch=request.user.branch
+                kwargs["queryset"] = (
+                    db_field.related_model.objects.filter(
+                        branch=request.user.branch
+                    )
                 )
 
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+        return super().formfield_for_foreignkey(
+            db_field, request, **kwargs
+        )
 
     # =========================
-    # ROLE SECURITY (FIXED)
+    # ROLE RESTRICTIONS
     # =========================
     def formfield_for_choice_field(self, db_field, request, **kwargs):
 
-        if db_field.name == "role":
+        if db_field.name == "role" and not request.user.is_superuser:
             choices = list(db_field.choices)
 
             if request.user.role == "institution_admin":
-                # institution admin can create BOTH branch_admin and student
-                kwargs["choices"] = [
-                    c for c in choices if c[0] in ["branch_admin", "student"]
-                ]
+                allowed_roles = {"branch_admin", "student"}
 
             elif request.user.role == "branch_admin":
-                # branch admin can ONLY create student
-                kwargs["choices"] = [
-                    c for c in choices if c[0] == "student"
-                ]
+                allowed_roles = {"student"}
 
-        return super().formfield_for_choice_field(db_field, request, **kwargs)
+            else:
+                allowed_roles = set()
+
+            kwargs["choices"] = [
+                choice for choice in choices
+                if choice[0] in allowed_roles
+            ]
+
+        return super().formfield_for_choice_field(
+            db_field, request, **kwargs
+        )
 
     # =========================
-    # SAFE USER CREATION
+    # SAFE USER SAVING
     # =========================
     def save_model(self, request, obj, form, change):
 
-        if request.user.role == "institution_admin":
+        if request.user.is_superuser:
+            pass
+
+        elif request.user.role == "institution_admin":
             obj.institution = request.user.institution
             obj.is_superuser = False
-            obj.is_staff = True
+            obj.is_staff = obj.role in {
+                "institution_admin",
+                "branch_admin",
+            }
 
         elif request.user.role == "branch_admin":
             obj.institution = request.user.institution
             obj.branch = request.user.branch
             obj.is_superuser = False
-            obj.is_staff = True
+            obj.is_staff = False
 
         super().save_model(request, obj, form, change)

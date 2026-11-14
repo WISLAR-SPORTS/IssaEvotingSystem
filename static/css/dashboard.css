@@ -1,270 +1,848 @@
-/* =========================
-   GLOBAL LAYOUT
-========================= */
-* {
-    box-sizing: border-box;
+/* =========================================
+   GUIDED STUDENT DASHBOARD
+   ========================================= */
+
+.student-dashboard {
+    padding: 32px 0 56px;
 }
 
-body {
-    background: #f5f7fb;
-    font-family: "Segoe UI", Arial, sans-serif;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
-.icon-box {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    background: rgba(13, 110, 253, 0.1);
+.student-dashboard .sd-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 18px;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
 }
 
-.card {
-    transition: 0.2s ease-in-out;
+.student-dashboard .sd-header h1 {
+    margin: 8px 0;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 750;
+    letter-spacing: -0.04em;
 }
 
-.card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+.student-dashboard .sd-header-copy > p,
+.student-dashboard .sd-section-header p {
+    margin: 0;
+    color: var(--text-muted, #64748b);
+    line-height: 1.65;
 }
 
-/* Responsive container spacing */
-.container, .container-fluid {
-    padding-left: 15px;
-    padding-right: 15px;
+.student-dashboard .sd-eyebrow {
+    font-size: 0.73rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    color: var(--primary, #4f46e5);
 }
 
-/* Headings */
-h4, h5 {
-    font-weight: 600;
-}
-
-/* =========================
-   INSTITUTION HEADER
-========================= */
-.text-center img,
-.text-center .rounded-circle {
-    transition: 0.3s ease;
-    max-width: 100%;
-}
-
-.text-center img:hover,
-.text-center .rounded-circle:hover {
-    transform: scale(1.05);
-}
-
-.text-center h5 {
-    font-weight: 700;
-    color: #222;
-}
-
-/* =========================
-   CARD DESIGN
-========================= */
-.card {
-    border: none;
-    border-radius: 14px;
-    background: #ffffff;
-    transition: all 0.25s ease;
-    width: 100%;
-}
-
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-}
-
-.card h5 {
-    color: #0d6efd;
-    margin-bottom: 8px;
-}
-
-.card p {
-    margin-bottom: 0;
-    color: #555;
-}
-
-/* =========================
-   STATUS CARD
-========================= */
-.status-card {
-    background: linear-gradient(135deg, #0d6efd, #6ea8fe);
-    color: white;
-    text-align: center;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-.btn-primary {
-    border-radius: 8px;
-    padding: 10px 18px;
-    font-weight: 600;
-    width: 100%;
-    max-width: 250px;
-}
-
-.btn-primary:hover {
-    background: #0b5ed7;
-}
-
-/* =========================
-   GRID LAYOUT FIXES
-========================= */
-.row {
+.student-dashboard .sd-institution {
     display: flex;
-    flex-wrap: wrap;
-    margin-left: -10px;
-    margin-right: -10px;
+    align-items: center;
+    gap: 12px;
+    max-width: 320px;
+    padding: 14px 18px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 16px;
+    background: var(--surface, #fff);
 }
 
-.col-md-4,
-.col-md-8,
-.col-md-6 {
-    padding: 10px;
-}
-
-/* =========================
-   SIDEBAR
-========================= */
-.sidebar-card {
-    background: #fff;
+.student-dashboard .sd-institution-logo,
+.student-dashboard .sd-institution-initial {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    object-fit: contain;
     border-radius: 12px;
-    padding: 15px;
+}
+
+.student-dashboard .sd-institution-initial {
+    display: grid;
+    place-items: center;
+    background: var(--primary, #4f46e5);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 750;
+}
+
+.student-dashboard .sd-institution-info {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+
+.student-dashboard .sd-institution-info strong {
+    overflow-wrap: anywhere;
+}
+
+.student-dashboard .sd-muted-label,
+.student-dashboard .sd-institution-caption {
+    color: var(--text-muted, #64748b);
+    font-size: 0.78rem;
+}
+
+/* Welcome panel */
+
+.student-dashboard .sd-welcome-panel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    overflow: hidden;
+    padding: clamp(24px, 4vw, 44px);
+    margin-bottom: 34px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 24px;
+    background:
+        radial-gradient(
+            circle at 95% 10%,
+            rgba(99, 102, 241, 0.12),
+            transparent 35%
+        ),
+        var(--surface, #fff);
+}
+
+.student-dashboard .sd-welcome-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 650px;
+}
+
+.student-dashboard .sd-status-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.76rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    color: var(--primary, #4f46e5);
+}
+
+.student-dashboard .sd-welcome-panel h2 {
+    margin: 16px 0 12px;
+    font-size: clamp(1.65rem, 3.3vw, 2.65rem);
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.student-dashboard .sd-welcome-panel p {
+    max-width: 590px;
+    margin: 0;
+    color: var(--text-muted, #64748b);
+    line-height: 1.8;
+}
+
+.student-dashboard .sd-welcome-status {
+    margin-top: 22px;
+}
+
+.student-dashboard .sd-vote-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 13px;
+    border-radius: 999px;
+    font-size: 0.83rem;
+    font-weight: 700;
+}
+
+.student-dashboard .sd-voted {
+    color: var(--success, #15803d);
+    background: var(--success-bg, #dcfce7);
+}
+
+.student-dashboard .sd-not-voted {
+    color: var(--warning, #92400e);
+    background: var(--warning-bg, #fef3c7);
+}
+
+.student-dashboard .sd-welcome-art {
+    position: relative;
+    display: grid;
+    flex: 0 0 170px;
+    place-items: center;
+    width: 170px;
+    height: 170px;
+    margin-right: 12px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.08);
+}
+
+.student-dashboard .sd-art-circle {
+    display: grid;
+    place-items: center;
+    width: 112px;
+    height: 112px;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 30px;
+    background: var(--surface, #fff);
+    color: var(--primary, #4f46e5);
+    transform: rotate(-7deg);
+}
+
+.student-dashboard .sd-art-circle svg {
+    width: 55px;
+    height: 55px;
+}
+
+.student-dashboard .sd-art-spark {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 12px;
+    background: var(--surface, #fff);
+    color: var(--primary, #4f46e5);
+}
+
+.student-dashboard .sd-art-spark-one {
+    top: 8px;
+    right: 4px;
+}
+
+.student-dashboard .sd-art-spark-two {
+    bottom: 8px;
+    left: 0;
+}
+
+/* Shared section styles */
+
+.student-dashboard .sd-section {
+    margin-bottom: 34px;
+}
+
+.student-dashboard .sd-section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.student-dashboard .sd-section-header h2 {
+    margin: 0 0 5px;
+    font-size: 1.18rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+}
+
+.student-dashboard .sd-section-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    border-radius: 14px;
+    background: var(--primary-bg, #eef2ff);
+    color: var(--primary, #4f46e5);
+}
+
+.student-dashboard .sd-section-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+.student-dashboard .sd-guide-section > .sd-section-header {
+    margin-bottom: 20px;
+}
+
+.student-dashboard .sd-guide-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.student-dashboard .sd-guide-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 18px;
+    background: var(--surface, #fff);
+    transition:
+        border-color 180ms ease,
+        transform 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.student-dashboard .sd-guide-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary, #4f46e5);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.student-dashboard .sd-guide-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
+    margin-bottom: 22px;
 }
 
-.sidebar-card h5 {
-    margin-bottom: 15px;
-    color: #0d6efd;
+.student-dashboard .sd-step-number {
+    color: var(--text-muted, #64748b);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
 }
 
-.sidebar-card p {
-    margin-bottom: 8px;
-    font-size: 14px;
+.student-dashboard .sd-guide-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--primary-bg, #eef2ff);
+    color: var(--primary, #4f46e5);
 }
 
-/* =========================
-   HELP BOX
-========================= */
-.help-box {
-    border-top: 1px solid #eee;
-    padding-top: 10px;
+.student-dashboard .sd-guide-icon svg {
+    width: 22px;
+    height: 22px;
 }
 
-/* =========================
-   ELECTION LIST
-========================= */
-.election-card {
-    border-left: 4px solid #0d6efd;
-    padding: 15px;
-    width: 100%;
+.student-dashboard .sd-guide-card h3 {
+    margin: 0 0 10px;
+    font-size: 1.04rem;
+    font-weight: 750;
 }
 
-.election-card:hover {
-    border-left: 4px solid #198754;
+.student-dashboard .sd-guide-card p {
+    flex: 1;
+    margin: 0 0 22px;
+    color: var(--text-muted, #64748b);
+    font-size: 0.91rem;
+    line-height: 1.75;
 }
 
-/* =========================
-   EMPTY STATE
-========================= */
-.empty-text {
+.student-dashboard .sd-guide-link {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    color: var(--primary, #4f46e5);
+    font-size: 0.88rem;
+    font-weight: 750;
+    text-decoration: none;
+}
+
+.student-dashboard .sd-guide-link:hover {
+    text-decoration: underline;
+}
+
+/* Election schedule */
+
+.student-dashboard .sd-section-heading-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.student-dashboard .sd-section-count {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 999px;
+    color: var(--text-muted, #64748b);
+    font-size: 0.8rem;
+    font-weight: 650;
+}
+
+.student-dashboard .sd-election-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.student-dashboard .sd-election-card {
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 18px;
+    background: var(--surface, #fff);
+}
+
+.student-dashboard .sd-election-top,
+.student-dashboard .sd-election-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.student-dashboard .sd-election-top {
+    justify-content: space-between;
+}
+
+.student-dashboard .sd-election-main {
+    min-width: 0;
+}
+
+.student-dashboard .sd-election-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: var(--primary-bg, #eef2ff);
+    color: var(--primary, #4f46e5);
+}
+
+.student-dashboard .sd-election-info {
+    min-width: 0;
+}
+
+.student-dashboard .sd-election-info h3 {
+    margin: 0 0 4px;
+    overflow-wrap: anywhere;
+    font-size: 1rem;
+    font-weight: 750;
+}
+
+.student-dashboard .sd-election-info > span {
+    color: var(--text-muted, #64748b);
+    font-size: 0.8rem;
+}
+
+.student-dashboard .sd-status-badge {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 750;
+}
+
+.student-dashboard .sd-status-active {
+    color: var(--success, #15803d);
+    background: var(--success-bg, #dcfce7);
+}
+
+.student-dashboard .sd-status-upcoming {
+    color: var(--info, #1d4ed8);
+    background: var(--info-bg, #dbeafe);
+}
+
+.student-dashboard .sd-status-ended {
+    color: var(--text-muted, #64748b);
+    background: var(--muted-bg, #f1f5f9);
+}
+
+.student-dashboard .sd-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.student-dashboard .sd-election-dates {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.student-dashboard .sd-date-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    min-width: 0;
+    padding: 13px;
+    border-radius: 12px;
+    background: var(--background, #f8fafc);
+}
+
+.student-dashboard .sd-date-item > svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--primary, #4f46e5);
+}
+
+.student-dashboard .sd-date-item div {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+}
+
+.student-dashboard .sd-date-item span {
+    color: var(--text-muted, #64748b);
+    font-size: 0.75rem;
+}
+
+.student-dashboard .sd-date-item strong {
+    overflow-wrap: anywhere;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.student-dashboard .sd-election-guidance {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 13px;
+    border-radius: 12px;
+    background: var(--background, #f8fafc);
+}
+
+.student-dashboard .sd-election-guidance > svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--primary, #4f46e5);
+}
+
+.student-dashboard .sd-election-guidance p {
+    margin: 0;
+    color: var(--text-muted, #64748b);
+    font-size: 0.83rem;
+    line-height: 1.65;
+}
+
+.student-dashboard .sd-election-guidance strong {
+    color: var(--text, #0f172a);
+}
+
+.student-dashboard .sd-election-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border, #e2e8f0);
+}
+
+.student-dashboard .sd-election-footer > span {
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.student-dashboard .sd-election-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 13px;
+    border-radius: 10px;
+    background: var(--primary, #4f46e5);
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: opacity 160ms ease;
+}
+
+.student-dashboard .sd-election-action:hover {
+    color: #fff;
+    opacity: 0.88;
+}
+
+/* Empty state and reminders */
+
+.student-dashboard .sd-empty-state {
+    grid-column: 1 / -1;
+    padding: 38px 24px;
+    border: 1px dashed var(--border, #cbd5e1);
+    border-radius: 18px;
     text-align: center;
-    color: #888;
-    padding: 20px;
+    background: var(--surface, #fff);
 }
 
-/* =========================
-   RESPONSIVE DESIGN
-========================= */
+.student-dashboard .sd-empty-icon {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 16px;
+    border-radius: 16px;
+    background: var(--primary-bg, #eef2ff);
+    color: var(--primary, #4f46e5);
+}
 
-/* Tablets */
-@media (max-width: 992px) {
-    .btn-primary {
+.student-dashboard .sd-empty-state h3 {
+    margin: 0 0 10px;
+    font-size: 1.1rem;
+    font-weight: 750;
+}
+
+.student-dashboard .sd-empty-state p {
+    max-width: 500px;
+    margin: 0 auto 18px;
+    color: var(--text-muted, #64748b);
+    line-height: 1.7;
+}
+
+.student-dashboard .sd-reminder-panel {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 22px;
+    margin: 0 0 34px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 16px;
+    background: var(--surface, #fff);
+}
+
+.student-dashboard .sd-reminder-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: var(--warning-bg, #fef3c7);
+    color: var(--warning, #92400e);
+}
+
+.student-dashboard .sd-reminder-panel h3 {
+    margin: 2px 0 7px;
+    font-size: 1rem;
+    font-weight: 750;
+}
+
+.student-dashboard .sd-reminder-panel p {
+    margin: 0;
+    color: var(--text-muted, #64748b);
+    font-size: 0.9rem;
+    line-height: 1.75;
+}
+
+/* Profile and support */
+
+.student-dashboard .sd-info-card {
+    height: 100%;
+    padding: 24px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 18px;
+    background: var(--surface, #fff);
+}
+
+.student-dashboard .sd-info-card > .sd-section-header {
+    margin-bottom: 22px;
+}
+
+.student-dashboard .sd-details-list {
+    display: grid;
+}
+
+.student-dashboard .sd-detail-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+.student-dashboard .sd-detail-row:last-child {
+    border-bottom: 0;
+}
+
+.student-dashboard .sd-detail-row > span {
+    color: var(--text-muted, #64748b);
+    font-size: 0.86rem;
+}
+
+.student-dashboard .sd-detail-row > strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+    font-size: 0.87rem;
+}
+
+.student-dashboard .sd-unassigned {
+    color: var(--text-muted, #94a3b8);
+    font-weight: 500;
+}
+
+.student-dashboard .sd-profile-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 13px;
+    margin-top: 12px;
+    border-radius: 12px;
+    background: var(--background, #f8fafc);
+}
+
+.student-dashboard .sd-profile-tip svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--primary, #4f46e5);
+}
+
+.student-dashboard .sd-profile-tip p,
+.student-dashboard .sd-support-description {
+    color: var(--text-muted, #64748b);
+    font-size: 0.88rem;
+    line-height: 1.75;
+}
+
+.student-dashboard .sd-profile-tip p {
+    margin: 0;
+}
+
+.student-dashboard .sd-support-description {
+    margin: 0 0 20px;
+}
+
+.student-dashboard .sd-contact-list {
+    display: grid;
+    gap: 16px;
+}
+
+.student-dashboard .sd-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.student-dashboard .sd-contact-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--background, #f8fafc);
+    color: var(--primary, #4f46e5);
+}
+
+.student-dashboard .sd-contact-item > div:last-child {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+}
+
+.student-dashboard .sd-contact-item span {
+    color: var(--text-muted, #64748b);
+    font-size: 0.77rem;
+}
+
+.student-dashboard .sd-contact-item strong,
+.student-dashboard .sd-contact-item a {
+    overflow-wrap: anywhere;
+    font-size: 0.88rem;
+}
+
+.student-dashboard .sd-contact-item a {
+    color: var(--primary, #4f46e5);
+    text-decoration: none;
+}
+
+.student-dashboard .sd-contact-item a:hover {
+    text-decoration: underline;
+}
+
+.student-dashboard .sd-contact-empty {
+    padding: 24px 16px;
+}
+
+/* Accessible focus and responsive layouts */
+
+.student-dashboard a:focus-visible {
+    outline: 3px solid var(--primary, #4f46e5);
+    outline-offset: 4px;
+}
+
+@media (max-width: 991.98px) {
+    .student-dashboard .sd-guide-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .student-dashboard .sd-guide-card:last-child {
+        grid-column: 1 / -1;
+    }
+
+    .student-dashboard .sd-election-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .student-dashboard {
+        padding-top: 22px;
+    }
+
+    .student-dashboard .sd-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .student-dashboard .sd-institution {
         width: 100%;
+        max-width: none;
     }
 
-    .sidebar-card {
-        margin-top: 20px;
+    .student-dashboard .sd-welcome-panel {
+        padding: 25px 22px;
+        border-radius: 19px;
     }
 
-    .card {
-        padding: 15px;
+    .student-dashboard .sd-welcome-art {
+        display: none;
     }
 
-    .text-center img,
-    .text-center .rounded-circle {
-        width: 70px;
-        height: 70px;
+    .student-dashboard .sd-guide-grid {
+        grid-template-columns: 1fr;
     }
 
-    .status-card {
+    .student-dashboard .sd-guide-card:last-child {
+        grid-column: auto;
+    }
+
+    .student-dashboard .sd-section-heading-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .student-dashboard .sd-election-top {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .student-dashboard .sd-election-dates {
+        grid-template-columns: 1fr;
+    }
+
+    .student-dashboard .sd-info-card {
         padding: 20px;
     }
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-    h4 {
-        font-size: 18px;
+@media (max-width: 420px) {
+    .student-dashboard .sd-election-card {
+        padding: 17px;
     }
 
-    h5 {
-        font-size: 16px;
+    .student-dashboard .sd-election-footer {
+        align-items: flex-start;
+        flex-direction: column;
     }
 
-    .card {
-        margin-bottom: 15px;
+    .student-dashboard .sd-detail-row {
+        gap: 12px;
     }
 
-    .text-center img,
-    .text-center .rounded-circle {
-        width: 60px;
-        height: 60px;
-    }
-
-    .btn-primary {
-        font-size: 14px;
-        padding: 10px;
-    }
-
-    .sidebar-card {
-        padding: 12px;
-    }
-
-    .status-card {
-        padding: 15px;
+    .student-dashboard .sd-detail-row > span,
+    .student-dashboard .sd-detail-row > strong {
+        font-size: 0.8rem;
     }
 }
 
-/* Small phones */
-@media (max-width: 480px) {
-    body {
-        font-size: 14px;
+@media (prefers-reduced-motion: reduce) {
+    .student-dashboard .sd-guide-card,
+    .student-dashboard .sd-election-action {
+        transition: none;
     }
 
-    .text-center h5 {
-        font-size: 16px;
-    }
-
-    .card {
-        padding: 12px;
-    }
-
-    .btn-primary {
-        font-size: 13px;
-    }
-
-    .status-card {
-        padding: 10px;
-    }
-
-    .help-box {
-        padding: 10px;
+    .student-dashboard .sd-guide-card:hover {
+        transform: none;
     }
 }

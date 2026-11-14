@@ -1,101 +1,374 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% load static %}
+
+{% block title %}{{ position.name }} Candidates | E-Voting{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/candidates.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<h3 class="mb-2">🗳️ {{ position.name }} Candidates</h3>
+<section class="candidates-page">
 
-<!-- 🧠 Position context (NEW - matches your backend logic) -->
-<div class="mb-4">
+<!-- PAGE HEADER -->
+<header class="candidates-header">
 
-    {% if position.is_central %}
-        <span class="badge bg-primary">Central Position</span>
-    {% else %}
-        <span class="badge bg-secondary">Branch Position</span>
-    {% endif %}
+    <div class="candidates-heading">
+        <a href="javascript:history.back()" class="candidates-back-link">
+            <i data-lucide="arrow-left"></i>
+            <span>Back</span>
+        </a>
 
-    {% if position.department %}
-        <span class="badge bg-info text-dark">
-            {{ position.department.name }}
+        <span class="candidates-eyebrow">
+            <i data-lucide="vote"></i>
+            STUDENT ELECTIONS
         </span>
-    {% endif %}
 
-</div>
+        <h1>{{ position.name }}</h1>
+
+        <p>
+            Meet the candidates for this position and select
+            the candidate you want to represent you.
+        </p>
+    </div>
+
+    <div class="candidates-header-icon" aria-hidden="true">
+        <i data-lucide="users-round"></i>
+    </div>
+
+</header>
+
+<!-- POSITION INFORMATION -->
+<section class="position-overview">
+
+    <div class="position-overview-main">
+        <div class="position-overview-icon">
+            <i data-lucide="landmark"></i>
+        </div>
+
+        <div class="position-overview-details">
+            <span class="overview-label">POSITION DETAILS</span>
+            <h2>{{ position.name }}</h2>
+
+            <div class="position-context">
+
+                {% if position.is_central %}
+                    <span class="context-badge badge-central">
+                        <i data-lucide="building-2"></i>
+                        Central position
+                    </span>
+                {% else %}
+                    <span class="context-badge badge-branch">
+                        <i data-lucide="git-branch"></i>
+                        Branch position
+                    </span>
+                {% endif %}
+
+                {% if position.department %}
+                    <span class="context-badge badge-department">
+                        <i data-lucide="graduation-cap"></i>
+                        {{ position.department.name }}
+                    </span>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    <div class="position-overview-meta">
+        <i data-lucide="calendar-clock"></i>
+        <div>
+            <span>Election schedule</span>
+            <strong>
+                {{ position.election.start_time|date:"M j, Y" }}
+            </strong>
+        </div>
+    </div>
+
+</section>
 
 {% now "Y-m-d H:i:s" as now %}
 
-<!-- 🟡 Upcoming Election -->
-{% if now < position.election.start_time %}
-    <div class="alert alert-info">
-        ⏳ Election starts in 
-        <strong>{{ position.election.start_time|timeuntil }}</strong>
-    </div>
+<!-- UPCOMING ELECTION -->
+{% if now < position.election.start_time|date:"Y-m-d H:i:s" %}
 
-<!-- 🔴 Ended Election -->
-{% elif now > position.election.end_time %}
-    <div class="alert alert-secondary">
-        ❌ This election has ended
-    </div>
+    <section class="election-state-card state-upcoming">
 
-<!-- 🟢 Active Election -->
-{% else %}
-
-<div class="row g-4">
-
-    {% for c in candidates %}
-
-    <div class="col-md-4">
-        <div class="card p-3 candidate-card text-center">
-
-            <!-- 🖼️ Candidate Image -->
-            {% if c.image %}
-                <img src="{{ c.image.url }}"
-                     class="rounded-circle mx-auto mb-2"
-                     style="max-width:400px; max-height:150px; object-fit: contain;">
-            {% else %}
-                <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center"
-                     style="width:90px;height:90px;background:#e9ecef;font-weight:bold;">
-                    {{ c.user.first_name|first|upper }}
-                </div>
-            {% endif %}
-
-            <!-- 👤 Candidate Info -->
-            <h5>{{ c.user.username }}</h5>
-            <p class="text-muted">{{ c.user.student_number }}</p>
-
-            <!-- 🗳️ Vote Button -->
-            <form method="POST" action="{% url 'voting:cast_vote' c.id %}">
-                {% csrf_token %}
-
-                {% if user_vote and user_vote.candidate.id == c.id %}
-                    <button class="btn btn-success w-100 mt-2" disabled>
-                        ✔ Your Choice
-                    </button>
-
-                {% elif has_voted %}
-                    <button class="btn btn-secondary w-100 mt-2" disabled>
-                        Already Voted
-                    </button>
-
-                {% else %}
-                    <button type="submit" class="btn btn-primary w-100 mt-2">
-                        Vote
-                    </button>
-                {% endif %}
-            </form>
-
+        <div class="state-icon">
+            <i data-lucide="clock-3"></i>
         </div>
-    </div>
 
-    {% empty %}
-        <div class="col-12">
-            <div class="alert alert-warning">
-                No candidates available for this position.
+        <div class="state-content">
+            <span class="state-label">VOTING NOT YET OPEN</span>
+            <h2>Get ready to vote</h2>
+            <p>
+                Voting for this position has not started.
+                Please return when the election opens.
+            </p>
+
+            <div class="state-detail">
+                <i data-lucide="calendar"></i>
+                Starts {{ position.election.start_time|date:"M j, Y · g:i A" }}
+            </div>
+
+            <div class="state-detail">
+                <i data-lucide="hourglass"></i>
+                Time remaining:
+                <strong>{{ position.election.start_time|timeuntil }}</strong>
             </div>
         </div>
-    {% endfor %}
 
-</div>
+    </section>
+
+<!-- ENDED ELECTION -->
+{% elif now > position.election.end_time|date:"Y-m-d H:i:s" %}
+
+    <section class="election-state-card state-ended">
+
+        <div class="state-icon">
+            <i data-lucide="calendar-x-2"></i>
+        </div>
+
+        <div class="state-content">
+            <span class="state-label">VOTING CLOSED</span>
+            <h2>This election has ended</h2>
+            <p>
+                The voting period for this position is over.
+                New votes can no longer be submitted.
+            </p>
+
+            <div class="state-detail">
+                <i data-lucide="calendar-check"></i>
+                Ended {{ position.election.end_time|date:"M j, Y · g:i A" }}
+            </div>
+        </div>
+
+    </section>
+
+<!-- ACTIVE ELECTION -->
+{% else %}
+
+    <section class="candidates-section">
+
+        <div class="candidates-section-header">
+            <div>
+                <span class="section-overline">YOUR REPRESENTATIVES</span>
+                <h2>Meet the candidates</h2>
+                <p>Review the candidates and make your selection.</p>
+            </div>
+
+            {% if has_voted %}
+                <span class="voting-status status-complete">
+                    <i data-lucide="check-circle-2"></i>
+                    Vote recorded
+                </span>
+            {% else %}
+                <span class="voting-status status-open">
+                    <span class="status-dot"></span>
+                    Voting open
+                </span>
+            {% endif %}
+        </div>
+
+        {% if has_voted %}
+            <div class="voted-notice">
+                <i data-lucide="shield-check"></i>
+                <div>
+                    <strong>Your vote has been submitted</strong>
+                    <p>
+                        {% if user_vote %}
+                            Your selected candidate is
+                            {{ user_vote.candidate.user.username }}.
+                        {% else %}
+                            You have already voted for this position.
+                        {% endif %}
+                        You cannot submit another vote for this position.
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="candidates-grid">
+
+            {% for c in candidates %}
+
+                <article class="candidate-card">
+
+                    <div class="candidate-card-top">
+                        <span class="candidate-number">
+                            CANDIDATE {{ forloop.counter|stringformat:"02d" }}
+                        </span>
+
+                        {% if user_vote and user_vote.candidate.id == c.id %}
+                            <span class="selected-indicator">
+                                <i data-lucide="check-circle-2"></i>
+                                Your choice
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- CANDIDATE PHOTO -->
+                    <div class="candidate-photo-wrapper">
+
+                        {% if c.image %}
+                            <img
+                                src="{{ c.image.url }}"
+                                alt="Photo of {{ c.user.username }}"
+                                class="candidate-photo"
+                                loading="lazy"
+                            >
+                        {% else %}
+                            <div class="candidate-avatar" aria-label="Candidate initials">
+                                {{ c.user.first_name|default:c.user.username|first|upper }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <!-- CANDIDATE DETAILS -->
+                    <div class="candidate-details">
+                        <h3>{{ c.user.username }}</h3>
+
+                        {% if c.user.student_number %}
+                            <p class="candidate-student-id">
+                                <i data-lucide="id-card"></i>
+                                {{ c.user.student_number }}
+                            </p>
+                        {% else %}
+                            <p class="candidate-student-id">
+                                <i data-lucide="user-round"></i>
+                                Registered candidate
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <!-- VOTING ACTION -->
+                    <div class="candidate-card-footer">
+
+                        <form
+                            method="POST"
+                            action="{% url 'voting:cast_vote' c.id %}"
+                            class="candidate-vote-form"
+                        >
+                            {% csrf_token %}
+
+                            {% if user_vote and user_vote.candidate.id == c.id %}
+
+                                <button
+                                    type="button"
+                                    class="candidate-action action-selected"
+                                    disabled
+                                >
+                                    <i data-lucide="check-circle-2"></i>
+                                    Your choice
+                                </button>
+
+                            {% elif has_voted %}
+
+                                <button
+                                    type="button"
+                                    class="candidate-action action-disabled"
+                                    disabled
+                                >
+                                    <i data-lucide="lock-keyhole"></i>
+                                    Already voted
+                                </button>
+
+                            {% else %}
+
+                                <button
+                                    type="submit"
+                                    class="candidate-action action-vote"
+                                    data-candidate-name="{{ c.user.username }}"
+                                >
+                                    <span>Vote for candidate</span>
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+
+                            {% endif %}
+
+                        </form>
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+
+                <div class="candidates-empty">
+                    <div class="empty-icon">
+                        <i data-lucide="users-round"></i>
+                    </div>
+
+                    <h3>No candidates available</h3>
+
+                    <p>
+                        No candidates have been registered for this
+                        position yet. Please check back later.
+                    </p>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% if candidates and not has_voted %}
+            <div class="voting-guidance">
+                <i data-lucide="info"></i>
+                <p>
+                    Please review your selection carefully before voting.
+                    Make sure you choose the candidate you intend to support.
+                </p>
+            </div>
+        {% endif %}
+
+    </section>
 
 {% endif %}
+
+<!-- FOOTER -->
+<footer class="candidates-footer">
+    <i data-lucide="shield-check"></i>
+    <p>
+        Your participation supports transparent student representation.
+    </p>
+</footer>
+
+
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+if (window.lucide) {
+window.lucide.createIcons();
+}
+
+document.querySelectorAll(".candidate-vote-form").forEach(function (form) {
+form.addEventListener("submit", function (event) {
+const button = form.querySelector(
+'button[type="submit"]'
+);
+
+if (!button || !button.classList.contains("action-vote")) {
+return;
+}
+
+const candidateName =
+button.dataset.candidateName || "this candidate";
+
+const confirmed = window.confirm(
+"Are you sure you want to vote for " +
+candidateName +
+"? Please confirm your selection."
+);
+
+if (!confirmed) {
+event.preventDefault();
+}
+});
+});
+});
+</script>
 
 {% endblock %}

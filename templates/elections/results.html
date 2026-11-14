@@ -1,120 +1,628 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block content %}
+{% block title %}Election Results | E-Voting{% endblock %}
 
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/results.css' %}">
 
-<div class="container py-4">
+{% endblock %}
 
-    <!-- HEADER -->
-    <div class="dashboard-header mb-4">
-        <h2 class="fw-bold">📊 Election Results Dashboard</h2>
-        <p class="text-muted">Live results with real-time vote tracking</p>
-    </div>
+{% block content %}
 
-    {% for item in results_data %}
+<section class="results-dashboard">
 
-    <div class="result-card mb-4">
+    <!-- PAGE HEADER -->
+    <header class="results-header">
+        <div class="results-heading">
+            <span class="results-eyebrow">
+                <i data-lucide="chart-no-axes-combined"></i>
+                ELECTION OVERVIEW
+            </span>
 
-        <!-- POSITION HEADER -->
-        <div class="result-card-header">
+            <h1>Election Results</h1>
 
-            <h5 class="mb-0">{{ item.position.name }}</h5>
-
-            {% if item.position.is_central %}
-                <span class="badge badge-central">Central</span>
-            {% else %}
-                <span class="badge badge-branch">Branch</span>
-            {% endif %}
-
+            <p>
+                Follow candidate performance and vote distribution
+                across election positions.
+            </p>
         </div>
 
-        <!-- BODY -->
-        <div class="result-card-body">
+        <div class="results-live-indicator">
+            <span class="live-dot"></span>
+            <span>Results dashboard</span>
+        </div>
+    </header>
 
-            {% for c in item.candidates %}
+    <!-- SUMMARY -->
+    <div class="results-summary">
 
-            <div class="candidate-row {% if c.is_winner %}winner-row{% endif %}">
+        <article class="summary-card">
+            <div class="summary-icon">
+                <i data-lucide="list-check"></i>
+            </div>
 
-                <!-- LEFT SIDE -->
-                <div class="candidate-info">
+            <div class="summary-content">
+                <span>Positions</span>
+                <strong id="totalPositions">{{ results_data|length }}</strong>
+            </div>
+        </article>
 
-                    <div class="avatar">
-                        {{ c.user.username|first|upper }}
+        <article class="summary-card">
+            <div class="summary-icon">
+                <i data-lucide="users"></i>
+            </div>
+
+            <div class="summary-content">
+                <span>Candidates</span>
+                <strong id="totalCandidates">0</strong>
+            </div>
+        </article>
+
+        <article class="summary-card">
+            <div class="summary-icon">
+                <i data-lucide="trophy"></i>
+            </div>
+
+            <div class="summary-content">
+                <span>Leading candidates</span>
+                <strong id="totalWinners">0</strong>
+            </div>
+        </article>
+
+    </div>
+
+    <!-- FILTERS -->
+    <div class="results-section-heading">
+        <div>
+            <h2>Explore results</h2>
+            <p>Search, filter and compare candidates.</p>
+        </div>
+    </div>
+
+    <div class="results-toolbar">
+
+        <input
+            type="search"
+            id="resultsSearch"
+            class="results-search"
+            placeholder="Search candidate, student number or position..."
+            aria-label="Search election results"
+            autocomplete="off"
+        >
+
+        <select
+            id="positionFilter"
+            class="results-select"
+            aria-label="Filter by position type"
+        >
+            <option value="all">All position types</option>
+            <option value="central">Central positions</option>
+            <option value="branch">Branch positions</option>
+        </select>
+
+        <select
+            id="candidateFilter"
+            class="results-select"
+            aria-label="Filter by candidate status"
+        >
+            <option value="all">All candidates</option>
+            <option value="winner">Winners only</option>
+            <option value="others">Other candidates</option>
+        </select>
+
+        <select
+            id="sortFilter"
+            class="results-select"
+            aria-label="Sort candidates"
+        >
+            <option value="votes-desc">Most votes first</option>
+            <option value="votes-asc">Fewest votes first</option>
+            <option value="name-asc">Name: A to Z</option>
+            <option value="name-desc">Name: Z to A</option>
+            <option value="percent-desc">Highest vote share</option>
+        </select>
+
+    </div>
+
+    <div class="results-toolbar-actions">
+        <span id="filterStatus" class="results-filter-status" aria-live="polite">
+            Showing all available results
+        </span>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button
+                type="button"
+                id="expandAll"
+                class="results-action-button"
+            >
+                <i data-lucide="chevrons-down-up"></i>
+                Expand all
+            </button>
+
+            <button
+                type="button"
+                id="resetFilters"
+                class="results-action-button"
+            >
+                <i data-lucide="rotate-ccw"></i>
+                Reset filters
+            </button>
+
+            <button
+                type="button"
+                id="refreshResults"
+                class="results-action-button"
+            >
+                <i data-lucide="refresh-cw"></i>
+                Refresh
+            </button>
+        </div>
+    </div>
+
+    <div
+        id="noMatchingResults"
+        class="results-no-matches"
+        hidden
+        role="status"
+    >
+        <i data-lucide="search-x"></i>
+        <h3>No matching results</h3>
+        <p>Try another search term or change your filters.</p>
+    </div>
+
+    <!-- POSITION RESULTS -->
+    <div class="results-section-heading">
+        <div>
+            <h2>Results by position</h2>
+            <p>Compare candidates and their share of votes.</p>
+        </div>
+    </div>
+
+    <div class="results-grid" id="resultsGrid">
+
+        {% for item in results_data %}
+
+        <article
+            class="result-card"
+            data-result-card
+            data-position-name="{{ item.position.name|lower }}"
+            data-position-type="{% if item.position.is_central %}central{% else %}branch{% endif %}"
+        >
+
+            <!-- POSITION HEADER -->
+            <div class="result-card-header">
+
+                <div class="position-heading">
+                    <div class="position-icon">
+                        <i data-lucide="vote"></i>
                     </div>
 
                     <div>
+                        <span class="position-label">POSITION</span>
+                        <h3>{{ item.position.name }}</h3>
+                    </div>
+                </div>
 
-                        <div class="candidate-name">
-                            {{ c.user.username }}
+                {% if item.position.is_central %}
+                    <span class="position-badge badge-central">
+                        <i data-lucide="building-2"></i>
+                        Central
+                    </span>
+                {% else %}
+                    <span class="position-badge badge-branch">
+                        <i data-lucide="git-branch"></i>
+                        Branch
+                    </span>
+                {% endif %}
 
-                            {% if c.is_winner %}
-                                <span class="winner-pill">🏆 Winner</span>
-                            {% endif %}
+                <button
+                    type="button"
+                    class="position-toggle"
+                    data-position-toggle
+                    aria-expanded="true"
+                    aria-label="Collapse {{ item.position.name }} results"
+                >
+                    <i data-lucide="chevron-down"></i>
+                </button>
+
+            </div>
+
+            <!-- CANDIDATES -->
+            <div class="result-card-body" data-position-body>
+
+                {% for c in item.candidates %}
+
+                <div
+                    class="candidate-row {% if c.is_winner %}winner-row{% endif %}"
+                    data-candidate-row
+                    data-name="{{ c.user.get_full_name|default:c.user.username|lower }}"
+                    data-username="{{ c.user.username|lower }}"
+                    data-student-number="{{ c.user.student_number|default:''|lower }}"
+                    data-votes="{{ c.total_votes|default:0 }}"
+                    data-percent="{{ c.vote_percent|default:0 }}"
+                    data-winner="{% if c.is_winner %}yes{% else %}no{% endif %}"
+                >
+
+                    <div class="candidate-main">
+
+                        <div class="candidate-avatar {% if c.is_winner %}winner-avatar{% endif %}">
+                            {{ c.user.username|first|upper }}
                         </div>
 
-                        <div class="candidate-meta">
-                            {{ c.user.student_number }}
+                        <div class="candidate-details">
+
+                            <div class="candidate-title-row">
+                                <h4>
+                                    {{ c.user.get_full_name|default:c.user.username }}
+                                </h4>
+
+                                {% if c.is_winner %}
+                                    <span class="winner-pill">
+                                        <i data-lucide="trophy"></i>
+                                        Winner
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <span class="candidate-number">
+                                {% if c.user.student_number %}
+                                    {{ c.user.student_number }}
+                                {% else %}
+                                    Candidate
+                                {% endif %}
+                            </span>
+
                         </div>
 
-                        <!-- VOTE BAR -->
-                        <div class="vote-container">
+                    </div>
 
-                            <div class="vote-meta">
-                                <span>{{ c.vote_percent }}%</span>
-                            </div>
+                    <div class="candidate-votes">
+                        <strong>{{ c.total_votes|default:0 }}</strong>
+                        <span>votes</span>
+                    </div>
 
-                            <div class="vote-bar-bg">
-                                <div class="vote-bar-fill"
-                                     style="width: {{ c.vote_percent }}%;">
-                                </div>
-                            </div>
+                    <div class="candidate-progress">
 
+                        <div class="progress-labels">
+                            <span>Vote share</span>
+                            <strong>{{ c.vote_percent|default:0 }}%</strong>
+                        </div>
+
+                        <div
+                            class="vote-progress-track"
+                            role="progressbar"
+                            aria-label="Vote share for {{ c.user.username }}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            aria-valuenow="{{ c.vote_percent|default:0 }}"
+                        >
+                            <div
+                                class="vote-progress-fill {% if c.is_winner %}winner-progress{% endif %}"
+                                style="width: {% if c.vote_percent > 100 %}100{% elif c.vote_percent > 0 %}{{ c.vote_percent }}{% else %}0{% endif %}%;"
+                            ></div>
                         </div>
 
                     </div>
 
                 </div>
 
-                <!-- RIGHT SIDE -->
-                <div class="vote-count">
-                    <span class="vote-badge">
-                        {{ c.total_votes }} votes
-                    </span>
+                {% empty %}
+
+                <div class="results-empty">
+                    <i data-lucide="users"></i>
+                    <h4>No candidates available</h4>
+                    <p>
+                        There are no candidates registered for this
+                        position yet.
+                    </p>
                 </div>
 
+                {% endfor %}
+
             </div>
 
-            {% empty %}
+        </article>
 
-            <div class="empty-state">
-                No candidates found
-            </div>
+        {% empty %}
 
-            {% endfor %}
-
+        <div class="results-empty results-empty-page">
+            <i data-lucide="chart-no-axes-combined"></i>
+            <h3>No election results available</h3>
+            <p>
+                Results will appear here when candidate voting data
+                is available.
+            </p>
         </div>
+
+        {% endfor %}
 
     </div>
 
-    {% endfor %}
+    <footer class="results-footer">
+        <i data-lucide="shield-check"></i>
+        <span>
+            Election results are displayed according to the available
+            voting data.
+        </span>
+        <span id="lastUpdated"></span>
+    </footer>
 
-</div>
+</section>
 
-<!-- 🔥 LIVE AUTO REFRESH -->
 <script>
-function refreshResults() {
-    fetch("/voting/api/live-results/")
-        .then(res => res.json())
-        .then(data => {
-            console.log("Live update:", data);
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("resultsSearch");
+    const positionFilter = document.getElementById("positionFilter");
+    const candidateFilter = document.getElementById("candidateFilter");
+    const sortFilter = document.getElementById("sortFilter");
+    const resetButton = document.getElementById("resetFilters");
+    const expandAllButton = document.getElementById("expandAll");
+    const refreshButton = document.getElementById("refreshResults");
+    const noMatches = document.getElementById("noMatchingResults");
+    const filterStatus = document.getElementById("filterStatus");
+    const lastUpdated = document.getElementById("lastUpdated");
 
-            // (future upgrade: update DOM dynamically here)
+    const cards = Array.from(
+        document.querySelectorAll("[data-result-card]")
+    );
+
+    function getRows(card) {
+        return Array.from(card.querySelectorAll("[data-candidate-row]"));
+    }
+
+    function setExpanded(card, expanded) {
+        const body = card.querySelector("[data-position-body]");
+        const button = card.querySelector("[data-position-toggle]");
+
+        if (!body || !button) return;
+
+        body.hidden = !expanded;
+        button.setAttribute("aria-expanded", String(expanded));
+        button.setAttribute(
+            "aria-label",
+            (expanded ? "Collapse " : "Expand ") +
+            card.querySelector("h3").textContent.trim() +
+            " results"
+        );
+    }
+
+    function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        const positionType = positionFilter.value;
+        const candidateStatus = candidateFilter.value;
+        const sortMode = sortFilter.value;
+
+        let visiblePositions = 0;
+        let visibleCandidates = 0;
+        let visibleWinners = 0;
+
+        cards.forEach(function (card) {
+            const type = card.dataset.positionType;
+            const positionName = card.dataset.positionName || "";
+
+            const typeMatches =
+                positionType === "all" || type === positionType;
+
+            const rows = getRows(card);
+
+            rows.forEach(function (row) {
+                const searchableText = [
+                    row.dataset.name,
+                    row.dataset.username,
+                    row.dataset.studentNumber,
+                    positionName
+                ].join(" ");
+
+                const textMatches =
+                    !query || searchableText.includes(query);
+
+                const isWinner = row.dataset.winner === "yes";
+
+                const statusMatches =
+                    candidateStatus === "all" ||
+                    (candidateStatus === "winner" && isWinner) ||
+                    (candidateStatus === "others" && !isWinner);
+
+                row.hidden = !(
+                    typeMatches &&
+                    textMatches &&
+                    statusMatches
+                );
+            });
+
+            // Sort candidates within each position.
+            rows.sort(function (a, b) {
+                const votesA = Number(a.dataset.votes) || 0;
+                const votesB = Number(b.dataset.votes) || 0;
+                const percentA = Number(a.dataset.percent) || 0;
+                const percentB = Number(b.dataset.percent) || 0;
+                const nameA = a.dataset.name || "";
+                const nameB = b.dataset.name || "";
+
+                switch (sortMode) {
+                    case "votes-asc":
+                        return votesA - votesB;
+                    case "name-asc":
+                        return nameA.localeCompare(nameB);
+                    case "name-desc":
+                        return nameB.localeCompare(nameA);
+                    case "percent-desc":
+                        return percentB - percentA;
+                    case "votes-desc":
+                    default:
+                        return votesB - votesA;
+                }
+            });
+
+            const body = card.querySelector("[data-position-body]");
+
+            rows.forEach(function (row) {
+                body.appendChild(row);
+            });
+
+            const hasVisibleCandidate = rows.some(function (row) {
+                return !row.hidden;
+            });
+
+            // Keep positions with no registered candidates visible
+            // when no candidate-specific search/filter is active.
+            const hasNoCandidates = rows.length === 0;
+
+            const showCard =
+                typeMatches &&
+                (
+                    hasVisibleCandidate ||
+                    (
+                        hasNoCandidates &&
+                        !query &&
+                        candidateStatus === "all"
+                    )
+                );
+
+            card.hidden = !showCard;
+
+            if (showCard) {
+                visiblePositions++;
+            }
+
+            rows.forEach(function (row) {
+                if (!row.hidden) {
+                    visibleCandidates++;
+
+                    if (row.dataset.winner === "yes") {
+                        visibleWinners++;
+                    }
+                }
+            });
         });
-}
 
-setInterval(refreshResults, 5000);
+        noMatches.hidden = visiblePositions > 0;
+
+        filterStatus.textContent =
+            "Showing " + visiblePositions +
+            " position(s) and " + visibleCandidates +
+            " candidate(s)" +
+            (visibleWinners ? " · " + visibleWinners + " winner(s)" : "");
+
+        document.getElementById("totalPositions").textContent =
+            cards.length;
+
+        document.getElementById("totalCandidates").textContent =
+            document.querySelectorAll("[data-candidate-row]").length;
+
+        // This counts candidates marked as winners in the supplied data.
+        document.getElementById("totalWinners").textContent =
+            document.querySelectorAll(
+                '[data-candidate-row][data-winner="yes"]'
+            ).length;
+    }
+
+    // Expand or collapse an individual position.
+    document.querySelectorAll("[data-position-toggle]").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const card = button.closest("[data-result-card]");
+            const expanded =
+                button.getAttribute("aria-expanded") !== "true";
+
+            setExpanded(card, expanded);
+        });
+    });
+
+    // Search and filter interactions.
+    searchInput.addEventListener("input", applyFilters);
+    positionFilter.addEventListener("change", applyFilters);
+    candidateFilter.addEventListener("change", applyFilters);
+    sortFilter.addEventListener("change", applyFilters);
+
+    // Expand all position cards.
+    expandAllButton.addEventListener("click", function () {
+        const currentlyExpanded = cards.some(function (card) {
+            const button = card.querySelector("[data-position-toggle]");
+            return button &&
+                button.getAttribute("aria-expanded") === "true";
+        });
+
+        cards.forEach(function (card) {
+            setExpanded(card, !currentlyExpanded);
+        });
+
+        expandAllButton.innerHTML = currentlyExpanded
+            ? '<i data-lucide="chevrons-down-up"></i> Expand all'
+            : '<i data-lucide="chevrons-up-down"></i> Collapse all';
+
+        if (window.lucide) window.lucide.createIcons();
+    });
+
+    // Reset all filters.
+    resetButton.addEventListener("click", function () {
+        searchInput.value = "";
+        positionFilter.value = "all";
+        candidateFilter.value = "all";
+        sortFilter.value = "votes-desc";
+
+        applyFilters();
+    });
+
+    // Manual refresh.
+    refreshButton.addEventListener("click", function () {
+        refreshButton.disabled = true;
+        refreshButton.textContent = "Refreshing...";
+
+        window.location.reload();
+    });
+
+    // Initial state.
+    applyFilters();
+
+    if (lastUpdated) {
+        lastUpdated.textContent =
+            " · Page loaded " + new Date().toLocaleTimeString();
+    }
+
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
+
+    // Periodic page refresh. Pause while a student is using filters
+    // or the page is in the background.
+    const REFRESH_INTERVAL = 30000;
+    let refreshTimer = null;
+
+    function startRefreshTimer() {
+        if (refreshTimer !== null) {
+            clearInterval(refreshTimer);
+        }
+
+        refreshTimer = setInterval(function () {
+            if (document.hidden) return;
+
+            const active = document.activeElement;
+
+            if (
+                active === searchInput ||
+                active === positionFilter ||
+                active === candidateFilter ||
+                active === sortFilter
+            ) {
+                return;
+            }
+
+            window.location.reload();
+        }, REFRESH_INTERVAL);
+    }
+
+    document.addEventListener("visibilitychange", function () {
+        if (document.hidden && refreshTimer !== null) {
+            clearInterval(refreshTimer);
+            refreshTimer = null;
+        } else if (!document.hidden) {
+            startRefreshTimer();
+        }
+    });
+
+    startRefreshTimer();
+});
 </script>
 
 {% endblock %}

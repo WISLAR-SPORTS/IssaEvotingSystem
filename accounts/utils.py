@@ -8,8 +8,8 @@ def generate_otp():
 
 def send_otp_email(email, code):
     send_mail(
-        subject="Password Reset OTP",
-        message=f"Your OTP is {code}. It expires in 10 minutes.",
+        subject=" UniVote | Password Reset OTP",
+        message=f"Your UniVote Authentication OTP is {code}. It expires in 10 minutes.""If you did not request this code, ignore this email.",
         from_email=None,
         recipient_list=[email]
     )
