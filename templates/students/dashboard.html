@@ -25,18 +25,13 @@
 
             {% if user.institution %}
             <div class="sd-institution">
-                {% if user.institution.logo %}
-                    <img
-                        src="{{ user.institution.logo.url }}"
-                        alt="{{ user.institution.name }} logo"
-                        class="sd-institution-logo"
-                    >
-                {% else %}
-                    <div class="sd-institution-initial">
-                        {{ user.institution.name|first|upper }}
-                    </div>
-                {% endif %}
-
+               <div class="sd-institution-info">
+    <span class="sd-muted-label">Your institution</span>
+    <strong>{{ user.institution.name }}</strong>
+    <span class="sd-institution-caption">
+        Student voting portal
+    </span>
+</div>
                 <div class="sd-institution-info">
                     <span class="sd-muted-label">Your institution</span>
                     <strong>{{ user.institution.name }}</strong>
@@ -50,6 +45,7 @@
 
         <!-- Main guidance panel -->
      
+
 
             
         </section>
