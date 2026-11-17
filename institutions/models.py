@@ -2,6 +2,7 @@
 from django.db import models
 from django.conf import settings
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 
 class Institution(models.Model):
@@ -12,11 +13,13 @@ class Institution(models.Model):
     )
 
     name = models.CharField(max_length=255, unique=True)
-    logo = models.ImageField(
-        upload_to="institution_logos/",
-        null=True,
-        blank=True,
-    )
+    logo = CloudinaryField(
+    'logo',
+    folder='institution_logos',
+    null=True,
+    blank=True,
+)
+    
     email = models.EmailField(null=True, blank=True)
     contact_phone = models.CharField(
         max_length=30, null=True, blank=True
