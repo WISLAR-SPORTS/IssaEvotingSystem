@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% load static %}
 
@@ -11,15 +10,17 @@
 {% block content %}
 
 <div class="student-dashboard">
-
     <div class="container">
 
-        <!-- Dashboard header -->
+        <!-- Welcome header -->
         <header class="sd-header">
             <div class="sd-header-copy">
                 <span class="sd-eyebrow">STUDENT PORTAL</span>
-                <h1>Dashboard</h1>
-                <p>Manage your elections and voting activity.</p>
+                
+                <p>
+                    Everything you need to participate in your institution's
+                    elections starts here.
+                </p>
             </div>
 
             {% if user.institution %}
@@ -39,190 +40,295 @@
                 <div class="sd-institution-info">
                     <span class="sd-muted-label">Your institution</span>
                     <strong>{{ user.institution.name }}</strong>
-                    <span class="sd-institution-caption">Voting platform</span>
+                    <span class="sd-institution-caption">
+                        Student voting portal
+                    </span>
                 </div>
             </div>
             {% endif %}
         </header>
 
-        <!-- Voting status -->
-        <section class="sd-status-panel">
-            <div class="sd-status-content">
-                <span class="sd-status-kicker">
-                    <i data-lucide="shield-check"></i>
-                    Election participation
-                </span>
+        <!-- Main guidance panel -->
+     
 
-                <h2>Your voice matters.</h2>
+        <!-- Guided next steps -->
+        <section class="sd-section sd-guide-section">
+            <div class="sd-section-header">
+                <div class="sd-section-icon">
+                    <i data-lucide="route"></i>
+                </div>
+                <div>
+                    <h2>Let's get you started</h2>
+                    <p>Follow these steps to navigate your voting journey.</p>
+                </div>
+            </div>
 
-                <p>
-                    Review election positions and participate in your
-                    institution's electoral process.
-                </p>
+            <div class="sd-guide-grid">
 
-                <div class="sd-status-bottom">
-                    {% if has_voted %}
-                        <span class="sd-vote-status sd-voted">
-                            <i data-lucide="check-circle-2"></i>
-                            You have voted
-                        </span>
-                    {% else %}
-                        <span class="sd-vote-status sd-not-voted">
-                            <i data-lucide="clock-3"></i>
-                            Not yet voted
-                        </span>
-                    {% endif %}
+                <!-- Step 1 -->
+                <article class="sd-guide-card">
+                    <div class="sd-guide-top">
+                        <span class="sd-step-number">01</span>
+                        <div class="sd-guide-icon">
+                            <i data-lucide="calendar-days"></i>
+                        </div>
+                    </div>
+
+                    <h3>Check election dates</h3>
+                    <p>
+                        Find out which elections are active, upcoming,
+                        or already closed. Check the opening and closing times.
+                    </p>
+
+                    <a href="#available-elections" class="sd-guide-link">
+                        View election schedules
+                        <i data-lucide="arrow-down"></i>
+                    </a>
+                </article>
+
+                <!-- Step 2 -->
+                <article class="sd-guide-card">
+                    <div class="sd-guide-top">
+                        <span class="sd-step-number">02</span>
+                        <div class="sd-guide-icon">
+                            <i data-lucide="users-round"></i>
+                        </div>
+                    </div>
+
+                    <h3>Explore positions</h3>
+                    <p>
+                        Open the positions page to review the positions
+                        available and the candidates presented to you.
+                    </p>
 
                     <a
                         href="{% url 'elections:positions_list' %}"
-                        class="sd-primary-button"
+                        class="sd-guide-link"
                     >
-                        View positions
+                        Explore positions
                         <i data-lucide="arrow-up-right"></i>
                     </a>
-                </div>
-            </div>
+                </article>
 
-            <div class="sd-status-decoration" aria-hidden="true">
-                <i data-lucide="vote"></i>
+                <!-- Step 3 -->
+                <article class="sd-guide-card">
+                    <div class="sd-guide-top">
+                        <span class="sd-step-number">03</span>
+                        <div class="sd-guide-icon">
+                            <i data-lucide="check-circle-2"></i>
+                        </div>
+                    </div>
+
+                    <h3>Participate when eligible</h3>
+                    <p>
+                        When an election is open and you are eligible,
+                        follow the voting instructions on the election page
+                        and review your choices before submitting.
+                    </p>
+
+                    <a
+                        href="{% url 'elections:positions_list' %}"
+                        class="sd-guide-link"
+                    >
+                        Continue to positions
+                        <i data-lucide="arrow-up-right"></i>
+                    </a>
+                </article>
+
             </div>
         </section>
 
-<!-- Available elections -->
-<section class="sd-section">
-
-    <div class="sd-section-header">
-        <div class="sd-section-icon">
-            <i data-lucide="calendar-days"></i>
-        </div>
-
-        <div>
-            <h2>Available Elections</h2>
-            <p>Election schedules for your institution</p>
-        </div>
-    </div>
-
-    <div class="sd-election-list">
-
-        {% for election in elections %}
-
-            <a href="{% url 'elections:positions_list' %}"
-               class="sd-election-link"
-               aria-label="View positions for {{ election.name }}">
-
-                <article class="sd-election-card">
-
-                    <div class="sd-election-top">
-
-                        <div class="sd-election-main">
-                            <div class="sd-election-icon">
-                                <i data-lucide="vote"></i>
-                            </div>
-
-                            <div class="sd-election-info">
-                                <h3>{{ election.name }}</h3>
-                                <span>Election schedule</span>
-                            </div>
-                        </div>
-
-                        {% if election.display_status == "active" %}
-                            <span class="sd-status-badge sd-status-active">
-                                <span class="sd-status-dot"></span>
-                                Active
-                            </span>
-
-                        {% elif election.display_status == "upcoming" %}
-                            <span class="sd-status-badge sd-status-upcoming">
-                                <i data-lucide="clock-3"></i>
-                                Upcoming
-                            </span>
-
-                        {% else %}
-                            <span class="sd-status-badge sd-status-ended">
-                                <i data-lucide="calendar-check"></i>
-                                Ended
-                            </span>
-                        {% endif %}
-
+        <!-- Election schedules -->
+        <section
+            class="sd-section"
+            id="available-elections"
+        >
+            <div class="sd-section-heading-row">
+                <div class="sd-section-header">
+                    <div class="sd-section-icon">
+                        <i data-lucide="calendar-check"></i>
                     </div>
-
-                    <div class="sd-election-dates">
-
-                        <div class="sd-date-item">
-                            <i data-lucide="calendar-check"></i>
-                            <div>
-                                <span>Starts</span>
-                                <strong>
-                                    {{ election.start_time|date:"M d, Y, H:i" }}
-                                </strong>
-                            </div>
-                        </div>
-
-                        <div class="sd-date-item">
-                            <i data-lucide="calendar-clock"></i>
-                            <div>
-                                <span>Ends</span>
-                                <strong>
-                                    {{ election.end_time|date:"M d, Y, H:i" }}
-                                </strong>
-                            </div>
-                        </div>
-
+                    <div>
+                        <h2>Your election schedules</h2>
+                        <p>
+                            Check the status and dates before taking action.
+                        </p>
                     </div>
-
-                    <div class="sd-election-footer">
-                        <span>
-                            {% if election.display_status == "active" %}
-                                View available positions
-                            {% elif election.display_status == "upcoming" %}
-                                View election positions
-                            {% else %}
-                                View positions
-                            {% endif %}
-                        </span>
-
-                        <i data-lucide="arrow-up-right"></i>
-                    </div>
-
-                </article>
-
-            </a>
-
-        {% empty %}
-
-            <div class="sd-empty-state">
-                <div class="sd-empty-icon">
-                    <i data-lucide="calendar-x"></i>
                 </div>
 
-                <h3>No elections available</h3>
-
-                <p>
-                    There are currently no elections listed for
-                    your institution.
-                </p>
+                <span class="sd-section-count">
+                    {{ elections|length }}
+                    election{{ elections|length|pluralize }}
+                </span>
             </div>
 
-        {% endfor %}
+            <div class="sd-election-list">
 
-    </div>
-</section>
+                {% for election in elections %}
 
+                    <article class="sd-election-card">
+
+                        <div class="sd-election-top">
+                            <div class="sd-election-main">
+                                <div class="sd-election-icon">
+                                    <i data-lucide="vote"></i>
+                                </div>
+
+                                <div class="sd-election-info">
+                                    <h3>{{ election.name }}</h3>
+                                    <span>Election schedule</span>
+                                </div>
+                            </div>
+
+                            {% if election.display_status == "active" %}
+                                <span class="sd-status-badge sd-status-active">
+                                    <span class="sd-status-dot"></span>
+                                    Active
+                                </span>
+                            {% elif election.display_status == "upcoming" %}
+                                <span class="sd-status-badge sd-status-upcoming">
+                                    <i data-lucide="clock-3"></i>
+                                    Upcoming
+                                </span>
+                            {% else %}
+                                <span class="sd-status-badge sd-status-ended">
+                                    <i data-lucide="calendar-check"></i>
+                                    Ended
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="sd-election-dates">
+                            <div class="sd-date-item">
+                                <i data-lucide="calendar-days"></i>
+                                <div>
+                                    <span>Starts</span>
+                                    <strong>
+                                        {{ election.start_time|date:"M d, Y, H:i" }}
+                                    </strong>
+                                </div>
+                            </div>
+
+                            <div class="sd-date-item">
+                                <i data-lucide="calendar-clock"></i>
+                                <div>
+                                    <span>Ends</span>
+                                    <strong>
+                                        {{ election.end_time|date:"M d, Y, H:i" }}
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sd-election-guidance">
+                            {% if election.display_status == "active" %}
+                                <i data-lucide="circle-help"></i>
+                                <p>
+                                    <strong>Election in progress.</strong>
+                                    Check the available positions and follow
+                                    the instructions for eligible voters.
+                                </p>
+                            {% elif election.display_status == "upcoming" %}
+                                <i data-lucide="calendar-clock"></i>
+                                <p>
+                                    <strong>Get ready.</strong>
+                                    Review the schedule and return when
+                                    voting opens.
+                                </p>
+                            {% else %}
+                                <i data-lucide="info"></i>
+                                <p>
+                                    <strong>Voting period ended.</strong>
+                                    This election is closed. Check other
+                                    schedules for upcoming opportunities.
+                                </p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sd-election-footer">
+                            <span>
+                                {% if election.display_status == "active" %}
+                                    Review positions
+                                {% elif election.display_status == "upcoming" %}
+                                    Preview positions
+                                {% else %}
+                                    View positions
+                                {% endif %}
+                            </span>
+
+                            <a
+                                href="{% url 'elections:positions_list' %}"
+                                class="sd-election-action"
+                                aria-label="View positions for {{ election.name }}"
+                            >
+                                {% if election.display_status == "active" %}
+                                    Continue
+                                {% elif election.display_status == "upcoming" %}
+                                    Preview
+                                {% else %}
+                                    View
+                                {% endif %}
+                                <i data-lucide="arrow-up-right"></i>
+                            </a>
+                        </div>
+
+                    </article>
+
+                {% empty %}
+
+                    <div class="sd-empty-state">
+                        <div class="sd-empty-icon">
+                            <i data-lucide="calendar-x"></i>
+                        </div>
+
+                        <h3>No elections available yet</h3>
+
+                        <p>
+                            There are no election schedules to display
+                            at the moment. You can check your profile
+                            and return later for updates.
+                        </p>
+
+                        <a href="#student-profile" class="sd-primary-button">
+                            Check my profile
+                            <i data-lucide="arrow-down"></i>
+                        </a>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </section>
+
+        <!-- Helpful reminder -->
+        <aside class="sd-reminder-panel">
+            <div class="sd-reminder-icon">
+                <i data-lucide="lightbulb"></i>
+            </div>
+            <div>
+                <h3>A quick reminder</h3>
+                <p>
+                    Always check the election dates, read the instructions
+                    carefully, and make your choices independently.
+                    If something does not look right, contact your institution
+                    before proceeding.
+                </p>
+            </div>
+        </aside>
 
         <!-- Profile and support -->
         <div class="row g-4 sd-bottom-grid">
 
             <!-- Student profile -->
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6" id="student-profile">
                 <section class="sd-section sd-info-card">
                     <div class="sd-section-header">
                         <div class="sd-section-icon">
                             <i data-lucide="user-round"></i>
                         </div>
-
                         <div>
                             <h2>My profile</h2>
-                            <p>Your registered student information</p>
+                            <p>Make sure your student details are correct.</p>
                         </div>
                     </div>
 
@@ -238,7 +344,9 @@
                                 {% if user.branch %}
                                     {{ user.branch.name }}
                                 {% else %}
-                                    <span class="sd-unassigned">Not assigned</span>
+                                    <span class="sd-unassigned">
+                                        Not assigned
+                                    </span>
                                 {% endif %}
                             </strong>
                         </div>
@@ -249,7 +357,9 @@
                                 {% if user.department %}
                                     {{ user.department.name }}
                                 {% else %}
-                                    <span class="sd-unassigned">Not assigned</span>
+                                    <span class="sd-unassigned">
+                                        Not assigned
+                                    </span>
                                 {% endif %}
                             </strong>
                         </div>
@@ -260,31 +370,41 @@
                                 {% if user.institution %}
                                     {{ user.institution.name }}
                                 {% else %}
-                                    <span class="sd-unassigned">Not assigned</span>
+                                    <span class="sd-unassigned">
+                                        Not assigned
+                                    </span>
                                 {% endif %}
                             </strong>
                         </div>
                     </div>
+
+                    <div class="sd-profile-tip">
+                        <i data-lucide="info"></i>
+                        <p>
+                            If any details are missing or incorrect,
+                            contact your institution for assistance.
+                        </p>
+                    </div>
                 </section>
             </div>
 
-            <!-- Help and contact -->
+            <!-- Help and support -->
             <div class="col-12 col-lg-6">
                 <section class="sd-section sd-info-card">
                     <div class="sd-section-header">
                         <div class="sd-section-icon">
                             <i data-lucide="headset"></i>
                         </div>
-
                         <div>
-                            <h2>Help & support</h2>
-                            <p>Contact your institution's support team</p>
+                            <h2>Need help?</h2>
+                            <p>You do not have to figure everything out alone.</p>
                         </div>
                     </div>
 
                     <p class="sd-support-description">
-                        If you experience issues while voting, use the
-                        contact details below to reach your institution.
+                        Contact your institution if you have trouble
+                        accessing positions, understanding the schedule,
+                        or completing the voting process.
                     </p>
 
                     {% if user.institution %}
@@ -296,7 +416,9 @@
                                 </div>
                                 <div>
                                     <span>Institution</span>
-                                    <strong>{{ user.institution.name }}</strong>
+                                    <strong>
+                                        {{ user.institution.name }}
+                                    </strong>
                                 </div>
                             </div>
 
@@ -311,7 +433,9 @@
                                             {{ user.institution.email }}
                                         </a>
                                     {% else %}
-                                        <strong class="sd-unassigned">Not available</strong>
+                                        <strong class="sd-unassigned">
+                                            Not available
+                                        </strong>
                                     {% endif %}
                                 </div>
                             </div>
@@ -327,7 +451,9 @@
                                             {{ user.institution.contact_phone }}
                                         </a>
                                     {% else %}
-                                        <strong class="sd-unassigned">Not available</strong>
+                                        <strong class="sd-unassigned">
+                                            Not available
+                                        </strong>
                                     {% endif %}
                                 </div>
                             </div>
@@ -339,7 +465,10 @@
                                 <i data-lucide="contact-round"></i>
                             </div>
                             <h3>Contact information unavailable</h3>
-                            <p>Your account is not linked to an institution.</p>
+                            <p>
+                                Your account is not linked to an institution.
+                                Contact your platform administrator for help.
+                            </p>
                         </div>
                     {% endif %}
                 </section>
@@ -349,6 +478,7 @@
 
     </div>
 </div>
+
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -356,11 +486,6 @@
             window.lucide.createIcons();
         }
     });
-</script>
-<script>
-    if (window.lucide) {
-        window.lucide.createIcons();
-    }
 </script>
 
 {% endblock %}
